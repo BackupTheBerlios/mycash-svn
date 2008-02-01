@@ -1,0 +1,134 @@
+<ui version="4.0" >
+ <class>MainWindow1</class>
+ <widget class="QMainWindow" name="MainWindow1" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>730</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Hauptprogramm</string>
+  </property>
+  <widget class="QTabWidget" name="tabWidgetMain" >
+   <property name="enabled" >
+    <bool>true</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>1261</width>
+     <height>681</height>
+    </rect>
+   </property>
+   <property name="currentIndex" >
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tabMain" >
+    <attribute name="title" >
+     <string>Hauptmenü</string>
+    </attribute>
+    <widget class="QPushButton" name="buttonNeuKonto" >
+     <property name="geometry" >
+      <rect>
+       <x>80</x>
+       <y>40</y>
+       <width>311</width>
+       <height>161</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Neues Konto erstellen</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>381</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuProgramm" >
+    <property name="title" >
+     <string>Programm</string>
+    </property>
+    <addaction name="actionNeu" />
+    <addaction name="actionBeenden" />
+   </widget>
+   <widget class="QMenu" name="menuHilfe" >
+    <property name="title" >
+     <string>Hilfe</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_ber" >
+    <property name="title" >
+     <string>Über</string>
+    </property>
+    <addaction name="actionMyCash" />
+    <addaction name="actionQt" />
+   </widget>
+   <addaction name="menuProgramm" />
+   <addaction name="menuHilfe" />
+   <addaction name="menu_ber" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>16</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <action name="actionNeu" >
+   <property name="text" >
+    <string>Neu</string>
+   </property>
+  </action>
+  <action name="actionBeenden" >
+   <property name="text" >
+    <string>Beenden</string>
+   </property>
+   <property name="shortcut" >
+	<string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionMyCash" >
+   <property name="text" >
+    <string>MyCash</string>
+   </property>
+  </action>
+  <action name="actionQt" >
+   <property name="text" >
+    <string>Qt</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionBeenden</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow1</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>639</x>
+     <y>364</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

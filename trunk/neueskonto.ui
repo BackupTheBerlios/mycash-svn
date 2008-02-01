@@ -1,0 +1,106 @@
+<ui version="4.0" >
+ <class>NeuesKontoDialog</class>
+ <widget class="QWidget" name="NeuesKontoDialog" >
+  <property name="windowModality" >
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>584</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Neues Konto erstellen</string>
+  </property>
+  <widget class="QWidget" name="gridLayout" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>421</width>
+     <height>321</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" >
+    <item row="0" column="0" >
+     <widget class="QLabel" name="labelKontoName" >
+      <property name="text" >
+       <string>Name des Kontos:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" >
+     <widget class="QLineEdit" name="lineKontoName" />
+    </item>
+    <item row="1" column="0" >
+     <widget class="QLabel" name="labelKontoBeschreibung" >
+      <property name="text" >
+       <string>Beschreibung des Kontos: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" >
+     <widget class="QLineEdit" name="lineKontoBeschreibung" />
+    </item>
+    <item row="2" column="0" >
+     <widget class="QLabel" name="labelBLZ" >
+      <property name="text" >
+       <string>Bankleitzahl:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" >
+     <widget class="QLineEdit" name="lineBLZ" />
+    </item>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="pushAdd" >
+   <property name="geometry" >
+    <rect>
+     <x>462</x>
+     <y>20</y>
+     <width>101</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Hinzufügen</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushEnd" >
+   <property name="geometry" >
+    <rect>
+     <x>460</x>
+     <y>60</y>
+     <width>101</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Beenden</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushEnd</sender>
+   <signal>clicked()</signal>
+   <receiver>NeuesKontoDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>510</x>
+     <y>73</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>291</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
