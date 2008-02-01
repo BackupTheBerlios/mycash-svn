@@ -14,8 +14,44 @@
 Konto::Konto(){ //Konstruktor fuer neues Konto
 	KontoFile = "";
 	KontoName = "";
-	KontoBezeichnung = "";
+	KontoBeschreibung = "";
+	setNotChanged();
+}
+
+
+Konto::Konto(QString filename){
+	KontoFile = filename;
+	KontoName = "";
+	KontoBeschreibung = "";
+	loadFile(filename);
+	setNotChanged();
+}
+
+
+Konto::Konto(QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp){
+	KontoFile = "";
+	KontoName = kontoname;
+	KontoBeschreibung = kontobeschreibung;
+	BLZ = blz;
+	BankName = bankname;
+	KontoTyp = kontotyp;
+	setNotChanged();	
+}
+
+
+void Konto::setChanged(){
+	isChanged = true;
+	emit doChange();
+}
+
+
+void Konto::setNotChanged(){
 	isChanged = false;
+}
+
+
+QString Konto::getKontoName(){
+	return KontoName;
 }
 
 
@@ -24,7 +60,7 @@ quint32 Konto::loadFile(QString filename){
 		QTextStream console(stdout);
 	#endif
 
-	isChanged = false;
+	setNotChanged();
 
 	//Oeffne Datei
 	QFile file(filename);
@@ -54,7 +90,7 @@ quint32 Konto::loadFile(QString filename){
 
 			list = line.split("|");
 			KontoName = list.at(0);
-			KontoBezeichnung = list.at(1);
+			KontoBeschreibung = list.at(1);
 			BLZ = list.at(2);
 			BankName = list.at(3);
 			KontoTyp = list.at(4).toInt();
@@ -118,7 +154,6 @@ quint32 Konto::loadFile(QString filename){
 			tempEntry.list_Entry_deb();
 			addEntry(&tempEntry);
 		}
-		//line = in.readLine();
 	}// Ende While
 	
 	KontoFile = filename;
@@ -129,9 +164,10 @@ quint32 Konto::loadFile(QString filename){
 		console.flush();
 	#endif
 	
-	//if(DEBUG){
+	#ifdef DEBUG
 		printEntry_deb();
-	//}
+	#endif
+
 	return Ok;
 }
 
@@ -176,12 +212,8 @@ quint32 Konto::saveFile(){
 	QTextStream out(&file);
 	out.setCodec("UTF-8");
 	
-	//int zeilennummer = 0;
-	
-	//zeilennummer++;
-	//if(zeilennummer == Kontoinfos){
-		out << KontoName << "|" << KontoBezeichnung << "|" << BLZ << "|" << BankName << "|" << KontoTyp << "\r\n";
-	//}
+	out << KontoName << "|" << KontoBeschreibung << "|" << BLZ << "|" << BankName << "|" << KontoTyp << "\r\n";
+
 	#ifdef DEBUG
 		console << "Anzahl: " << Eintraege.size() << "\r\n";
 	#endif
@@ -204,13 +236,12 @@ quint32 Konto::saveFile(){
 		out << "\r\n";
 		out.flush();
 	}
-	
-	out << "20080117|Testeinkauf|2|1|1.Posten|1.23|2|2.Posten|2.34|" << "\r\n";
 
 	#ifdef DEBUG
 		console << "\tKonto::saveFile()\t" << "Datei (" << KontoFile << ") wurde erfolgreich geschrieben\n\r";
 	#endif
-	isChanged = false;
+
+	setNotChanged();
 	return Ok;	
 }
 
@@ -222,42 +253,42 @@ Konto::~Konto(){
 
 quint32 Konto::setKontoName(QString KName){
 	KontoName = KName;
-	isChanged = true;
+	setChanged();
 	return Ok;
 }
 
 
 quint32 Konto::setKontoBezeichnung(QString KBez){
-	KontoBezeichnung = KBez;
-	isChanged = true;
+	KontoBeschreibung = KBez;
+	setChanged();
 	return Ok;
 }
 
 
 quint32 Konto::setKontoFile(QString KFile){
 	KontoFile = KFile;
-	isChanged = true;
+	setChanged();
 	return Ok;
 }
 
 
 quint32 Konto::setBLZ(QString blz){
 	BLZ = blz;
-	isChanged = true;
+	setChanged();
 	return Ok;
 }
 
 
 quint32 Konto::setBankName(QString bankname){
 	BankName = bankname;
-	isChanged = true;
+	setChanged();
 	return Ok;
 }
 
 
 quint32 Konto::setKontoTyp(quint32 kontotyp){
 	KontoTyp = kontotyp;
-	isChanged = true;
+	setChanged();
 	return Ok;
 }
 
@@ -266,13 +297,13 @@ quint32 Konto::addEntry(quint32 nummer, KontoEntry *entry){
 	if(nummer == newEntry){
 		Eintraege[ getFreeNumber() ] = *entry;
 	}
-	isChanged = true;
+	setChanged();
 	return Ok;
 }
 
 
 quint32 Konto::addEntry(KontoEntry *entry){
-	isChanged = true;
+	setChanged();
 	return addEntry(newEntry, entry);
 }
 
@@ -282,7 +313,7 @@ quint32 Konto::deleteEntry(quint32 nummer){
 	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
 		if( it.key() == nummer){
 			Eintraege.erase(it);
-			isChanged = true;
+			setChanged();
 			return Ok;
 		}
 	}
@@ -294,7 +325,9 @@ quint32 Konto::deleteSplitt(quint32 nummer, quint32 splittnummer){
 	MapKontoEntry::iterator it;
 	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
 		if( it.key() == nummer ){
-			it.value().deleteSplitt(splittnummer);
+			if( it.value().deleteSplitt(splittnummer) ){
+				setChanged();
+			}
 			return Ok;
 		}
 	}
@@ -306,8 +339,11 @@ quint32 Konto::changeDatum(QString datum, quint32 entry){
 	MapKontoEntry::iterator it;
 	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
 		if(it.key() == entry){
-			isChanged = true;
-			return it.value().changeDatum(datum);
+			if( it.value().changeDatum(datum) ){
+				setChanged();
+				return Ok;
+			}
+			break;
 		}
 	}
 	return NotFound;
@@ -318,8 +354,11 @@ quint32 Konto::changeDatum(QDate datum, quint32 entry){
 	MapKontoEntry::iterator it;
 	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
 		if(it.key() == entry){
-			isChanged = true;
-			return it.value().changeDatum(datum);
+			if( it.value().changeDatum(datum) ){
+				setChanged();
+				return Ok;
+			}
+			break;
 		}
 	}
 	return NotFound;
@@ -330,8 +369,11 @@ quint32	Konto::changeVerwendung(QString verwendung, quint32 entry){
 	MapKontoEntry::iterator it;
 	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
 		if(it.key() == entry){
-			isChanged = true;
-			return it.value().changeVerwendung(verwendung);
+			if( it.value().changeVerwendung(verwendung) ){
+				setChanged();
+				return Ok;
+			}
+			break;
 		}
 	}
 	return NotFound;
@@ -342,8 +384,11 @@ quint32 Konto::changeVerwendung(QString verwendung, quint32 entry, quint32 numme
 	MapKontoEntry::iterator it;
 	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
 		if(it.key() == entry){
-			isChanged = true;
-			return it.value().changeVerwendung(verwendung, nummer);
+			if( it.value().changeVerwendung(verwendung, nummer) ){
+				setChanged();
+				return Ok;
+			}
+			break;
 		}
 	}
 	return NotFound;
@@ -354,8 +399,11 @@ quint32 Konto::changeKategorie(quint32 kategorie, quint32 entry, quint32 nummer)
 	MapKontoEntry::iterator it;
 	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
 		if(it.key() == entry){
-			isChanged = true;
-			return it.value().changeKategorie(kategorie, nummer);
+			if( it.value().changeKategorie(kategorie, nummer) ){
+				setChanged();
+				return Ok;
+			}
+			break;
 		}
 	}
 	return NotFound;
@@ -366,8 +414,11 @@ quint32 Konto::changeBetrag(float betrag, quint32 entry, quint32 nummer){
 	MapKontoEntry::iterator it;
 	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
 		if(it.key() == entry){
-			isChanged = true;
-			return it.value().changeBetrag(betrag, nummer);
+			if( it.value().changeBetrag(betrag, nummer) ){
+				setChanged();
+				return Ok;
+			}
+			break;
 		}
 	}
 	return NotFound;
@@ -414,6 +465,11 @@ float Konto::getBetragKategorieIntervall(quint32 kategorie, QDate von, QDate bis
 }
 
 
+bool Konto::isNotChanged(){
+	return !isChanged;
+}
+
+
 quint32 Konto::printEntry_deb(){
 	QTextStream console(stdout);
 	
@@ -449,7 +505,7 @@ void Konto::showKontoData_deb(){
 
 	QString str;
 	QMessageBox::information(0, "Kontoinfos",
-						"KontoFile: '" + KontoFile + "'\nKontoName: '" + KontoName + "'\nKontoBezeichnung: '" + KontoBezeichnung +
+						"KontoFile: '" + KontoFile + "'\nKontoName: '" + KontoName + "'\nKontoBezeichnung: '" + KontoBeschreibung +
 						"'\nBLZ: '" + BLZ + "'\nBankName: '" + BankName + "'\nKontoTyp: '" + str.setNum(KontoTyp) + "'",
 						QMessageBox::Yes | QMessageBox::Default);
 }

@@ -2,7 +2,9 @@
 #include <QMessageBox>
 #include <QString>
 #include <QTextStream>
+#include <QLayout>
 #include "neueskontodialog.h"
+#include "konto.h"
 
 NeuesKontoDialog::NeuesKontoDialog(QWidget *parent) : QDialog(parent){
 	setupUi(this);
@@ -10,13 +12,25 @@ NeuesKontoDialog::NeuesKontoDialog(QWidget *parent) : QDialog(parent){
 
 	QRegExp regExp("[1-9][0-9]{0,7}");
 	lineBLZ -> setValidator(new  QRegExpValidator(regExp, this));
-	
+
+	//QLayout::setSizeConstraint(QLayout::SetFixedSize);
+	setFixedSize(width(), height());
 }
 
 
 void NeuesKontoDialog::clickAdd(){
-	//QWidget neu;
-	QMessageBox::warning(0,"Titel","Message",QMessageBox::Ok);
-	//QTextStream console(stdout);
-	//console << "clickAdd()" << "\n\r";
+	//Fehleranalyse ... Einagbewerte checken...
+	Konto *tempKonto = new Konto(lineKontoName -> text(), lineKontoBeschreibung -> text(), lineBLZ -> text(), lineBankName -> text(), 0);
+	emit add(tempKonto);
+	delete tempKonto;
+	clearLines();
+	close();
+}
+
+
+void NeuesKontoDialog::clearLines(){
+	lineKontoName -> setText("");
+	lineKontoBeschreibung -> setText("");
+	lineBLZ -> setText("");
+	lineBankName -> setText("");
 }

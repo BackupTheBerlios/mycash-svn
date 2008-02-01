@@ -8,8 +8,11 @@
 #include "KontoEntry.h"
 #include <QString>
 #include <QMap>
+#include <QWidget>
 
-class Konto{
+class Konto : public QWidget{
+	Q_OBJECT
+
 	enum Status{
 		Ok = 1,
 		WrongFile = 2,
@@ -32,10 +35,15 @@ class Konto{
 
 	public:
 		Konto();
+		Konto(QString filename);
+		Konto(QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp);
 		~Konto();
+		
 		quint32 loadFile(QString filename);
 		quint32 saveFile();
 		QString getKontoFile();
+		QString getKontoName();
+
 		quint32 setKontoFile(QString KontoFile);
 		quint32 setKontoName(QString KontoName);
 		quint32 setKontoBezeichnung(QString KontoBezeichnung);
@@ -58,16 +66,24 @@ class Konto{
 		float getBetragKategorie(quint32 kategorie);
 		float getBetragKategorieIntervall(quint32 kategorie, QDate von, QDate bis);
 		
+		void setChanged();
+
+		bool isNotChanged();
+
 		operator bool();
 		
 		void showKontoData_deb();
 		quint32 printEntry_deb();
+
+	signals:
+		void doChange();
 	
 	private:
 		quint32 getFreeNumber();
+		void setNotChanged();
 		
 		QString KontoName;
-		QString KontoBezeichnung;
+		QString KontoBeschreibung;
 		QString KontoFile;	//Datei in der Kontodaten gespeichert
 		QString BLZ;	//Bankleitzahl
 		QString BankName;	//Bankname

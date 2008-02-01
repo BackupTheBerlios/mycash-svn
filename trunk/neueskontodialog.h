@@ -15,8 +15,9 @@ class NeuesKontoDialog : public QDialog, public Ui::NeuesKontoDialog/*, public Q
 		void add(Konto *);
 	public slots:
 		void clickAdd();
+	private:
+		void clearLines();
 	
 };
-
 
 #endif

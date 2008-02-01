@@ -9,7 +9,7 @@
 
 class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 	enum sort{NO=0, ASC=1, DES=2};
-	enum returns{Ok=1, NotFound=2}; 
+	enum returns{Ok=1, NotFound=4}; 
 	typedef QMap<quint32, Konto_Splitt> MapSplitt;
 
 	public:
