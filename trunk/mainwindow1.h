@@ -42,6 +42,7 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		bool okToContinue();
 		bool saveFile(QString filename);
 		bool clear();
+		QString correctFilename(QString filename, QString endung);
 
 		MapKontoWidget connections;
 		//bool IsChanged;

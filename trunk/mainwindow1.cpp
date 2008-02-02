@@ -25,7 +25,7 @@ MainWindow1::MainWindow1(QWidget *parent) : QMainWindow(parent){
 	connect(buttonNeuKonto, SIGNAL( clicked() ), this, SLOT( showNeuesKontoDialog() ));
 	connect(actionOeffnen, SIGNAL( triggered() ), this, SLOT( loadFile() ));
 
-	// Initialisiere Formulare
+	// Initialisiere Variablen der Formulare
 	neuesKontoDialog = 0;
 }
 
@@ -86,6 +86,12 @@ bool MainWindow1::clear(){
 }
 
 
+bool MainWindow1::load(QString filename){
+	File = filename;
+	return load();
+}
+
+
 bool MainWindow1::load(){
 	#ifdef DEBUG
 		QTextStream console(stdout);
@@ -117,74 +123,95 @@ bool MainWindow1::load(){
 }
 
 
-bool MainWindow1::load(QString filename){
-	File = filename;
-	return load();
-}
-
-
 bool MainWindow1::loadFile(){
-	if( isWindowModified() ){
-
+	if( okToContinue() ){
+		clear();
+		QString filename;
+		filename = QFileDialog::getOpenFileName(this,
+												tr("Open Project"),
+												".",
+												tr("%1 projects (%2)").arg(AppName).arg(END_PROJECT));
+		if(filename != ""){
+			load(filename);
+			return true;
+		}
+		return false;
+	}else{
+		return false;
 	}
-	return true;
+	//return true;
 }
 
 
+/*****
+* save() [SLOT]
+******/
 bool MainWindow1::save(){
-	if(! File.isEmpty() ){
-		return saveFile(File);
-	}else{
+	if(File.isEmpty() ){
 		return saveAs();
+	}else{
+		return saveFile(File);
 	}
 }
 
 
 bool MainWindow1::saveAs(){
-	QString filename = QFileDialog::getSaveFileName(this, tr("Save Project"), ".", tr("%1 projects (*.mc)").arg(AppName));
-	
+	//QMessageBox::warning(this,"MainWindow::saveAs","1", QMessageBox::Ok);
+	QString filename = QFileDialog::getSaveFileName(this, tr("Save Project"), ".", tr("%1 projects (%2)").arg(AppName).arg(END_PROJECT));
+	QMessageBox::warning(this,"MainWindow::saveAs","2", QMessageBox::Ok);
 	if(filename.isEmpty()){
 		return false;
 	}
-	return saveFile(filename);
+
+	filename = correctFilename(filename, END_PROJECT);
+	File = filename;
+	
+	QMessageBox::warning(this,"MainWindow::saveAs",File, QMessageBox::Ok);
+	
+	return saveFile(File);
 }
 
 
 bool MainWindow1::saveFile(QString filename){
 	#ifdef DEBUG
+		// Stream auf console erstellen
 		QTextStream console(stdout);
 	#endif	
 
-
+	//Dateihandler erstellen
 	QFile file(filename);
-	if(! file.open(QIODevice::WriteOnly) ){
+	if(! file.open(QIODevice::WriteOnly) ){	// Ueberpruefung ob Datei geoeffnet werden kann
 		#ifdef DEBUG
 			console << "MainWindow::saveFile(): " << "Datei '" << filename << "' kann nicht geoeffnet werden" << "\n\r";
 		#endif
 		return false;
 	}
 
+	// Textstream auf Dateihandler erstellen
 	QTextStream out( &file );
-	out.setCodec("UTF-8");
+	out.setCodec("UTF-8");	//C
 	
 	MapKontoWidget::iterator it;
 	for(it = connections.begin(); it != connections.end(); it++){
-		if(! it.key() -> isNotChanged()){
+
+		QMessageBox::warning(this,"saveFile()", it.key() -> getKontoFile(), QMessageBox::Ok);
+		
+		if( it.key() -> getKontoFile() == "" ){
 			
-			if(it.key() -> getKontoFile() == ""){
-
-				QString kontofilename = QFileDialog::getSaveFileName(this, tr("Save Konto: %1").arg( it.key() -> getKontoName() ), ".",
-					tr("%1 konten (*.mck)").arg(AppName));
-				if(! kontofilename.isEmpty() ){
-					it.key() -> setKontoFile( kontofilename );
-					it.key() -> saveFile();
-				}
-
+			QString kontofilename = QFileDialog::getSaveFileName(this, tr("Save Konto: %1").arg( it.key() -> getKontoName() ), ".",
+					tr("%1 konten (%2)").arg(AppName).arg(END_KONTO));
+			if(kontofilename.isEmpty() ){
+				#ifdef DEBUG
+					console << "MainWindow::saveFile(): " << "Dialog fuer Dateinamen ohne Auswahl geschlossen" << "\n\r";
+				#endif
+				return false;
 			}else{
-				it.key() -> saveFile();
+				kontofilename = correctFilename(kontofilename, END_KONTO);
+				it.key() -> setKontoFile( kontofilename );
 			}
-
 		}
+
+		it.key() -> saveFile();
 
 		out << it.key() -> getKontoFile() << "\n\r";
 	}
@@ -216,6 +243,19 @@ bool MainWindow1::okToContinue(){
 		}
 	}
 	return true;
+}
+
+
+QString MainWindow1::correctFilename(QString filename, QString endung){
+	QString file = filename;
+	if( endung.at(0) == '*' ){
+		endung = endung.right( endung.size() - 1 );
+	}
+	if(! file.contains(endung, Qt::CaseInsensitive) ){
+		file.append(endung);
+	}
+
+	return file;
 }
 
 

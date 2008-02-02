@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>MainWindow1</class>
- <widget class="QMainWindow" name="MainWindow1" >
+ <widget class="QWidget" name="MainWindow1" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -10,30 +10,38 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Hauptprogramm[*]</string>
+   <string>MyCash[*]</string>
   </property>
   <widget class="QTabWidget" name="tabWidgetMain" >
    <property name="enabled" >
     <bool>true</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>40</y>
+     <width>1211</width>
+     <height>551</height>
+    </rect>
    </property>
    <property name="currentIndex" >
     <number>0</number>
    </property>
    <widget class="QWidget" name="tabMain" >
     <attribute name="title" >
-     <string>Hauptmenü</string>
+     <string>main</string>
     </attribute>
     <widget class="QPushButton" name="buttonNeuKonto" >
      <property name="geometry" >
       <rect>
-       <x>80</x>
-       <y>40</y>
+       <x>20</x>
+       <y>20</y>
        <width>311</width>
        <height>161</height>
       </rect>
      </property>
      <property name="text" >
-      <string>Neues Konto erstellen</string>
+      <string>create new account</string>
      </property>
     </widget>
    </widget>
@@ -43,13 +51,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1280</width>
-     <height>29</height>
+     <width>381</width>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProgramm" >
     <property name="title" >
-     <string>Programm</string>
+     <string>program</string>
     </property>
     <addaction name="actionNeu" />
     <addaction name="actionOeffnen" />
@@ -57,12 +65,12 @@
    </widget>
    <widget class="QMenu" name="menuHilfe" >
     <property name="title" >
-     <string>Hilfe</string>
+     <string>help</string>
     </property>
    </widget>
    <widget class="QMenu" name="menu_ber" >
     <property name="title" >
-     <string>Über</string>
+     <string>about</string>
     </property>
     <addaction name="actionMyCash" />
     <addaction name="actionQt" />
@@ -71,15 +79,24 @@
    <addaction name="menuHilfe" />
    <addaction name="menu_ber" />
   </widget>
-  <widget class="QStatusBar" name="statusbar" />
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>16</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
   <action name="actionNeu" >
    <property name="text" >
-    <string>Neu</string>
+    <string>new</string>
    </property>
   </action>
   <action name="actionBeenden" >
    <property name="text" >
-    <string>Beenden</string>
+    <string>exit</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+S</string>
@@ -95,20 +112,12 @@
     <string>Qt</string>
    </property>
   </action>
-  <action name="actionLaden" >
-   <property name="text" >
-    <string>Laden</string>
-   </property>
-  </action>
   <action name="actionOeffnen" >
    <property name="text" >
-    <string>Oeffnen</string>
+    <string>open</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+O</string>
-   </property>
-   <property name="shortcutContext" >
-    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
  </widget>

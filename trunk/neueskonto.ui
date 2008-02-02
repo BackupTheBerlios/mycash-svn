@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Neues Konto erstellen</string>
+   <string>create new account</string>
   </property>
   <widget class="QWidget" name="gridLayout" >
    <property name="geometry" >
@@ -28,7 +28,7 @@
     <item row="0" column="0" >
      <widget class="QLabel" name="labelKontoName" >
       <property name="text" >
-       <string>Name des Kontos:</string>
+       <string>name of account:</string>
       </property>
      </widget>
     </item>
@@ -38,7 +38,7 @@
     <item row="1" column="0" >
      <widget class="QLabel" name="labelKontoBeschreibung" >
       <property name="text" >
-       <string>Beschreibung des Kontos: </string>
+       <string>description of account:</string>
       </property>
      </widget>
     </item>
@@ -48,7 +48,7 @@
     <item row="2" column="0" >
      <widget class="QLabel" name="labelBLZ" >
       <property name="text" >
-       <string>Bankleitzahl:</string>
+       <string>bank identification number:</string>
       </property>
      </widget>
     </item>
@@ -58,7 +58,7 @@
     <item row="3" column="0" >
      <widget class="QLabel" name="labelBankname" >
       <property name="text" >
-       <string>Bankname:</string>
+       <string>name of bank:</string>
       </property>
      </widget>
     </item>
@@ -77,7 +77,7 @@
     </rect>
    </property>
    <property name="text" >
-    <string>Hinzufügen</string>
+    <string>add</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushEnd" >
@@ -90,7 +90,7 @@
     </rect>
    </property>
    <property name="text" >
-    <string>Beenden</string>
+    <string>close</string>
    </property>
   </widget>
  </widget>

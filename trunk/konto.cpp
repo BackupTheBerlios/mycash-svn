@@ -39,6 +39,11 @@ Konto::Konto(QString kontoname, QString kontobeschreibung, QString blz, QString 
 }
 
 
+Konto::~Konto(){
+	//saveFile();
+}
+
+
 void Konto::setChanged(){
 	isChanged = true;
 	emit doChange();
@@ -243,11 +248,6 @@ quint32 Konto::saveFile(){
 
 	setNotChanged();
 	return Ok;	
-}
-
-
-Konto::~Konto(){
-	saveFile();
 }
 
 
