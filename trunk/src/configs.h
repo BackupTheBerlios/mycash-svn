@@ -11,7 +11,7 @@
 
 const QString AppName = "MyCash";
 const QString WindowTitle = "MyCash[*]";
-const QString END_PROJECT = "*.mc";
+const QString END_PROJECT = "*.mcp";
 const QString END_KONTO = "*.mck";
 
 //QT-Einstellungen

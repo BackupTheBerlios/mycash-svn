@@ -21,11 +21,10 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 	public:
 		MainWindow1(QWidget *parent = 0);
 		~MainWindow1();
-		//void SetIsChanged();
-		//void SetIsNotChanged();
+
 		bool save();
 		bool saveAs();
-		bool load();
+		bool loadFile();
 		bool load(QString filename);
 
 	protected:
@@ -36,18 +35,21 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		void showNeuesKontoDialog();
 		bool addKonto(Konto *konto);
 		bool newFile();
-		bool loadFile();
+		bool load();
 
 	private:
 		bool okToContinue();
 		bool saveFile(QString filename);
 		bool clear();
+		void setFileName(QString filename);
+		void unloadKonten();
+		QString getFileName();
 		QString correctFilename(QString filename, QString endung);
 
-		MapKontoWidget connections;
+		MapKontoWidget connections;	//Verknüfungstabelle der Konten mit TabWidget
 		//bool IsChanged;
-		QString File;
-		NeuesKontoDialog *neuesKontoDialog;
+		QString File;	//Projektdatei
+		NeuesKontoDialog *neuesKontoDialog;	//Speicher des Formular NeuesKontoDialog
 
 };
 
