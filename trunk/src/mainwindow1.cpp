@@ -18,11 +18,11 @@
 #include <QWidget>
 
 MainWindow1::MainWindow1 ( QWidget *parent ) : QMainWindow ( parent )
-		/******************************************************************************
-		* Konstruktor fuer GUI MainWindow1
-		* Verbindung der Signale und Slots
-		* Initialisierung der Formularen
-		*******************************************************************************/
+/******************************************************************************
+* Konstruktor fuer GUI MainWindow1
+* Verbindung der Signale und Slots
+* Initialisierung der Formularen
+*******************************************************************************/
 {
 	setupUi ( this );
 
@@ -39,7 +39,7 @@ MainWindow1::MainWindow1 ( QWidget *parent ) : QMainWindow ( parent )
 MainWindow1::~MainWindow1()
 /******************************************************************************
 * Dekonstruktur der GUI MainWindow1
-* entlade die Formulare
+* entlaedt die Formulare
 *******************************************************************************/
 {
 	//delete Formulare
@@ -61,36 +61,45 @@ void MainWindow1::projectChanged() // SLOT
 }
 
 
-bool MainWindow1::addKonto ( Konto *konto )
+bool MainWindow1::addKonto ( Konto *konto ) // SLOT
+/******************************************************************************
+* Methode uebernimmt eine Klasse, fuegt sie in die Verknüpfungstabelle ein,
+* erzeugt ein TabWidget Eintrag
+*******************************************************************************/
 {
 	QWidget *tempWidget = new QWidget();
 	connect ( konto, SIGNAL ( doChange() ), this, SLOT ( projectChanged() ) );
-	konto -> setChanged();
+	konto -> setChanged(); // Wegen Signal an MainWindow
 	connections[konto] = tempWidget;
 	tabWidgetMain -> addTab ( tempWidget, konto -> getKontoName() );
 
+	//setze Ansicht auf neu hinzugefuegtes TabWidget
 	tabWidgetMain -> setCurrentWidget ( tempWidget );
 	return true;
 }
 
 
 void MainWindow1::closeEvent ( QCloseEvent *event )
+/******************************************************************************
+* Methode ueberschreibt closeEvent
+* wenn MainWindow geaendert wurde: Abfrage ob Speichern -> Reaktion darauf
+*******************************************************************************/
 {
-	if ( connections.size() == 0 ) {
+	// !Keine Abfrage der Groesse von der Verknuepfungstabelle, da Programmeinstellungen geändert worden koennten
+	if ( okToContinue() ) {
 		event -> accept();
 
 	} else {
-		if ( okToContinue() ) {
-			event -> accept();
-
-		} else {
-			event -> ignore();
-		}
+		event -> ignore();
 	}
 }
 
 
-bool MainWindow1::newFile()
+bool MainWindow1::newFile() // SLOT
+/******************************************************************************
+* Methode fragt bei geaenderten Projekt ab, ob ein Neues Projekt erstellt werden soll
+* wenn ja: altes Projekt wird zurueck gesetzt
+*******************************************************************************/
 {
 	if ( okToContinue() ) {
 		return clear();
@@ -130,7 +139,7 @@ bool MainWindow1::load() // SLOT
 				   tr ( "%1 projects (%2)" ).arg ( AppName ).arg ( END_PROJECT ) );
 
 		if ( filename != "" ) {
-			setFileName( filename );
+			setFileName ( filename );
 			loadFile();
 			return true;
 		}
@@ -144,39 +153,50 @@ bool MainWindow1::load() // SLOT
 
 
 bool MainWindow1::load ( QString filename )
+/******************************************************************************
+* Ueberladene Methode von load, wenn Dateiname schon bekannt
+*******************************************************************************/
 {
 	setFileName ( filename );
-	return load();
+	return loadFile();
 }
 
 
 bool MainWindow1::loadFile()
+/******************************************************************************
+* Methode, die Datei ausliesst und Konten hinzufuegt
+*******************************************************************************/
 {
 #ifdef DEBUG
 	QTextStream console ( stdout );
 #endif
 
+	// erstelle ein Dateihandler auf die Projektdatei
 	QFile file ( getFileName() );
 
 	if ( ! file.open ( QIODevice::ReadOnly ) ) {
 #ifdef DEBUG
-		console << "MainWindow::load() :" << "Datei '" << File << "' kann nicht geoeffnet werden." << "\n\r";
+		console << "MainWindow::load() :" << "Projektdatei '" << getFileName() << "' kann nicht geoeffnet werden." << "\n\r";
 #endif
 		return false;
 	}
 
+	// erstelle ein TextStream auf die Projektdatei
 	QTextStream in ( &file );
 
 	in.setCodec ( "UTF-8" );
 
-	QString line;
+	QString line; // Speicher fuer die einzulesende Zeile
 
 	while ( ( line = in.readLine() ) != "" ) {
+		//ToDo: testen ob Dateiname(line) gueltig!
 		Konto *tempKonto = new Konto ( line );
 		addKonto ( tempKonto );
 	}
 
 #ifdef DEBUG
+	console << "MainWindow::load() :" << "Projektdatei '" << getFileName() << "' wurde erfolgreich eingelesen." << "\n\r";
+
 	console.flush();
 
 #endif
@@ -220,8 +240,6 @@ bool MainWindow1::saveAs()
 
 	setFileName ( filename ); // setze Projektdateiname
 
-	//QMessageBox::warning ( this, "MainWindow::saveAs", File, QMessageBox::Ok );
-
 	return saveFile ( getFileName() );
 }
 
@@ -257,17 +275,19 @@ bool MainWindow1::saveFile ( QString filename )
 	for ( it = connections.begin(); it != connections.end(); it++ ) {
 
 		QString kontofile = it.key() -> getKontoFile();
-		//QMessageBox::warning ( this, "saveFile()", "KontoFileName: '" + kontofile + "'", QMessageBox::Ok );
-		//QMessageBox::warning(this, "saveFile() - Kontodaten", "Kontofile: " + it.key() -> getKontoFile() + "\n\r" + "KontoName: " + it.key() -> getKontoName(), QMessageBox::Ok);
 
 		if ( kontofile.isEmpty() ) { //Wenn kein kontofile angegeben
 			//Rufe ein FileDialog auf
-			QString kontofilename = QFileDialog::getSaveFileName ( this, tr ( "Save Konto: %1" ).arg ( it.key() -> getKontoName() ),
-									".", tr ( "%1 konten (%2)" ).arg ( AppName ).arg ( END_KONTO ) );
+			QString kontofilename = QFileDialog::getSaveFileName ( this,
+									tr ( "Save Konto: %1" ).arg ( it.key() -> getKontoName() ),
+									".",
+									tr ( "%1 konten (%2)" ).arg ( AppName ).arg ( END_KONTO )
+																 );
 
 			if ( kontofilename.isEmpty() ) { //Filedialog abgebrochen
 #ifdef DEBUG
 				console << "MainWindow::saveFile(): " << "Dialog fuer Dateinamen ohne Auswahl geschlossen" << "\n\r";
+				console.flush();
 #endif
 				return false;
 
@@ -286,6 +306,7 @@ bool MainWindow1::saveFile ( QString filename )
 	file.close();
 
 #ifdef DEBUG
+	console << "MainWindow::saveFile(): " << "Projekdatei '" << getFileName() << "' erfolgreich gespeichert." << "\n\r";
 	console.flush();
 #endif
 

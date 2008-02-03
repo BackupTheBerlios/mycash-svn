@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
-<defaultcodec></defaultcodec>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="main_layout.ui" line="13"/>
+        <location filename="../main_layout.ui" line="13"/>
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="main_layout.ui" line="38"/>
+        <location filename="../main_layout.ui" line="38"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -17,7 +16,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="main_layout.ui" line="44"/>
+        <location filename="../main_layout.ui" line="44"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -25,12 +24,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="main_layout.ui" line="54"/>
+        <location filename="../main_layout.ui" line="54"/>
         <source>Hauptmenü</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="116"/>
+        <location filename="../main_layout.ui" line="116"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -38,7 +37,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="main_layout.ui" line="122"/>
+        <location filename="../main_layout.ui" line="122"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -46,57 +45,57 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="main_layout.ui" line="87"/>
+        <location filename="../main_layout.ui" line="87"/>
         <source>Neues Konto hinzufügen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="128"/>
+        <location filename="../main_layout.ui" line="128"/>
         <source>Kontenverlauf anzeigen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="144"/>
+        <location filename="../main_layout.ui" line="144"/>
         <source>Entscheidung !</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="156"/>
+        <location filename="../main_layout.ui" line="156"/>
         <source>JA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="169"/>
+        <location filename="../main_layout.ui" line="169"/>
         <source>Nein</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="182"/>
+        <location filename="../main_layout.ui" line="182"/>
         <source>Vielleicht</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="200"/>
+        <location filename="../main_layout.ui" line="200"/>
         <source>Hilfe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="205"/>
+        <location filename="../main_layout.ui" line="205"/>
         <source>Programm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="218"/>
+        <location filename="../main_layout.ui" line="218"/>
         <source>&amp;Neu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="223"/>
+        <location filename="../main_layout.ui" line="223"/>
         <source>&amp;Beenden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main_layout.ui" line="226"/>
+        <location filename="../main_layout.ui" line="226"/>
         <source>Ctrl+B</source>
         <translation type="unfinished"></translation>
     </message>
@@ -104,37 +103,37 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow1</name>
     <message>
-        <location filename="mainwindow1.cpp" line="131"/>
+        <location filename="mainwindow1.cpp" line="137"/>
         <source>Open Project</source>
         <translation>Projekt öffnen</translation>
     </message>
     <message>
-        <location filename="mainwindow1.cpp" line="156"/>
+        <location filename="mainwindow1.cpp" line="232"/>
         <source>%1 projects (%2)</source>
         <translation>%1 Projekte (%2)</translation>
     </message>
     <message>
-        <location filename="mainwindow1.cpp" line="156"/>
+        <location filename="mainwindow1.cpp" line="231"/>
         <source>Save Project</source>
         <translation>Projekt speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow1.cpp" line="191"/>
+        <location filename="mainwindow1.cpp" line="282"/>
         <source>Save Konto: %1</source>
         <translation>Speicher Konto: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow1.cpp" line="192"/>
+        <location filename="mainwindow1.cpp" line="284"/>
         <source>%1 konten (%2)</source>
         <translation>%1 Konten (%2)</translation>
     </message>
     <message>
-        <location filename="mainwindow1.cpp" line="221"/>
+        <location filename="mainwindow1.cpp" line="346"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="mainwindow1.cpp" line="223"/>
+        <location filename="mainwindow1.cpp" line="348"/>
         <source>The project has been modified.
 Do you want to save your changes?</source>
         <translation>Das Projekt wurde geändert.

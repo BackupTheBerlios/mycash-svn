@@ -71,7 +71,9 @@ class Konto : public QWidget{
 		bool isNotChanged();
 
 		operator bool();
-		
+
+		//DEBUG - FUNKTIONS
+		void printKontoInfos();	
 		void showKontoData_deb();
 		quint32 printEntry_deb();
 
