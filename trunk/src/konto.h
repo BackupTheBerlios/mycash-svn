@@ -40,13 +40,15 @@ class Konto : public QWidget{
 		~Konto();
 		
 		quint32 loadFile(QString filename);
+		quint32 loadFileXML(QString filename);
 		quint32 saveFile();
+		quint32 saveFileXML();
 		QString getKontoFile();
 		QString getKontoName();
 
 		quint32 setKontoFile(QString KontoFile);
 		quint32 setKontoName(QString KontoName);
-		quint32 setKontoBezeichnung(QString KontoBezeichnung);
+		quint32 setKontoBeschreibung(QString KontoBezeichnung);
 		quint32 setBLZ(QString blz);
 		quint32 setBankName(QString bankname);
 		quint32 setKontoTyp(quint32 kontotyp);

@@ -44,6 +44,22 @@
       <string>create new account</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="buttonAddKonto" >
+     <property name="geometry" >
+      <rect>
+       <x>360</x>
+       <y>20</y>
+       <width>311</width>
+       <height>161</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>add exist account</string>
+     </property>
+     <property name="flat" >
+      <bool>false</bool>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar" >
@@ -61,6 +77,8 @@
     </property>
     <addaction name="actionNeu" />
     <addaction name="actionOeffnen" />
+    <addaction name="actionSave" />
+    <addaction name="actionSaveAs" />
     <addaction name="actionBeenden" />
    </widget>
    <widget class="QMenu" name="menuHilfe" >
@@ -99,7 +117,7 @@
     <string>exit</string>
    </property>
    <property name="shortcut" >
-    <string>Ctrl+S</string>
+    <string>Ctrl+B</string>
    </property>
   </action>
   <action name="actionMyCash" >
@@ -118,6 +136,22 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave" >
+   <property name="text" >
+    <string>save</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+S</string>
+   </property>
+   <property name="shortcutContext" >
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSaveAs" >
+   <property name="text" >
+    <string>save as</string>
    </property>
   </action>
  </widget>

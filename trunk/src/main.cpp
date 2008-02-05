@@ -11,7 +11,7 @@
 
 #include "ui_mainwindow1.h"
 #include "mainwindow1.h"
-
+#include "tabkontomain.h"
 
 int main(int argc, char *argv[]){
 	
@@ -23,6 +23,7 @@ int main(int argc, char *argv[]){
 	app.installTranslator(&appTranslator);
 
 	MainWindow1 ui;
+	//TabKontoMain ui(0,0);
 	ui.show();
 	
 	//Delete Kontotypen

@@ -2,6 +2,8 @@
 #define _class_konto_splitt_h
 
 #include <QString>
+#include <QDomElement>
+#include <QDomDocument>
 
 class Konto_Splitt{
 	enum returns{Ok=1};
@@ -15,6 +17,8 @@ class Konto_Splitt{
 		quint32 changeVerwendung(QString verwendung);
 		float getBetrag();
 		quint32 changeBetrag(float betrag);
+
+		QDomElement getXmlElement(QDomDocument &doc);
 		
 	private:
 		quint32 Kategorie;

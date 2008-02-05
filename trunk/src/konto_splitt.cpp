@@ -1,6 +1,8 @@
 #include "konto_splitt.h"
 #include <QString>
 
+#include <QtXml> //contains #include <QDomDocument>, #include <QDomElement>, #include <QDomText>
+
 Konto_Splitt::Konto_Splitt(){
 
 }
@@ -44,4 +46,30 @@ quint32 Konto_Splitt::changeBetrag(float betrag){
 quint32 Konto_Splitt::changeVerwendung(QString verwendung){
 	Verwendung = verwendung;
 	return Ok;
+}
+
+
+QDomElement Konto_Splitt::getXmlElement(QDomDocument &doc)
+/******************************************************************************
+* Methode gibt ein XML-Node zurueck
+*******************************************************************************/
+{
+	QDomElement elementSplitt = doc.createElement("Splittdaten");
+	QDomElement elementKategorie = doc.createElement("Kategorie");
+	QDomElement elementVerwendung = doc.createElement("Verwendung");
+	QDomElement elementBetrag = doc.createElement("Betrag");
+	
+	QDomText textKategorie = doc.createTextNode( QString().setNum(Kategorie) );
+	QDomText textVerwendung = doc.createTextNode(Verwendung);
+	QDomText textBetrag = doc.createTextNode( QString().setNum(Betrag, 'f', 2) );
+
+	elementKategorie.appendChild(textKategorie);
+	elementVerwendung.appendChild(textVerwendung);
+	elementBetrag.appendChild(textBetrag);
+
+	elementSplitt.appendChild(elementKategorie);
+	elementSplitt.appendChild(elementVerwendung);
+	elementSplitt.appendChild(elementBetrag);
+
+	return elementSplitt;
 }

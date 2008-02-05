@@ -4,6 +4,7 @@
 #include <QString>
 #include <QtAlgorithms>
 #include <QTextStream>
+#include <QtXml> //contain #include <QDomElement>, #include <QDomDocument>, #include <QDomText>
 #include "EntryKategorie.h"
 
 KontoEntry::KontoEntry(QDate datum, QString verwendung, QMap<quint32, Konto_Splitt> *splittdaten){
@@ -188,6 +189,33 @@ float KontoEntry::getBetragKategorie(quint32 kategorie){
 		}
 	}
 	return summe;
+}
+
+
+QDomElement KontoEntry::getXmlElement(QDomDocument &doc)
+/******************************************************************************
+* Methode gibt ein QDomElement mit den Eintraegen zurueck
+*******************************************************************************/
+{
+	QDomElement elementEntry = doc.createElement("Eintraege");
+	QDomElement elementDatum = doc.createElement("Datum");
+	QDomElement elementVerwendung = doc.createElement("Verwendung");
+	
+	QDomText textDatum = doc.createTextNode( getDatum() );
+	QDomText textVerwendung = doc.createTextNode( getVerwendung() );
+
+	elementDatum.appendChild(textDatum);
+	elementVerwendung.appendChild(textVerwendung);
+
+	elementEntry.appendChild(elementDatum);
+	elementEntry.appendChild(elementVerwendung);
+
+	MapSplitt::iterator it;
+	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
+		elementEntry.appendChild( it.value().getXmlElement(doc) );
+	}
+	
+	return elementEntry;
 }
 
 

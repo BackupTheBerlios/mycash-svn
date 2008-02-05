@@ -6,6 +6,8 @@
 #include <QVector>
 #include <QString>
 #include <QMap>
+#include <QDomElement>
+#include <QDomDocument>
 
 class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 	enum sort{NO=0, ASC=1, DES=2};
@@ -33,6 +35,8 @@ class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 
 		float getBetragKategorie(quint32 kategorie);
 		float getBetragKategorieIntervall(quint32 kategorie, QDate von, QDate bis);
+
+		QDomElement getXmlElement(QDomDocument &doc);
 
 		quint32 list_Entry_deb();
 

@@ -1,0 +1,58 @@
+<ui version="4.0" >
+ <class>TabKontoMain</class>
+ <widget class="QWidget" name="TabKontoMain" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>726</width>
+    <height>354</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="gridLayout" >
+   <property name="geometry" >
+    <rect>
+     <x>11</x>
+     <y>11</y>
+     <width>699</width>
+     <height>319</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" >
+    <item row="0" column="0" >
+     <widget class="QPushButton" name="buttonAddEntry" >
+      <property name="text" >
+       <string>add Entry</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" >
+     <widget class="QPushButton" name="buttonShowHistoryList" >
+      <property name="text" >
+       <string>show history (list)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" >
+     <widget class="QPushButton" name="buttonShowHistoryGrafik" >
+      <property name="text" >
+       <string>show history (grafik)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" >
+     <widget class="QPushButton" name="buttonSettings" >
+      <property name="text" >
+       <string>settings</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

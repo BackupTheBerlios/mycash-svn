@@ -12,18 +12,17 @@
 #include "konto.h"
 #include "ui_mainwindow1.h"
 #include "neueskontodialog.h"
+#include "tabkontomain.h"
 
 class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 	Q_OBJECT
 	
-	typedef QMap<Konto *, QWidget *> MapKontoWidget;
+	typedef QMap<Konto *, TabKontoMain *> MapKontoWidget;
 
 	public:
 		MainWindow1(QWidget *parent = 0);
 		~MainWindow1();
 
-		bool save();
-		bool saveAs();
 		bool loadFile();
 		bool load(QString filename);
 
@@ -36,6 +35,9 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		bool addKonto(Konto *konto);
 		bool newFile();
 		bool load();
+		bool save();
+		bool saveAs();
+		bool addExistKonto();
 
 	private:
 		bool okToContinue();

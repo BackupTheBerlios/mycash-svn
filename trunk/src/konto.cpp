@@ -11,7 +11,12 @@
 #include <QTextStream>
 #include <QMessageBox>
 
+#include <QtXml>	//constains #include <QDomDocument>, #include <QDomText>
+
 Konto::Konto()  //Konstruktor fuer neues Konto
+/******************************************************************************
+* leerer Konstruktor
+*******************************************************************************/
 {
 	KontoFile = "";
 	KontoName = "";
@@ -21,16 +26,22 @@ Konto::Konto()  //Konstruktor fuer neues Konto
 
 
 Konto::Konto ( QString filename )
+/******************************************************************************
+* Konstruktor mit DateiNamen, Datei wird geladen
+*******************************************************************************/
 {
 	KontoFile = filename;
 	KontoName = "";
 	KontoBeschreibung = "";
-	loadFile ( filename );
+	loadFile ( KontoFile );
 	setNotChanged();
 }
 
 
 Konto::Konto ( QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp )
+/******************************************************************************
+* Kontruktor mit KontoName, KontoBeschreibung, BLZ, BankName und Kontotyp
+*******************************************************************************/
 {
 	KontoFile = "";
 	KontoName = kontoname;
@@ -43,12 +54,18 @@ Konto::Konto ( QString kontoname, QString kontobeschreibung, QString blz, QStrin
 
 
 Konto::~Konto()
+/******************************************************************************
+* Dekonstruktor
+*******************************************************************************/
 {
 	//saveFile();
 }
 
 
 void Konto::setChanged()
+/******************************************************************************
+* Methode setzt Konto als geaendert
+*******************************************************************************/
 {
 	isChanged = true;
 	emit doChange();
@@ -56,18 +73,27 @@ void Konto::setChanged()
 
 
 void Konto::setNotChanged()
+/******************************************************************************
+* Methode setzt Konto als nicht geaendert
+*******************************************************************************/
 {
 	isChanged = false;
 }
 
 
 QString Konto::getKontoName()
+/******************************************************************************
+* Methode gibt KontoNamen zurueck
+*******************************************************************************/
 {
 	return KontoName;
 }
 
 
 quint32 Konto::loadFile ( QString filename )
+/******************************************************************************
+* Methode laed eine Kontodatei(filename)
+*******************************************************************************/
 {
 #ifdef DEBUG
 	QTextStream console ( stdout );
@@ -80,13 +106,13 @@ quint32 Konto::loadFile ( QString filename )
 
 	if ( !file.open ( QIODevice::ReadOnly ) ) {
 #ifdef DEBUG
-		console << "\tKonto::loadFile()\t" << "Datei mit Kontoinformationen (" << filename << ") konnte nicht geoeffnet werden.\n\r";
+		console << "\tKonto::loadFile()\t" << "Datei mit Kontoinformationen (" << filename <<
+		") konnte nicht geoeffnet werden.\n\r";
 #endif
 		return WrongFile;
 	}
 
 	QTextStream in ( &file );
-
 	in.setCodec ( "UTF-8" );
 
 	int zeilennr = 0;
@@ -184,8 +210,8 @@ quint32 Konto::loadFile ( QString filename )
 	KontoFile = filename;
 
 #ifdef DEBUG
-	console << "\tKonto::loadFile()\t" << "Aus Datei mit Kontoinformationen (" << filename << ") wurde erfolgreich " <<
-	Eintraege.size() << " Eintraege geladen.\n\r";
+	console << "\tKonto::loadFile()\t" << "Aus Datei mit Kontoinformationen (" << filename <<
+	") wurde erfolgreich " << Eintraege.size() << " Eintraege geladen.\n\r";
 
 	console.flush();
 
@@ -200,13 +226,30 @@ quint32 Konto::loadFile ( QString filename )
 }
 
 
+quint32 Konto::loadFileXML(QString filename)
+/******************************************************************************
+* Methode laed eine Kontodatei im XML-Format
+*******************************************************************************/
+{
+	
+
+	return true;
+}
+
+
 QString Konto::getKontoFile()
+/******************************************************************************
+* Methode gibt die aktuelle Kontodatei zurueck
+*******************************************************************************/
 {
 	return KontoFile;
 }
 
 
 Konto::operator bool()
+/******************************************************************************
+* Ueberladener Bool-Operator
+*******************************************************************************/
 {
 	if ( KontoFile.isEmpty() ) {
 		return false;
@@ -218,6 +261,9 @@ Konto::operator bool()
 
 
 quint32 Konto::saveFile()
+/******************************************************************************
+* Methode speichert ein Konto
+*******************************************************************************/
 {
 #ifdef DEBUG
 	QTextStream console ( stdout );
@@ -229,7 +275,7 @@ quint32 Konto::saveFile()
 
 	if ( KontoFile == "" ) { // Ueberprüfe ob Datei angegeben
 #ifdef DEBUG
-		console << "\tKonto::saveFile()\t" << "Keine Datei zum Speichern angegeben\n\r";
+		console << "\tKonto::saveFile()\t" << "Keine Kontodatei zum Speichern angegeben\n\r";
 #endif
 		return WrongFile;
 	}
@@ -238,7 +284,7 @@ quint32 Konto::saveFile()
 
 	if ( !file.open ( QIODevice::WriteOnly ) ) {
 #ifdef DEBUG
-		console << "\tKonto::saveFile()\t" << "Datei (" << KontoFile << ") konnte nicht geschrieben werden\n\r";
+		console << "\tKonto::saveFile()\t" << "Kontodatei (" << KontoFile << ") konnte nicht geschrieben werden\n\r";
 #endif
 		return WrongFile;
 	}
@@ -276,7 +322,9 @@ quint32 Konto::saveFile()
 	}
 
 #ifdef DEBUG
-	console << "\tKonto::saveFile()\t" << "Datei (" << KontoFile << ") wurde erfolgreich geschrieben\n\r";
+	console << "\tKonto::saveFile()\t" << "Kontodatei (" << KontoFile << ") wurde erfolgreich geschrieben\n\r";
+
+	console.flush();
 
 #endif
 
@@ -286,7 +334,95 @@ quint32 Konto::saveFile()
 }
 
 
+quint32 Konto::saveFileXML()
+/******************************************************************************
+* Methode speichert ein Konto im XML-Format
+*******************************************************************************/
+{
+	const int Indent = 4; //Einrueckung
+
+#ifdef DEBUG
+	QTextStream console ( stdout );
+#endif
+
+	if ( !isChanged ) { // Ueberprüfe ob Aenderung stattgefunden
+		return Ok;
+	}
+
+	if ( KontoFile == "" ) { // Ueberprüfe ob Datei angegeben
+#ifdef DEBUG
+		console << "\tKonto::saveFile()\t" << "Keine Kontodatei zum Speichern angegeben\n\r";
+#endif
+		return WrongFile;
+	}
+
+	QFile file ( KontoFile ); // Lege Filehandler an
+
+	if ( !file.open ( QIODevice::WriteOnly ) ) {
+#ifdef DEBUG
+		console << "\tKonto::saveFile()\t" << "Kontodatei (" << KontoFile
+				<< ") konnte nicht geschrieben werden\n\r";
+#endif
+		return WrongFile;
+	}
+
+	QTextStream out ( &file );
+	out.setCodec ( "UTF-8" );
+
+	//XML - Document erzeugen
+	QDomDocument doc;
+
+	//Elemente erzeugen
+	QDomElement elementKonto = doc.createElement ( "Konto" );
+	QDomElement elementName = doc.createElement ( "KontoName" );
+	QDomElement elementBeschreibung = doc.createElement ( "KontoBeschreibung" );
+	QDomElement elementBlz = doc.createElement ( "BLZ" );
+	QDomElement elementBankName = doc.createElement ( "BankName" );
+	QDomElement elementKontoTyp = doc.createElement ( "KontoTyp" );
+
+	//Textelemente erzeugen
+	QDomText textName = doc.createTextNode ( KontoName );
+	QDomText textBeschreibung = doc.createTextNode ( KontoBeschreibung );
+	QDomText textBlz = doc.createTextNode ( BLZ );
+	QDomText textBankName = doc.createTextNode ( BankName );
+	QDomText textKontoTyp = doc.createTextNode ( QString().setNum ( KontoTyp ) );
+
+	//Textelemente mit Unterelementen verbinden
+	elementName.appendChild ( textName );
+	elementBeschreibung.appendChild ( textBeschreibung );
+	elementBlz.appendChild ( textBlz );
+	elementBankName.appendChild ( textBankName );
+	elementKontoTyp.appendChild ( textKontoTyp );
+
+	//Unterelemente mit Hauptelement verbinden
+	elementKonto.appendChild ( elementName );
+	elementKonto.appendChild ( elementBeschreibung );
+	elementKonto.appendChild ( elementBlz );
+	elementKonto.appendChild ( elementBankName );
+	elementKonto.appendChild ( elementKontoTyp );
+
+	for ( MapKontoEntry::iterator it = Eintraege.begin(); it != Eintraege.end(); it++ ) {
+		//einzelne Eintraege mit Hauptelement verbinden
+		elementKonto.appendChild ( it.value().getXmlElement ( doc ) );
+	}
+	
+	//Baum ans Dokument binden
+	doc.appendChild(elementKonto);
+
+	//Version bestimmen und anhaengen
+	QDomNode xmlNode = doc.createProcessingInstruction ( "xml", "version=\"1.0\" encoding=\"UTF-8\"" );
+	doc.insertBefore ( xmlNode, doc.firstChild() );
+
+	doc.save(out, Indent);
+
+	return true;
+}
+
+
 quint32 Konto::setKontoName ( QString KName )
+/******************************************************************************
+* Methode setzt den KontoNamen
+*******************************************************************************/
 {
 	KontoName = KName;
 	setChanged();
@@ -294,7 +430,10 @@ quint32 Konto::setKontoName ( QString KName )
 }
 
 
-quint32 Konto::setKontoBezeichnung ( QString KBez )
+quint32 Konto::setKontoBeschreibung ( QString KBez )
+/******************************************************************************
+* Methode setzt die KontoBeschreibung
+*******************************************************************************/
 {
 	KontoBeschreibung = KBez;
 	setChanged();
@@ -303,6 +442,9 @@ quint32 Konto::setKontoBezeichnung ( QString KBez )
 
 
 quint32 Konto::setKontoFile ( QString KFile )
+/******************************************************************************
+* Methode setzt die Kontodatei
+*******************************************************************************/
 {
 	KontoFile = KFile;
 	setChanged();
@@ -311,6 +453,9 @@ quint32 Konto::setKontoFile ( QString KFile )
 
 
 quint32 Konto::setBLZ ( QString blz )
+/******************************************************************************
+* Methode setzt die BLZ
+*******************************************************************************/
 {
 	BLZ = blz;
 	setChanged();
@@ -319,6 +464,9 @@ quint32 Konto::setBLZ ( QString blz )
 
 
 quint32 Konto::setBankName ( QString bankname )
+/******************************************************************************
+* Methode setzt den Banknamen
+*******************************************************************************/
 {
 	BankName = bankname;
 	setChanged();
@@ -327,6 +475,9 @@ quint32 Konto::setBankName ( QString bankname )
 
 
 quint32 Konto::setKontoTyp ( quint32 kontotyp )
+/******************************************************************************
+* Methode setzt den KontoTyp
+*******************************************************************************/
 {
 	KontoTyp = kontotyp;
 	setChanged();
@@ -335,9 +486,15 @@ quint32 Konto::setKontoTyp ( quint32 kontotyp )
 
 
 quint32 Konto::addEntry ( quint32 nummer, KontoEntry *entry )
+/******************************************************************************
+* Methode fuegt an Stelle nummer einen neuen Eintrag(entry) ein
+*******************************************************************************/
 {
 	if ( nummer == newEntry ) {
 		Eintraege[ getFreeNumber() ] = *entry;
+
+	} else {
+		Eintraege[ nummer ] = *entry;
 	}
 
 	setChanged();
@@ -346,19 +503,25 @@ quint32 Konto::addEntry ( quint32 nummer, KontoEntry *entry )
 }
 
 
-quint32 Konto::addEntry ( KontoEntry *entry )
+quint32 Konto::addEntry ( KontoEntry *entry ) //???
+/******************************************************************************
+* Methode fuegt einen Eintrag hinzu - Überladene Funktion für neuen Eintrag
+*******************************************************************************/
 {
 	setChanged();
 	return addEntry ( newEntry, entry );
 }
 
 
-quint32 Konto::deleteEntry ( quint32 nummer )
+quint32 Konto::deleteEntry ( quint32 entry )
+/******************************************************************************
+* Methode löschen einen Eintrag(entry)
+*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
 	for ( it = Eintraege.begin(); it != Eintraege.end(); it++ ) {
-		if ( it.key() == nummer ) {
+		if ( it.key() == entry ) {
 			Eintraege.erase ( it );
 			setChanged();
 			return Ok;
@@ -369,12 +532,15 @@ quint32 Konto::deleteEntry ( quint32 nummer )
 }
 
 
-quint32 Konto::deleteSplitt ( quint32 nummer, quint32 splittnummer )
+quint32 Konto::deleteSplitt ( quint32 entry, quint32 splittnummer )
+/******************************************************************************
+* Methode loescht einen Splitteintrag(splittnummer) eines Eintrages(entry)
+*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
 	for ( it = Eintraege.begin(); it != Eintraege.end(); it++ ) {
-		if ( it.key() == nummer ) {
+		if ( it.key() == entry ) {
 			if ( it.value().deleteSplitt ( splittnummer ) ) {
 				setChanged();
 			}
@@ -388,6 +554,9 @@ quint32 Konto::deleteSplitt ( quint32 nummer, quint32 splittnummer )
 
 
 quint32 Konto::changeDatum ( QString datum, quint32 entry )
+/******************************************************************************
+* Methode aendert das Datum eines Eintrages(entry) - Datum als String
+*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
@@ -407,6 +576,9 @@ quint32 Konto::changeDatum ( QString datum, quint32 entry )
 
 
 quint32 Konto::changeDatum ( QDate datum, quint32 entry )
+/******************************************************************************
+* Methode aendert das Datum eines Eintrages(entry) - Datum als Klasse
+*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
@@ -426,6 +598,9 @@ quint32 Konto::changeDatum ( QDate datum, quint32 entry )
 
 
 quint32 Konto::changeVerwendung ( QString verwendung, quint32 entry )
+/******************************************************************************
+* Methode aendert die Verwendung eines Eintrages(entry)
+*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
@@ -445,6 +620,9 @@ quint32 Konto::changeVerwendung ( QString verwendung, quint32 entry )
 
 
 quint32 Konto::changeVerwendung ( QString verwendung, quint32 entry, quint32 nummer )
+/******************************************************************************
+*  Methode aendert die Verwendung eines Postens(nummer) eines Eintrages(entry)
+*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
@@ -464,6 +642,9 @@ quint32 Konto::changeVerwendung ( QString verwendung, quint32 entry, quint32 num
 
 
 quint32 Konto::changeKategorie ( quint32 kategorie, quint32 entry, quint32 nummer )
+/******************************************************************************
+*  Methode aendert die Kategorie eines Postens(nummer) eines Eintrages(entry)
+*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
@@ -483,6 +664,9 @@ quint32 Konto::changeKategorie ( quint32 kategorie, quint32 entry, quint32 numme
 
 
 quint32 Konto::changeBetrag ( float betrag, quint32 entry, quint32 nummer )
+/******************************************************************************
+* Methode aendert den Betrag eines Postens(nummer) eines Eintrages(entry)
+*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
@@ -502,6 +686,9 @@ quint32 Konto::changeBetrag ( float betrag, quint32 entry, quint32 nummer )
 
 
 quint32 Konto::getFreeNumber()
+/******************************************************************************
+* Methode gibt eine freie Number der Eintraege zurueck, Luecken werden ignoriert
+*******************************************************************************/
 {
 #ifdef DEBUG
 	QTextStream console ( stdout );
@@ -600,14 +787,14 @@ quint32 Konto::printEntry_deb() //DEBUG-Funktion
 }
 
 
-void printKontoInfos() //DEBUG-Funktion
+void Konto::printKontoInfos() //DEBUG-Funktion
 /******************************************************************************
 * Methode gibt Kontoinformationen auf der Konsole aus
 *******************************************************************************/
 {
 	QTextStream console ( stdout );
 	console << "Kontoinfo:" << "\n\r" << "==========" << "\n\r";
-	console << "KontName: '" << KontoName << "'\n\r";
+	console << "KontoName: '" << KontoName << "'\n\r";
 	console << "KontoBeschreibung: '" << KontoBeschreibung << "'\n\r";
 	console << "BLZ: '" << BLZ << "'\n\r";
 	console << "BankName: '" << BankName << "'\n\r" << "\n\r";

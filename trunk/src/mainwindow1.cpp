@@ -13,23 +13,55 @@
 #include "configs.h"
 #include "neueskontodialog.h"
 #include "konto.h"
+#include "tabkontomain.h"
 
 #include <QMainWindow>
 #include <QWidget>
 
 MainWindow1::MainWindow1 ( QWidget *parent ) : QMainWindow ( parent )
-/******************************************************************************
-* Konstruktor fuer GUI MainWindow1
-* Verbindung der Signale und Slots
-* Initialisierung der Formularen
-*******************************************************************************/
+		/******************************************************************************
+		* Konstruktor fuer GUI MainWindow1
+		* Verbindung der Signale und Slots
+		* Initialisierung der Formularen
+		*******************************************************************************/
 {
 	setupUi ( this );
 
-	connect ( actionQt, SIGNAL ( triggered() ), qApp, SLOT ( aboutQt() ) );
-	connect ( actionNeu, SIGNAL ( triggered() ), this, SLOT ( newFile() ) );
-	connect ( buttonNeuKonto, SIGNAL ( clicked() ), this, SLOT ( showNeuesKontoDialog() ) );
-	connect ( actionOeffnen, SIGNAL ( triggered() ), this, SLOT ( load() ) );
+	connect ( actionQt,
+			  SIGNAL ( triggered() ),
+			  qApp,
+			  SLOT ( aboutQt() )
+			);
+	connect ( actionNeu,
+			  SIGNAL ( triggered() ),
+			  this,
+			  SLOT ( newFile() )
+			);
+	connect ( buttonNeuKonto,
+			  SIGNAL ( clicked() ),
+			  this,
+			  SLOT ( showNeuesKontoDialog() )
+			);
+	connect ( actionOeffnen,
+			  SIGNAL ( triggered() ),
+			  this,
+			  SLOT ( load() )
+			);
+	connect ( actionSave,
+			  SIGNAL ( triggered() ),
+			  this,
+			  SLOT ( save() )
+			);
+	connect ( actionSaveAs,
+			  SIGNAL ( triggered() ),
+			  this,
+			  SLOT ( saveAs() )
+			);
+	connect ( buttonAddKonto,
+			  SIGNAL ( clicked() ),
+			  this,
+			  SLOT ( addExistKonto() )
+			);
 
 	// Initialisiere Variablen der Formulare
 	neuesKontoDialog = 0;
@@ -67,7 +99,7 @@ bool MainWindow1::addKonto ( Konto *konto ) // SLOT
 * erzeugt ein TabWidget Eintrag
 *******************************************************************************/
 {
-	QWidget *tempWidget = new QWidget();
+	TabKontoMain *tempWidget = new TabKontoMain(this, konto);
 	connect ( konto, SIGNAL ( doChange() ), this, SLOT ( projectChanged() ) );
 	konto -> setChanged(); // Wegen Signal an MainWindow
 	connections[konto] = tempWidget;
@@ -75,6 +107,27 @@ bool MainWindow1::addKonto ( Konto *konto ) // SLOT
 
 	//setze Ansicht auf neu hinzugefuegtes TabWidget
 	tabWidgetMain -> setCurrentWidget ( tempWidget );
+	return true;
+}
+
+
+bool MainWindow1::addExistKonto()
+{
+	QString filename;
+	filename = QFileDialog::getOpenFileName ( this,
+			   tr ( "Open Kontofile" ),
+			   ".",
+			   tr ( "%1 konten (%2)" ).arg ( AppName ).arg ( END_KONTO )
+											);
+
+	if ( filename.isEmpty() ) {
+		return false; // Dialog ohne Auswahl beendet
+	}
+
+	Konto *tempKonto = new Konto ( filename );
+
+	addKonto ( tempKonto );
+
 	return true;
 }
 
@@ -297,8 +350,8 @@ bool MainWindow1::saveFile ( QString filename )
 				it.key() -> setKontoFile ( kontofilename ); // setze den erhaltenen Dateinamen in dem Kontoobjekt
 			}
 		}
-
-		it.key() -> saveFile();
+		it.key() -> setKontoFile("konto.xml");
+		it.key() -> saveFileXML();
 
 		out << it.key() -> getKontoFile() << "\n\r";
 	}
@@ -309,6 +362,8 @@ bool MainWindow1::saveFile ( QString filename )
 	console << "MainWindow::saveFile(): " << "Projekdatei '" << getFileName() << "' erfolgreich gespeichert." << "\n\r";
 	console.flush();
 #endif
+
+	setWindowModified( false );
 
 	return true;
 }
