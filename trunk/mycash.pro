@@ -17,9 +17,11 @@ HEADERS += 	src/class_konto_typ.h \
            	src/KontoEntry.h \
            	src/mainwindow1.h \
            	src/neueskontodialog.h \
- 			src/tabkontomain.h
+ 			src/tabkontomain.h \
+ 	src/AddEntry.h
 FORMS += main_layout.ui src/mainwindow1.ui src/neueskonto.ui \
-		 src/tab_konto_main.ui
+		 src/tab_konto_main.ui \
+ 		 src/add_entry.ui
 
 SOURCES += 	src/class_konto_typ.cpp \
            	src/EntryKategorie.cpp \
@@ -29,6 +31,7 @@ SOURCES += 	src/class_konto_typ.cpp \
            	src/main.cpp \
            	src/mainwindow1.cpp \
            	src/neueskontodialog.cpp \
-			src/tabkontomain.cpp
+			src/tabkontomain.cpp \
+ 	src/AddEntry.cpp
 
 TRANSLATIONS += src/mycash_de.ts

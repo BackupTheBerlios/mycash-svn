@@ -50,6 +50,18 @@ Konto::Konto ( QString kontoname, QString kontobeschreibung, QString blz, QStrin
 	BankName = bankname;
 	KontoTyp = kontotyp;
 	setNotChanged();
+	setLimitNegativ( 0.00 );
+	setCanBeNegativ( true );
+}
+
+Konto::Konto(QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp, float limit, bool underLimit)
+/******************************************************************************
+* Kontstruktor mit KontoName, KontoBeschreibung, BLZ, BankName, KontoTyp, Limit, LimitFix
+*******************************************************************************/
+{
+	Konto(kontoname, kontobeschreibung, blz, bankname, kontotyp);
+	setLimitNegativ(limit);
+	setCanBeNegativ(underLimit);
 }
 
 
@@ -69,6 +81,44 @@ void Konto::setChanged()
 {
 	isChanged = true;
 	emit doChange();
+}
+
+
+quint32 Konto::setLimitNegativ(float limit)
+/******************************************************************************
+* Methode setzt den Limit
+*******************************************************************************/
+{
+	limitNegativ = limit;
+	return Ok;
+}
+
+
+quint32 Konto::setCanBeNegativ(bool beNegativ)
+/******************************************************************************
+* Methode setzt den Limit fix
+********************************************************************************/
+{
+	canBeNegativ = beNegativ;
+	return true;
+}
+
+
+float Konto::getLimitNegativ()
+/******************************************************************************
+* Methode gibt das Limit zurueck
+*******************************************************************************/
+{
+	return limitNegativ;
+}
+
+
+bool Konto::getCanBeNegativ()
+/******************************************************************************
+* Methode gibt zurueck, ob Limit unterschritten werden kann
+*******************************************************************************/
+{
+	return canBeNegativ;
 }
 
 
@@ -231,7 +281,7 @@ quint32 Konto::loadFileXML(QString filename)
 * Methode laed eine Kontodatei im XML-Format
 *******************************************************************************/
 {
-	
+	filename = filename;
 
 	return true;
 }

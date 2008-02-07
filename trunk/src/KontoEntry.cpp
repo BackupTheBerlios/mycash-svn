@@ -7,16 +7,10 @@
 #include <QtXml> //contain #include <QDomElement>, #include <QDomDocument>, #include <QDomText>
 #include "EntryKategorie.h"
 
-KontoEntry::KontoEntry(QDate datum, QString verwendung, QMap<quint32, Konto_Splitt> *splittdaten){
-	//QTextStream console(stdout);
+KontoEntry::KontoEntry(QDate datum, QString verwendung, quint32 transfer, MapSplitt *splittdaten){
 	Datum = datum;
-	//console << "\t" << "KontoEntry::KontoEntry(): " << "Datum: " << Datum.toString("yyyyMMdd") << "\r\n";
+	Transfer = transfer;
 	Verwendung = verwendung;
-	/*QVector<Konto_Splitt>::iterator it;
-	for(it = splittdaten.begin(); it != splittdaten.end(); it++){
-		//Splittdaten[getFreeNumber()] = new Konto_Splitt(it -> getKategorie(), it -> getVerwendung(), it -> getBetrag()); //Optimieren !!!
-		Splittdaten[ getFreeNumber() ] = it;
-	}*/
 	Splittdaten = *splittdaten;
 }
 
@@ -64,6 +58,16 @@ QVector<quint32> KontoEntry::getKategorien(quint32 sort){
 
 QString KontoEntry::getVerwendung(){
 	return Verwendung;
+}
+
+
+quint32 KontoEntry::changeTransfer(quint32 transfer)
+/******************************************************************************
+* Methode aendert die Art des Transfers
+*******************************************************************************/
+{
+	Transfer = transfer;
+	return true;
 }
 
 
@@ -189,6 +193,15 @@ float KontoEntry::getBetragKategorie(quint32 kategorie){
 		}
 	}
 	return summe;
+}
+
+
+quint32 KontoEntry::getTransfer()
+/******************************************************************************
+* Methode gibt die Transfermethode zurueck
+*******************************************************************************/
+{
+	return Transfer;
 }
 
 

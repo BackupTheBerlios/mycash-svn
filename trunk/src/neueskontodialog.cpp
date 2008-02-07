@@ -7,10 +7,10 @@
 #include "konto.h"
 
 NeuesKontoDialog::NeuesKontoDialog ( QWidget *parent ) : QDialog ( parent )
-/******************************************************************************
-* Konstruktor fuer NeuesKontoDialog
-* Connections erzeugen, Eingabevalidatoren bestimmen, Groesse festlegen
-*******************************************************************************/
+		/******************************************************************************
+		* Konstruktor fuer NeuesKontoDialog
+		* Connections erzeugen, Eingabevalidatoren bestimmen, Groesse festlegen
+		*******************************************************************************/
 {
 	setupUi ( this );
 	connect ( pushAdd, SIGNAL ( clicked() ), this, SLOT ( clickAdd() ) );
@@ -33,7 +33,9 @@ void NeuesKontoDialog::clickAdd()
 								   lineKontoBeschreibung -> text(),
 								   lineBLZ -> text(),
 								   lineBankName -> text(),
-								   0
+								   0, //KontoTyp
+								   spinboxLimit -> value(),
+								   checkBeUnderLimit -> checkState()
 								 );
 	emit add ( tempKonto );
 	// tempKonto wird in ~MainWindow1 geloescht

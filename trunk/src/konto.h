@@ -37,6 +37,7 @@ class Konto : public QWidget{
 		Konto();
 		Konto(QString filename);
 		Konto(QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp);
+		Konto(QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp, float limit, bool underLimit);
 		~Konto();
 		
 		quint32 loadFile(QString filename);
@@ -45,6 +46,8 @@ class Konto : public QWidget{
 		quint32 saveFileXML();
 		QString getKontoFile();
 		QString getKontoName();
+		float getLimitNegativ();
+		bool getCanBeNegativ();
 
 		quint32 setKontoFile(QString KontoFile);
 		quint32 setKontoName(QString KontoName);
@@ -52,6 +55,8 @@ class Konto : public QWidget{
 		quint32 setBLZ(QString blz);
 		quint32 setBankName(QString bankname);
 		quint32 setKontoTyp(quint32 kontotyp);
+		quint32 setLimitNegativ(float limit);
+		quint32 setCanBeNegativ(bool beNegativ);
 
 		quint32 addEntry(quint32 nummer, KontoEntry *entry);
 		quint32 addEntry(KontoEntry *entry);
@@ -94,7 +99,9 @@ class Konto : public QWidget{
 		quint32 KontoTyp;
 
 		bool isChanged;
-		
+		float limitNegativ;
+		bool canBeNegativ;	
+
 		MapKontoEntry Eintraege;
 
 		enum Zeilenspeicher{

@@ -1,0 +1,189 @@
+<ui version="4.0" >
+ <class>AddEntry</class>
+ <widget class="QWidget" name="AddEntry" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>515</width>
+    <height>335</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>add Entry</string>
+  </property>
+  <widget class="QWidget" name="" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>411</width>
+     <height>313</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" >
+    <item row="0" column="0" >
+     <widget class="QLabel" name="labelDate" >
+      <property name="text" >
+       <string>date:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" >
+     <widget class="QDateEdit" name="date" />
+    </item>
+    <item row="1" column="0" >
+     <widget class="QLabel" name="labelUse" >
+      <property name="text" >
+       <string>use for:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" >
+     <widget class="QLineEdit" name="lineUse" />
+    </item>
+    <item row="2" column="0" >
+     <widget class="QLabel" name="labelTransfer" >
+      <property name="text" >
+       <string>transfer:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" >
+     <widget class="QComboBox" name="comboTransfer" >
+      <item>
+       <property name="text" >
+        <string>non specified</string>
+       </property>
+      </item>
+      <item>
+       <property name="text" >
+        <string>cash</string>
+       </property>
+      </item>
+      <item>
+       <property name="text" >
+        <string>cheque</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="3" column="0" >
+     <widget class="QLabel" name="labelSplitt" >
+      <property name="text" >
+       <string>splitt entry:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1" >
+     <widget class="QTableWidget" name="tableSplitt" >
+      <property name="rowCount" >
+       <number>1</number>
+      </property>
+      <property name="columnCount" >
+       <number>3</number>
+      </property>
+      <row/>
+      <column>
+       <property name="text" >
+        <string>genre</string>
+       </property>
+      </column>
+      <column>
+       <property name="text" >
+        <string>use for</string>
+       </property>
+      </column>
+      <column>
+       <property name="text" >
+        <string>pay</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item row="4" column="0" >
+     <widget class="QLabel" name="labelPay" >
+      <property name="text" >
+       <string>pay:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" >
+     <widget class="QLineEdit" name="linePay" >
+      <property name="alignment" >
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="readOnly" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="" >
+   <property name="geometry" >
+    <rect>
+     <x>430</x>
+     <y>10</y>
+     <width>77</width>
+     <height>150</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" >
+    <item>
+     <widget class="QPushButton" name="pushAdd" >
+      <property name="text" >
+       <string>add Entry</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushCancel" >
+      <property name="text" >
+       <string>cancel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer>
+      <property name="orientation" >
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" >
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushMore" >
+      <property name="text" >
+       <string>more</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>AddEntry</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>468</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>257</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
