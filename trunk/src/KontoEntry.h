@@ -12,11 +12,12 @@
 class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 	enum sort{NO=0, ASC=1, DES=2};
 	enum returns{Ok=1, NotFound=4}; 
-	typedef QMap<quint32, Konto_Splitt> MapSplitt;
+	typedef QMap<quint32, KontoSplitt> MapSplitt;
 
 	public:
 		KontoEntry();
 		KontoEntry(QDate datum, QString verwendung, quint32 transfer, MapSplitt *splittdaten);
+		KontoEntry(const QDomElement& element);
 		~KontoEntry();
 
 		quint32 changeTransfer(quint32 transfer);
@@ -27,14 +28,16 @@ class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 		quint32 changeKategorie(quint32 kategorie, quint32 nummer);
 		quint32 changeVerwendung(QString verwendung);	//Hauptverwendung
 
-		quint32 addSplitt(Konto_Splitt *splitt);
+		quint32 addSplitt(KontoSplitt *splitt);
 		quint32 deleteSplitt(quint32 splittnummer);
+
+		operator bool();
 
 		QString getVerwendung();
 		float getBetrag();
 		QString getDatum();
 		QVector<quint32> getKategorien(quint32 sort);
-		QVector<Konto_Splitt> getSplittdaten();
+		QVector<KontoSplitt> getSplittdaten();
 		quint32 getTransfer();
 
 		float getBetragKategorie(quint32 kategorie);

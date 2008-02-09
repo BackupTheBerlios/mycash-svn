@@ -147,3 +147,38 @@ QString RepeatEntry::parse ( QString text )
 	return text;
 }
 
+QDomElement RepeatEntry::getXmlElement(QDomDocument &doc)
+/******************************************************************************
+* Methode gibt ein XML Zweig zurueck
+*******************************************************************************/
+{
+	QDomElement elementRepeat = doc.createElement("RepeatEintraege");
+	QDomElement elementNext = doc.createElement("NextDate");
+	QDomElement elementCount = doc.createElement("Count");
+	QDomElement elementRepeatC = doc.createElement("Repeat");
+	QDomElement elementRepeatTyp = doc.createElement("RepeatTyp");
+	QDomElement elementStep = doc.createElement("Step");
+	
+	QDomText textNext = doc.createTextNode( Next.toString("dd.MM.yyyy") );
+	QDomText textCount = doc.createTextNode( QString::number(Count) );
+	QDomText textRepeat = doc.createTextNode( QString::number(Repeat) );
+	QDomText textRepeatTyp = doc.createTextNode( QString::number(RepeatTyp) );
+	QDomText textStep = doc.createTextNode( QString::number(Step) );
+
+	elementNext.appendChild( textNext );
+	elementCount.appendChild( textCount );
+	elementRepeatC.appendChild( textRepeat );
+	elementRepeatTyp.appendChild( textRepeatTyp );
+	elementStep .appendChild( textStep );
+
+	elementRepeat.appendChild( elementNext );
+	elementRepeat.appendChild( elementCount );
+	elementRepeat.appendChild( elementRepeatC );
+	elementRepeat.appendChild( elementRepeatTyp );
+	elementRepeat.appendChild( elementStep );
+	elementRepeat.appendChild( Entry.getXmlElement(doc) );
+
+	return elementRepeat;
+}
+
+

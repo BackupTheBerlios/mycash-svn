@@ -23,7 +23,7 @@ const QString KTypFile = "./configs/KontoTyp.mckt";
 const QString KatFile = "./configs/Kategorie.mckk";
 
 //Globale Variablen
-//extern Konto_Typ MCKT;
+//extern KontoTyp MCKT;
 
 #endif
 

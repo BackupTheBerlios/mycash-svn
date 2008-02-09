@@ -18,7 +18,7 @@ struct KTypS{
 	quint32 Options;
 };
 
-class Konto_Typ{
+class KontoTyp{
 	typedef QMap<quint32, KTypS> MapTyp;
 	
 	public:
@@ -42,16 +42,16 @@ class Konto_Typ{
 				};
 	
 	/*
-		Konto_Typ()
+		KontoTyp()
 		Konstrukter
 	*/	
-	Konto_Typ();
+	KontoTyp();
 
 	/*
-		~Konto_Typ()
+		~KontoTyp()
 		Destrukter
 	*/
-	~Konto_Typ();
+	~KontoTyp();
 	
 	/*
 		void newTyp(QString Bezeichnung, quint32 Option)

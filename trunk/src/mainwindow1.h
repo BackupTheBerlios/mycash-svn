@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QMap>
+#include <QtXml>
 
 #include "konto.h"
 #include "ui_mainwindow1.h"
@@ -34,6 +35,7 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		void projectChanged();
 		void showNeuesKontoDialog();
 		bool addKonto(Konto *konto);
+		bool addKonto(Konto *konto, bool show);
 		bool newFile();
 		bool load();
 		bool save();
@@ -43,15 +45,20 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		bool deleteKonto(Konto *konto);
 
 	private:
+		//QDomElement getFilesXml(QDomDocument& doc);
+		//bool parseFilesXml(QDomElement& element);
 		bool okToContinue();
 		bool saveFile(QString filename);
 		bool clear();
 		void setFileName(QString filename);
+		void showMain(bool show);
 		void unloadKonten();
 		QString getFileName();
 		QString correctFilename(QString filename, QString endung);
 		bool existFilename(QString filename);
 		void showMessageboxAlreadyExist();
+		//bool loadFilePlain();
+		//bool loadFileXml();
 
 		MapKontoWidget connections;	//Verknüfungstabelle der Konten mit TabWidget
 		//bool IsChanged;

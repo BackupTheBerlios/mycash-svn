@@ -3,6 +3,8 @@
 
 #include <QString>
 #include <QDate>
+#include <QDomElement>
+#include <QDomDocument>
 
 #include "KontoEntry.h"
 
@@ -20,6 +22,7 @@ class RepeatEntry{
 		/*QString getVerwendung();
 		QString getVerwendungParse();
 		KontoEntry getEntry(*/
+		QDomElement getXmlElement(QDomDocument &doc);
 
 	private:
 		void calcNext();
@@ -32,7 +35,6 @@ class RepeatEntry{
 		quint32 Repeat;
 		quint32 RepeatTyp;
 		quint32 Step;
-		bool AfterDay;
 
 		KontoEntry Entry;
 };

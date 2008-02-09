@@ -3,53 +3,95 @@
 
 #include <QtXml> //contains #include <QDomDocument>, #include <QDomElement>, #include <QDomText>
 
-Konto_Splitt::Konto_Splitt(){
+KontoSplitt::KontoSplitt(){
 
 }
 
 
-Konto_Splitt::Konto_Splitt(quint32 kategorie, QString verwendung, float betrag){
+KontoSplitt::KontoSplitt(const QDomElement &element)
+/******************************************************************************
+* Konstruktor zum laden von XML-Baeumen
+*******************************************************************************/
+{
+	if( element.tagName() != "Splittdaten" ){ //Falscher Baum
+		return;
+	}
+
+	//QDomNode
+	QDomNode node = element.firstChild();
+	while( !node.isNull() ){
+		QString textNode = node.toElement().tagName();
+		if(textNode == "Kategorie"){
+			Kategorie = node.toElement().text().toUInt(0);
+		}else if( textNode == "Verwendung"){
+			Verwendung = node.toElement().text();
+		}else if( textNode == "Betrag"){
+			Betrag = node.toElement().text().toFloat(0);
+		}else{
+			// Item nicht gueltig
+		}
+
+		node = node.nextSibling();
+	}
+}
+
+
+KontoSplitt::KontoSplitt(quint32 kategorie, QString verwendung, float betrag){
 	Kategorie = kategorie;
 	Verwendung = verwendung;
 	Betrag = betrag;
 }
 
 
-quint32 Konto_Splitt::changeKategorie(quint32 kategorie){
+KontoSplitt::operator bool()
+/******************************************************************************
+* UEberladener Bool-Operator
+* Wenn Verwendung != "" && Kategorie != 0 -> true, sonst false
+*******************************************************************************/
+{
+	if( Verwendung != "" && Kategorie != 0 ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
+quint32 KontoSplitt::changeKategorie(quint32 kategorie){
 	Kategorie = kategorie;
 	return Ok;
 }
 
 
-quint32 Konto_Splitt::getKategorie(){
+quint32 KontoSplitt::getKategorie(){
 	return Kategorie;
 }
 
 
-QString Konto_Splitt::getVerwendung(){
+QString KontoSplitt::getVerwendung(){
 	return Verwendung;
 }
 
 
-float Konto_Splitt::getBetrag(){
+float KontoSplitt::getBetrag(){
 	return Betrag;
 }
 
 
-quint32 Konto_Splitt::changeBetrag(float betrag){
+quint32 KontoSplitt::changeBetrag(float betrag){
 	// ToDo: betrag ueberpruefen
 	Betrag = betrag;
 	return Ok;
 }
 
 
-quint32 Konto_Splitt::changeVerwendung(QString verwendung){
+quint32 KontoSplitt::changeVerwendung(QString verwendung){
 	Verwendung = verwendung;
 	return Ok;
 }
 
 
-QDomElement Konto_Splitt::getXmlElement(QDomDocument &doc)
+QDomElement KontoSplitt::getXmlElement(QDomDocument &doc)
 /******************************************************************************
 * Methode gibt ein XML-Node zurueck
 *******************************************************************************/

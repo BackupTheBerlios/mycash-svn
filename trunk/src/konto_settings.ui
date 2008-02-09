@@ -1,0 +1,221 @@
+<ui version="4.0" >
+ <class>KontoSettings</class>
+ <widget class="QWidget" name="KontoSettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>539</width>
+    <height>433</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>account settings</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>515</width>
+     <height>409</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" >
+    <item>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="labelKontoName" >
+        <property name="text" >
+         <string>Accountname: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QLineEdit" name="lineKontoName" />
+      </item>
+      <item row="1" column="0" >
+       <layout class="QVBoxLayout" >
+        <item>
+         <widget class="QLabel" name="labelKontoBeschreibung" >
+          <property name="text" >
+           <string>description of account:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QTextEdit" name="textKontoBeschreibung" >
+        <property name="documentTitle" >
+         <string/>
+        </property>
+        <property name="undoRedoEnabled" >
+         <bool>false</bool>
+        </property>
+        <property name="acceptRichText" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="labelFile" >
+        <property name="text" >
+         <string>File to save:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QLineEdit" name="lineFile" />
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonFileDialog" >
+          <property name="text" >
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="labelBLZ" >
+        <property name="text" >
+         <string>bank idenfication number:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" >
+       <widget class="QLineEdit" name="lineBLZ" />
+      </item>
+      <item row="4" column="0" >
+       <widget class="QLabel" name="labelBankName" >
+        <property name="text" >
+         <string>name of bank:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" >
+       <widget class="QLineEdit" name="lineBankName" />
+      </item>
+      <item row="5" column="0" >
+       <widget class="QLabel" name="labelKontoTyp" >
+        <property name="text" >
+         <string>kind od account:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" >
+       <widget class="QComboBox" name="comboKontoTyp" />
+      </item>
+      <item row="6" column="0" >
+       <widget class="QLabel" name="labelLimit" >
+        <property name="text" >
+         <string>limit of account:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1" >
+       <widget class="QDoubleSpinBox" name="spinLimit" >
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="suffix" >
+         <string>€</string>
+        </property>
+        <property name="minimum" >
+         <double>-1000000.000000000000000</double>
+        </property>
+        <property name="maximum" >
+         <double>999999.989999999990687</double>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0" >
+       <widget class="QLabel" name="labelUnderLimit" >
+        <property name="text" >
+         <string>can be under limit:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1" >
+       <widget class="QCheckBox" name="boxUnderLimit" >
+        <property name="text" >
+         <string>Yes</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" >
+      <item>
+       <layout class="QVBoxLayout" >
+        <item>
+         <widget class="QPushButton" name="buttonOk" >
+          <property name="text" >
+           <string>Ok</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonCancel" >
+          <property name="text" >
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>KontoSettings</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>618</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>332</x>
+     <y>162</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

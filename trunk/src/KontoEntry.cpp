@@ -7,7 +7,11 @@
 #include <QtXml> //contain #include <QDomElement>, #include <QDomDocument>, #include <QDomText>
 #include "EntryKategorie.h"
 
-KontoEntry::KontoEntry(QDate datum, QString verwendung, quint32 transfer, MapSplitt *splittdaten){
+KontoEntry::KontoEntry(QDate datum, QString verwendung, quint32 transfer, MapSplitt *splittdaten)
+/******************************************************************************
+* Konstrukter mit Einzeleintraegen
+*******************************************************************************/
+{
 	Datum = datum;
 	Transfer = transfer;
 	Verwendung = verwendung;
@@ -15,13 +19,60 @@ KontoEntry::KontoEntry(QDate datum, QString verwendung, quint32 transfer, MapSpl
 }
 
 
-KontoEntry::KontoEntry(){
+KontoEntry::KontoEntry()
+/******************************************************************************
+* Standardkonstruktor
+*******************************************************************************/
+{
 
+}
+
+
+KontoEntry::KontoEntry(const QDomElement & element)
+/******************************************************************************
+* Konstruktor mit QDomElement
+*******************************************************************************/
+{
+	if( element.tagName() != "Eintraege" ){
+		return;
+	}
+	
+	QDomNode node = element.firstChild();
+	while( !node.isNull() ){
+		QString nodeText = node.toElement().tagName();
+		if( nodeText == "Datum" ){
+			Datum = QDate::fromString(node.toElement().text(), "yyyyMMdd");
+		}else if( nodeText == "Verwendung" ){
+			Verwendung = node.toElement().text();
+		}else if( nodeText == "Splittdaten" ){
+			KontoSplitt tempSplitt( node.toElement() );
+			if( tempSplitt ){
+				addSplitt( &tempSplitt ); 
+			}
+		}else{
+			// ITEM invalid
+		}
+
+		node = node.nextSibling();
+	}
 }
 
 
 KontoEntry::~KontoEntry(){
 
+}
+
+
+KontoEntry::operator bool()
+/******************************************************************************
+* Ueberladener Bool-Operator
+*******************************************************************************/
+{
+	if( !Datum.isNull()  && Splittdaten.size() > 0 ){
+		return true;
+	}else{
+		return false;
+	}
 }
 
 
@@ -142,8 +193,8 @@ quint32 KontoEntry::changeKategorie(quint32 kategorie, quint32 nummer){
 }
 
 
-QVector<Konto_Splitt> KontoEntry::getSplittdaten(){
-	QVector<Konto_Splitt> returnvalue;
+QVector<KontoSplitt> KontoEntry::getSplittdaten(){
+	QVector<KontoSplitt> returnvalue;
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
 		returnvalue.push_back( it.value() );
@@ -152,7 +203,7 @@ QVector<Konto_Splitt> KontoEntry::getSplittdaten(){
 }
 
 
-quint32 KontoEntry::addSplitt(Konto_Splitt *splitt){
+quint32 KontoEntry::addSplitt(KontoSplitt *splitt){
 	Splittdaten[ getFreeNumber() ] = *splitt;
 	return Ok;
 }

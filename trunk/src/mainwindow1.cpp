@@ -77,7 +77,7 @@ MainWindow1::MainWindow1 ( QWidget *parent ) : QMainWindow ( parent )
 	// configure view
 	qint32 pos;
 	pos = tabWidgetMain -> currentIndex();
-	tabWidgetMain -> removeTab( pos );
+	tabWidgetMain -> removeTab ( pos );
 }
 
 
@@ -108,12 +108,31 @@ void MainWindow1::projectChanged() // SLOT
 }
 
 
+bool MainWindow1::addKonto(Konto *konto, bool show)
+/******************************************************************************
+* Ueberladene Funktion, um das das hinzufuegen zum TabWidget zu steuern
+*******************************************************************************/
+{
+	if( show ){
+		return addKonto( konto );
+	}else{
+		connections[konto] = 0;
+
+		if ( connections.size() == 1 ) { // Wenn 1 -> einiger Eintrag, sonst schon da..
+			showMain( true );
+		}	
+	}
+	return true;
+}
+
+
 bool MainWindow1::addKonto ( Konto *konto ) // SLOT
 /******************************************************************************
 * Methode uebernimmt eine Klasse, fuegt sie in die Verknüpfungstabelle ein,
 * erzeugt ein TabWidget Eintrag
 *******************************************************************************/
 {
+	//QMessageBox::warning(this,"Sender",QString::number((uint)sender()) + "\n" + sender() -> objectName() );
 	QString file = konto -> getKontoFile();
 
 	if ( !file.isEmpty() && existFilename ( file ) ) {
@@ -135,11 +154,9 @@ bool MainWindow1::addKonto ( Konto *konto ) // SLOT
 			  this,
 			  SLOT ( closeTab ( TabKontoMain * ) )
 			);
-	if( connections.size() > 0){ // Eintrag vorhanden
-		if( tabMain == 0 ){ // Noch kein TabMain erstellt
-			tabMain = new TabMain( this );
-			tabWidgetMain -> addTab( tabMain, tr("Mainmenu") );
-		}
+
+	if ( connections.size() == 1 ) { // Wenn 1 -> einiger Eintrag, sonst schon da..
+		showMain(true);
 	}
 
 	tabWidgetMain -> addTab ( tempWidget, konto -> getKontoName() );
@@ -353,7 +370,8 @@ bool MainWindow1::saveAs()
 {
 	//QMessageBox::warning(this,"MainWindow::saveAs","1", QMessageBox::Ok);
 	QString filename = QFileDialog::getSaveFileName ( this,
-					   tr ( "Save Project" ), ".",
+					   tr ( "Save Project" ),
+					   ".",
 					   tr ( "%1 projects (%2)" ).arg ( AppName ).arg ( END_PROJECT )
 													);
 
@@ -531,12 +549,16 @@ void MainWindow1::showNeuesKontoDialog() //SLOT
 {
 	if ( ! neuesKontoDialog ) {
 		neuesKontoDialog = new NeuesKontoDialog ( this );
+		connect ( neuesKontoDialog,
+				  SIGNAL ( add ( Konto * ) ),
+				  this,
+				  SLOT ( addKonto ( Konto * ) )
+				);
 		// toDo: Titelleistenbuttons entfernen
 	}
 
-	connect ( neuesKontoDialog, SIGNAL ( add ( Konto * ) ), this, SLOT ( addKonto ( Konto * ) ) );
-
 	neuesKontoDialog -> show();
+
 	neuesKontoDialog -> activateWindow();
 }
 
@@ -573,7 +595,7 @@ void MainWindow1::showMessageboxAlreadyExist()
 }
 
 
-bool MainWindow1::deleteKonto(Konto *konto) // SLOT
+bool MainWindow1::deleteKonto ( Konto *konto ) // SLOT
 /******************************************************************************
 * Methode loescht ein Konto aus dem Projekt
 * Wenn ein entsprechender Tab noch geladen ist -> entladen und entfernen
@@ -581,27 +603,25 @@ bool MainWindow1::deleteKonto(Konto *konto) // SLOT
 *******************************************************************************/
 {
 	MapKontoWidget::iterator it;
-	for(it = connections.begin(); it != connections.end(); it++){
-		if( it.key() == konto ){
-			if(it.value() != 0){	//Tab geladen
+
+	for ( it = connections.begin(); it != connections.end(); it++ ) {
+		if ( it.key() == konto ) {
+			if ( it.value() != 0 ) { //Tab geladen
 				qint32 pos;
-				pos = tabWidgetMain -> indexOf( it.value() );
-				if( pos == -1){	//Tab nicht existent
+				pos = tabWidgetMain -> indexOf ( it.value() );
+
+				if ( pos == -1 ) { //Tab nicht existent
 					return false;
 				}
-				
-				tabWidgetMain -> removeTab( pos ); // entferne Tab aus QTabWidget
-				delete it.value();	//entlade Tab
-				delete it.key();	//entlade Konto
-				connections.erase ( it );	// loesche Konto aus Verknuepfungstabelle
 
- 				if( connections.size() == 0 ){	//Kein Konto im Project
-					// Aendere Ansicht und so...
-					qint32 pos;
-					pos = tabWidgetMain -> indexOf( tabMain );
-					if(pos != -1){
-						tabWidgetMain -> setTabEnabled(false, pos);
-					}
+				tabWidgetMain -> removeTab ( pos ); // entferne Tab aus QTabWidget
+
+				delete it.value(); //entlade Tab
+				delete it.key(); //entlade Konto
+				connections.erase ( it ); // loesche Konto aus Verknuepfungstabelle
+
+				if ( connections.size() == 0 ) { //Kein Konto im Project
+					showMain(false);
 				}
 
 				return true;
@@ -613,3 +633,27 @@ bool MainWindow1::deleteKonto(Konto *konto) // SLOT
 }
 
 
+void MainWindow1::showMain(bool show)
+/******************************************************************************
+* Methode aktiviert/deaktiviert das Hauptmenu
+*******************************************************************************/
+{
+	qint32 pos;
+	pos = tabWidgetMain -> indexOf ( tabMain );
+	if(pos == -1){
+		return;
+	}
+
+	if(show){
+		if ( tabMain == 0 ) { // Noch kein TabMain erstellt
+			tabMain = new TabMain ( this );
+			tabWidgetMain -> addTab ( tabMain, tr ( "Mainmenu" ) );
+		}
+		tabWidgetMain -> setTabEnabled(true, pos);
+		tabWidgetMain -> setVisible(true);
+	}else{
+		// Aendere Ansicht und so...
+		tabWidgetMain -> setTabEnabled ( false, pos );
+		tabWidgetMain -> setVisible (false);
+	}
+}

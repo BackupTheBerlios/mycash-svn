@@ -1,6 +1,7 @@
 #include "konto.h"
 #include "configs.h"
-#include <iostream>
+
+//#include <iostream>
 #include <string>
 #include <QString>
 #include <QFile>
@@ -11,7 +12,7 @@
 #include <QTextStream>
 #include <QMessageBox>
 
-#include <QtXml>	//constains #include <QDomDocument>, #include <QDomText>
+#include <QtXml> //constains #include <QDomDocument>, #include <QDomText>
 
 Konto::Konto()  //Konstruktor fuer neues Konto
 /******************************************************************************
@@ -33,7 +34,7 @@ Konto::Konto ( QString filename )
 	KontoFile = filename;
 	KontoName = "";
 	KontoBeschreibung = "";
-	loadFile ( KontoFile );
+	loadFileXML ( KontoFile );
 	setNotChanged();
 }
 
@@ -50,18 +51,24 @@ Konto::Konto ( QString kontoname, QString kontobeschreibung, QString blz, QStrin
 	BankName = bankname;
 	KontoTyp = kontotyp;
 	setNotChanged();
-	setLimitNegativ( 0.00 );
-	setCanBeNegativ( true );
+	setLimitNegativ ( 0.00 );
+	setCanBeNegativ ( true );
 }
 
-Konto::Konto(QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp, float limit, bool underLimit)
+Konto::Konto ( QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp, float limit, bool underLimit )
 /******************************************************************************
 * Kontstruktor mit KontoName, KontoBeschreibung, BLZ, BankName, KontoTyp, Limit, LimitFix
 *******************************************************************************/
-{
-	Konto(kontoname, kontobeschreibung, blz, bankname, kontotyp);
-	setLimitNegativ(limit);
-	setCanBeNegativ(underLimit);
+{	
+	KontoFile = "";
+	KontoName = kontoname;
+	KontoBeschreibung = kontobeschreibung;
+	BLZ = blz;
+	BankName = bankname;
+	KontoTyp = kontotyp;
+	setNotChanged();
+	setLimitNegativ ( limit );
+	setCanBeNegativ ( underLimit );
 }
 
 
@@ -84,17 +91,17 @@ void Konto::setChanged()
 }
 
 
-quint32 Konto::setLimitNegativ(float limit)
+quint32 Konto::setLimitNegativ ( float limit )
 /******************************************************************************
 * Methode setzt den Limit
 *******************************************************************************/
 {
-	limitNegativ = limit;
+	LimitNegativ = limit;
 	return Ok;
 }
 
 
-quint32 Konto::setCanBeNegativ(bool beNegativ)
+quint32 Konto::setCanBeNegativ ( bool beNegativ )
 /******************************************************************************
 * Methode setzt den Limit fix
 ********************************************************************************/
@@ -109,7 +116,7 @@ float Konto::getLimitNegativ()
 * Methode gibt das Limit zurueck
 *******************************************************************************/
 {
-	return limitNegativ;
+	return LimitNegativ;
 }
 
 
@@ -163,6 +170,7 @@ quint32 Konto::loadFile ( QString filename )
 	}
 
 	QTextStream in ( &file );
+
 	in.setCodec ( "UTF-8" );
 
 	int zeilennr = 0;
@@ -188,7 +196,7 @@ quint32 Konto::loadFile ( QString filename )
 
 		} else {
 			KontoEntry tempEntry /*= new KontoEntry()*/;
-			Konto_Splitt tempSplitt;
+			KontoSplitt tempSplitt;
 			quint32 zaehler = 0;
 			QStringList list;
 			QStringList::Iterator it;
@@ -276,12 +284,85 @@ quint32 Konto::loadFile ( QString filename )
 }
 
 
-quint32 Konto::loadFileXML(QString filename)
+quint32 Konto::loadFileXML ( QString filename )
 /******************************************************************************
 * Methode laed eine Kontodatei im XML-Format
 *******************************************************************************/
 {
-	filename = filename;
+	//Filehandler
+	QFile file ( filename );
+
+	//Fehlervariablen fuer Parser
+	QString errorStr;
+	int errorLine;
+	int errorColumn;
+
+	//DOM Document
+	QDomDocument doc;
+
+	if ( !doc.setContent ( &file, true, &errorStr, &errorLine, &errorColumn ) ) {
+		QMessageBox::warning ( this,
+							   tr ( "%1" ).arg ( AppName ),
+							   tr ( "Parse error at line %1, column %2:\n%3" )
+							   .arg ( errorLine )
+							   .arg ( errorColumn )
+							   .arg ( errorStr )
+							 );
+		return false;
+	}
+
+	//DOM Element
+	QDomElement root = doc.documentElement();
+
+	if ( root.tagName() != "Konto" ) {
+		QMessageBox::warning ( this,
+							   tr ( "%1" ).arg ( AppName ),
+							   tr ( "This is't a correct KontoFile" )
+							 );
+		return false;
+	}
+
+	//DOM Node
+	QDomNode node = root.firstChild();
+
+	while ( !node.isNull() ) {
+		QString nodeText = node.toElement().tagName();
+
+		if ( nodeText == "KontoName" ) {
+			KontoName = node.toElement().text();
+			//QMessageBox::information(this,"XML load", "Kontoname: '" + node/*.firstChild()*/.toElement().text() + "'");
+
+		} else if ( nodeText == "KontoBeschreibung" ) {
+			KontoBeschreibung = node.toElement().text();
+
+		} else if ( nodeText == "BLZ" ) {
+			BLZ = node.toElement().text();
+
+		} else if ( nodeText == "BankName" ) {
+			BankName = node.toElement().text();
+
+		} else if ( nodeText == "KontoTyp" ) {
+			KontoTyp = node.toElement().text().toUInt ( 0 );
+
+		} else if ( nodeText == "Eintraege" ) {
+			KontoEntry eintrag ( node.toElement() );
+			//Abfrage ob erfolgreich, dann in Eintraege
+
+			if ( eintrag ) {
+				addEntry ( &eintrag );
+			}
+
+		} else if ( nodeText == "RepeatEintraege" ) {
+
+		} else {
+			QMessageBox::information ( this,
+									   tr ( "%1" ).arg ( AppName ),
+									   tr ( "XML Item '%1' ivalid. Item is ignored." ).arg ( nodeText )
+									 );
+		}
+
+		node = node.nextSibling();
+	}
 
 	return true;
 }
@@ -355,10 +436,10 @@ quint32 Konto::saveFile()
 		out << it.value().getDatum() << "|";
 		out << it.value().getVerwendung() << "|";
 
-		QVector<Konto_Splitt> splitt = it.value().getSplittdaten();
+		QVector<KontoSplitt> splitt = it.value().getSplittdaten();
 		out << splitt.size() << "|";
 
-		QVector<Konto_Splitt>::iterator it1;
+		QVector<KontoSplitt>::iterator it1;
 
 		for ( it1 = splitt.begin(); it1 !=  splitt.end(); it1++ ) {
 			out << it1 -> getKategorie() << "|";
@@ -411,12 +492,13 @@ quint32 Konto::saveFileXML()
 	if ( !file.open ( QIODevice::WriteOnly ) ) {
 #ifdef DEBUG
 		console << "\tKonto::saveFile()\t" << "Kontodatei (" << KontoFile
-				<< ") konnte nicht geschrieben werden\n\r";
+		<< ") konnte nicht geschrieben werden\n\r";
 #endif
 		return WrongFile;
 	}
 
 	QTextStream out ( &file );
+
 	out.setCodec ( "UTF-8" );
 
 	//XML - Document erzeugen
@@ -455,15 +537,20 @@ quint32 Konto::saveFileXML()
 		//einzelne Eintraege mit Hauptelement verbinden
 		elementKonto.appendChild ( it.value().getXmlElement ( doc ) );
 	}
-	
+
+	for ( MapRepeatEntry::iterator it = RepeatEintraege.begin(); it != RepeatEintraege.end(); it++ ) {
+		elementKonto.appendChild ( it.value().getXmlElement ( doc ) );
+	}
+
 	//Baum ans Dokument binden
-	doc.appendChild(elementKonto);
+	doc.appendChild ( elementKonto );
 
 	//Version bestimmen und anhaengen
 	QDomNode xmlNode = doc.createProcessingInstruction ( "xml", "version=\"1.0\" encoding=\"UTF-8\"" );
+
 	doc.insertBefore ( xmlNode, doc.firstChild() );
 
-	doc.save(out, Indent);
+	doc.save ( out, Indent );
 
 	return true;
 }
@@ -821,8 +908,8 @@ quint32 Konto::printEntry_deb() //DEBUG-Funktion
 		console << "\t" << "Verwendung: " << it.value().getVerwendung();
 		console << "\n\r";
 
-		QVector<Konto_Splitt> splitt = it.value().getSplittdaten();
-		QVector<Konto_Splitt>::iterator it1;
+		QVector<KontoSplitt> splitt = it.value().getSplittdaten();
+		QVector<KontoSplitt>::iterator it1;
 
 		for ( it1 = splitt.begin(); it1 != splitt.end(); it1++ ) {
 			console << "\t\t" << it1 -> getKategorie() << "\t" << it1 -> getVerwendung() << "\t" << it -> getBetrag() << "\n\r";
@@ -834,6 +921,26 @@ quint32 Konto::printEntry_deb() //DEBUG-Funktion
 	console.flush();
 
 	return Ok;
+}
+
+
+Konto::KontoSettings Konto::getKontoSettings()
+/******************************************************************************
+* Methode gibt ein Struct mit Kontoinformationen zurueck
+*******************************************************************************/
+{
+	KontoSettings temp;
+
+	temp.KontoName = KontoName;
+	temp.KontoBeschreibung = KontoBeschreibung;
+	temp.BLZ = BLZ;
+	temp.BankName = BankName;
+	temp.KontoTyp = KontoTyp;
+	temp.FileName = KontoFile;
+	temp.Limit = LimitNegativ;
+	temp.canBeNegativ = canBeNegativ;
+
+	return temp;
 }
 
 

@@ -53,4 +53,6 @@ void NeuesKontoDialog::clearLines()
 	lineKontoBeschreibung -> setText ( "" );
 	lineBLZ -> setText ( "" );
 	lineBankName -> setText ( "" );
+	spinboxLimit -> setValue(0.0);
+	checkBeUnderLimit -> setCheckState( Qt::Unchecked );
 }

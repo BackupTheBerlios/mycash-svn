@@ -7,7 +7,7 @@
 #include "configs.h"
 #include "class_konto_typ.h"
 
-//Konto_Typ GLOBAL::*MCKT; //MyCash-KontoTyp
+//KontoTyp GLOBAL::*MCKT; //MyCash-KontoTyp
 
 #include "ui_mainwindow1.h"
 #include "mainwindow1.h"

@@ -12,10 +12,10 @@ const char seperator = '|';
 
 
 /*
-	Konto_Typ()
+	KontoTyp()
 	Konstrukter
 */	
-Konto_Typ::Konto_Typ(){
+KontoTyp::KontoTyp(){
 	#ifdef DEBUG	// Erzeuge fuer Debugfall ein Textstream auf Konsole
 		QTextStream console(stdout);
 	#endif
@@ -23,7 +23,7 @@ Konto_Typ::Konto_Typ(){
 	QFile file(KTypFile);	//Lege ein Dateihandler mit Dateinamen KTypFile an
 	if(!file.open(QIODevice::ReadOnly)){	
 		#ifdef DEBUG
-			console << "\tKonto_Typ::Konto_Typ()\t" << "Datei mit Kontotypen (" << KTypFile << ") konnte nicht geladen werden.\n\r";  
+			console << "\tKontoTyp::KontoTyp()\t" << "Datei mit Kontotypen (" << KTypFile << ") konnte nicht geladen werden.\n\r";  
 		#endif
 		return;		//Beende Konstruktor, wenn Datei nicht geladen werden konnte
 	}
@@ -52,10 +52,10 @@ Konto_Typ::Konto_Typ(){
 
 
 /*
-	~Konto_Typ()
+	~KontoTyp()
 	Destrukter
 */
-Konto_Typ::~Konto_Typ(){
+KontoTyp::~KontoTyp(){
 	saveTyp();
 }
 
@@ -64,7 +64,7 @@ Konto_Typ::~Konto_Typ(){
 	void saveTyp()
 	Methode speichert die Kontotypen
 */
-void Konto_Typ::saveTyp(){
+void KontoTyp::saveTyp(){
 	#ifdef DEBUG	// Erzeuge fuer Debugfall ein Textstream auf Konsole
 		QTextStream console(stdout);
 	#endif
@@ -77,7 +77,7 @@ void Konto_Typ::saveTyp(){
 	QFile file(KTypFile);
 	if(!file.open(QIODevice::WriteOnly)){
 		#ifdef DEBUG
-			console << "\tKonto_Typ::saveTyp()\t" << "Datei mit Kontotypen (" << KTypFile << ") konnte nicht beschrieben werden.\n\r"; 
+			console << "\tKontoTyp::saveTyp()\t" << "Datei mit Kontotypen (" << KTypFile << ") konnte nicht beschrieben werden.\n\r"; 
 		#endif
 		return;
 	}
@@ -99,7 +99,7 @@ void Konto_Typ::saveTyp(){
 	QString Bezeichung:	Bezeichnung des Kontotyps
 	quint32 Option:		Optionen des zuerstellenden Kontotyps
 */
-void Konto_Typ::newTyp(QString Bezeichnung, quint32 Option){
+void KontoTyp::newTyp(QString Bezeichnung, quint32 Option){
 	#ifdef DEBUG	// Erzeuge fuer Debugfall ein Textstream auf Konsole
 		QTextStream console(stdout);
 	#endif
@@ -107,7 +107,7 @@ void Konto_Typ::newTyp(QString Bezeichnung, quint32 Option){
 	// Wenn keine Bezeichnung eingegeben beende Funktion
 	if(Bezeichnung == ""){
 		#ifdef DEBUG	//Debugausgabe
-			console << "\tKonto_Typ::newTyp()\t" << "Keine Bezeichnung fuer neuen Kontotyp eingegeben.\n\r";
+			console << "\tKontoTyp::newTyp()\t" << "Keine Bezeichnung fuer neuen Kontotyp eingegeben.\n\r";
 		#endif
 		return;
 	}
@@ -116,7 +116,7 @@ void Konto_Typ::newTyp(QString Bezeichnung, quint32 Option){
 	for(it = typen.begin(); it != typen.end(); it++){
 		if(it.value().Bezeichnung == Bezeichnung){
 			#ifdef DEBUG	//Debugausgabe
-				console <<	"\tKonto_Typ::newTyp()\t" << "Eintrag '" << Bezeichnung <<
+				console <<	"\tKontoTyp::newTyp()\t" << "Eintrag '" << Bezeichnung <<
 							"' schon vorhanden. Kontotyp wird nicht angelegt.\n\r";
 			#endif
 			return;
@@ -137,7 +137,7 @@ void Konto_Typ::newTyp(QString Bezeichnung, quint32 Option){
 	uint32 getFreeNumber()
 	Funktion gibt die naechste freie Nummer zurueck; freie Nummern zwischen zwei Typen werden ignoriert
 */
-quint32 Konto_Typ::getFreeNumber(){
+quint32 KontoTyp::getFreeNumber(){
 	if( typen.isEmpty() ){
 		return 1;
 	}else{
@@ -152,14 +152,14 @@ quint32 Konto_Typ::getFreeNumber(){
 	quint32 getTypNummer(QString Bezeichnung)
 	Methode gibt die Typennummer zu einer Bezeichnung zurueck
 */
-quint32 Konto_Typ::getTypNummer(QString TypBezeichnung){
+quint32 KontoTyp::getTypNummer(QString TypBezeichnung){
 	MapTyp::iterator it;
 	for(it=typen.begin(); it != typen.end(); it++){
 		if(it.value().Bezeichnung == TypBezeichnung){
 			return it.key();
 		}
 	}
-	return Konto_Typ::NotFound;
+	return KontoTyp::NotFound;
 }
 
 
@@ -167,7 +167,7 @@ quint32 Konto_Typ::getTypNummer(QString TypBezeichnung){
 	QString getTypBezeichnung(quint32 Nummer)
 	Methode liefert die Bezeichung zu einen Kontotypen zurueck
 */
-QString Konto_Typ::getTypBezeichnung(quint32 Nummer){
+QString KontoTyp::getTypBezeichnung(quint32 Nummer){
 	KTypS tempS;
 	tempS.Bezeichnung = ""; // Options wird nicht benötigt.
 	return typen.value(Nummer, tempS).Bezeichnung;
@@ -178,7 +178,7 @@ QString Konto_Typ::getTypBezeichnung(quint32 Nummer){
 	QVector<QString> listTypen()
 	Methode gibt alle Kontotypen zurueck
 */
-QVector<QString> Konto_Typ::listTypen(){
+QVector<QString> KontoTyp::listTypen(){
 	QVector<QString> kontotypen;
 	MapTyp::iterator it;
 	for(it=typen.begin(); it != typen.end(); it++){
