@@ -14,6 +14,7 @@
 #include "neueskontodialog.h"
 #include "konto.h"
 #include "tabkontomain.h"
+#include "tabmain.h"
 
 #include <QMainWindow>
 #include <QWidget>
@@ -27,44 +28,56 @@ MainWindow1::MainWindow1 ( QWidget *parent ) : QMainWindow ( parent )
 {
 	setupUi ( this );
 
-	connect ( actionQt,
+	connect ( actionQt, //Menueintrag "about-Qt"
 			  SIGNAL ( triggered() ),
 			  qApp,
 			  SLOT ( aboutQt() )
 			);
-	connect ( actionNeu,
+
+	connect ( actionNew, // Menueintrag "program-new"
 			  SIGNAL ( triggered() ),
 			  this,
 			  SLOT ( newFile() )
 			);
-	connect ( buttonNeuKonto,
-			  SIGNAL ( clicked() ),
+
+	connect ( actionNewAccount, //Menueintrag "project-create new account"
+			  SIGNAL ( triggered() ),
 			  this,
 			  SLOT ( showNeuesKontoDialog() )
 			);
-	connect ( actionOeffnen,
+
+	connect ( actionOpen, // Menueintrag "program - open"
 			  SIGNAL ( triggered() ),
 			  this,
 			  SLOT ( load() )
 			);
-	connect ( actionSave,
+
+	connect ( actionSave, // Menueintrag "program - save"
 			  SIGNAL ( triggered() ),
 			  this,
 			  SLOT ( save() )
 			);
-	connect ( actionSaveAs,
+
+	connect ( actionSaveAs, // Menueintrag "program - save as"
 			  SIGNAL ( triggered() ),
 			  this,
 			  SLOT ( saveAs() )
 			);
-	connect ( buttonAddKonto,
-			  SIGNAL ( clicked() ),
+
+	connect ( actionAddAccount, // Menueintrag "project - add exist account"
+			  SIGNAL ( triggered() ),
 			  this,
 			  SLOT ( addExistKonto() )
 			);
 
 	// Initialisiere Variablen der Formulare
 	neuesKontoDialog = 0;
+	tabMain = 0;
+
+	// configure view
+	qint32 pos;
+	pos = tabWidgetMain -> currentIndex();
+	tabWidgetMain -> removeTab( pos );
 }
 
 
@@ -78,6 +91,8 @@ MainWindow1::~MainWindow1()
 	if ( neuesKontoDialog ) {
 		delete neuesKontoDialog;
 	}
+
+	//entlade Tabs
 
 	//loesche Eintraege aus der Verknuepfungstabelle
 	unloadKonten();
@@ -99,10 +114,34 @@ bool MainWindow1::addKonto ( Konto *konto ) // SLOT
 * erzeugt ein TabWidget Eintrag
 *******************************************************************************/
 {
-	TabKontoMain *tempWidget = new TabKontoMain(this, konto);
-	connect ( konto, SIGNAL ( doChange() ), this, SLOT ( projectChanged() ) );
+	QString file = konto -> getKontoFile();
+
+	if ( !file.isEmpty() && existFilename ( file ) ) {
+		showMessageboxAlreadyExist();
+		return false;
+	}
+
+	TabKontoMain *tempWidget = new TabKontoMain ( this, konto );
+
+	connect ( konto,
+			  SIGNAL ( doChange() ),
+			  this,
+			  SLOT ( projectChanged() )
+			);
 	konto -> setChanged(); // Wegen Signal an MainWindow
 	connections[konto] = tempWidget;
+	connect ( tempWidget,
+			  SIGNAL ( close ( TabKontoMain * ) ),
+			  this,
+			  SLOT ( closeTab ( TabKontoMain * ) )
+			);
+	if( connections.size() > 0){ // Eintrag vorhanden
+		if( tabMain == 0 ){ // Noch kein TabMain erstellt
+			tabMain = new TabMain( this );
+			tabWidgetMain -> addTab( tabMain, tr("Mainmenu") );
+		}
+	}
+
 	tabWidgetMain -> addTab ( tempWidget, konto -> getKontoName() );
 
 	//setze Ansicht auf neu hinzugefuegtes TabWidget
@@ -124,11 +163,44 @@ bool MainWindow1::addExistKonto()
 		return false; // Dialog ohne Auswahl beendet
 	}
 
+	if ( existFilename ( filename ) ) {
+		showMessageboxAlreadyExist();
+		return false;
+	}
+
 	Konto *tempKonto = new Konto ( filename );
 
 	addKonto ( tempKonto );
 
 	return true;
+}
+
+bool MainWindow1::closeTab ( TabKontoMain *tab ) //SLOT
+/******************************************************************************
+* Methode empfaengt den Wunsch zum schließen eines Tabs und entlaed den entsprechenden Tab
+*******************************************************************************/
+{
+	qint32 pos = 0;
+	pos = tabWidgetMain -> indexOf ( tab );
+
+	if ( pos == -1 ) { // Tab existiert nicht in tabWidgetMain
+		return false;
+	}
+
+	MapKontoWidget::iterator it;
+
+	for ( it = connections.begin(); it != connections.end(); it++ ) {
+		if ( it.value() == tab ) { //entsprechenden Eintrag in Verknuepfungstabelle gefunden
+			tabWidgetMain -> removeTab ( pos );
+			delete it.value();
+			it.value() = 0;
+
+			return true;
+		}
+	}
+
+	// Ende erreicht -> Tab nicht gefunden
+	return false;
 }
 
 
@@ -350,7 +422,9 @@ bool MainWindow1::saveFile ( QString filename )
 				it.key() -> setKontoFile ( kontofilename ); // setze den erhaltenen Dateinamen in dem Kontoobjekt
 			}
 		}
-		it.key() -> setKontoFile("konto.xml");
+
+		it.key() -> setKontoFile ( "konto.xml" );
+
 		it.key() -> saveFileXML();
 
 		out << it.key() -> getKontoFile() << "\n\r";
@@ -363,7 +437,7 @@ bool MainWindow1::saveFile ( QString filename )
 	console.flush();
 #endif
 
-	setWindowModified( false );
+	setWindowModified ( false );
 
 	return true;
 }
@@ -465,4 +539,77 @@ void MainWindow1::showNeuesKontoDialog() //SLOT
 	neuesKontoDialog -> show();
 	neuesKontoDialog -> activateWindow();
 }
+
+
+bool MainWindow1::existFilename ( QString filename )
+/******************************************************************************
+* Methode fragt alle Konten in der Verknuepfungstabelle nach den Dateinamen
+* filename wird mit den Dateinamen verglichen
+* wenn filename € Dateinamen -> true, sonst: false
+*******************************************************************************/
+{
+	MapKontoWidget::iterator it;
+
+	for ( it = connections.begin(); it != connections.end(); it++ ) {
+		if ( it.key() -> getKontoFile() == filename ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+void MainWindow1::showMessageboxAlreadyExist()
+/******************************************************************************
+* Methode zeigt eine MessageBox, dass ein Konto schon Element des Projects ist
+*******************************************************************************/
+{
+	QMessageBox::information ( this,
+							   tr ( "account can't add" ),
+							   tr ( "Account can't add. Account is already in this project." ),
+							   QMessageBox::Ok
+							 );
+}
+
+
+bool MainWindow1::deleteKonto(Konto *konto) // SLOT
+/******************************************************************************
+* Methode loescht ein Konto aus dem Projekt
+* Wenn ein entsprechender Tab noch geladen ist -> entladen und entfernen
+* Konto entladen + aus Verknuepfungstabelle loeschen
+*******************************************************************************/
+{
+	MapKontoWidget::iterator it;
+	for(it = connections.begin(); it != connections.end(); it++){
+		if( it.key() == konto ){
+			if(it.value() != 0){	//Tab geladen
+				qint32 pos;
+				pos = tabWidgetMain -> indexOf( it.value() );
+				if( pos == -1){	//Tab nicht existent
+					return false;
+				}
+				
+				tabWidgetMain -> removeTab( pos ); // entferne Tab aus QTabWidget
+				delete it.value();	//entlade Tab
+				delete it.key();	//entlade Konto
+				connections.erase ( it );	// loesche Konto aus Verknuepfungstabelle
+
+ 				if( connections.size() == 0 ){	//Kein Konto im Project
+					// Aendere Ansicht und so...
+					qint32 pos;
+					pos = tabWidgetMain -> indexOf( tabMain );
+					if(pos != -1){
+						tabWidgetMain -> setTabEnabled(false, pos);
+					}
+				}
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 

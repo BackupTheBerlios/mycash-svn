@@ -27,39 +27,10 @@
    <property name="currentIndex" >
     <number>0</number>
    </property>
-   <widget class="QWidget" name="tabMain" >
+   <widget class="QWidget" name="Seite" >
     <attribute name="title" >
-     <string>main</string>
+     <string>Seite</string>
     </attribute>
-    <widget class="QPushButton" name="buttonNeuKonto" >
-     <property name="geometry" >
-      <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>311</width>
-       <height>161</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>create new account</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="buttonAddKonto" >
-     <property name="geometry" >
-      <rect>
-       <x>360</x>
-       <y>20</y>
-       <width>311</width>
-       <height>161</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>add exist account</string>
-     </property>
-     <property name="flat" >
-      <bool>false</bool>
-     </property>
-    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar" >
@@ -67,7 +38,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>381</width>
+     <width>353</width>
      <height>31</height>
     </rect>
    </property>
@@ -75,13 +46,13 @@
     <property name="title" >
      <string>program</string>
     </property>
-    <addaction name="actionNeu" />
-    <addaction name="actionOeffnen" />
+    <addaction name="actionNew" />
+    <addaction name="actionOpen" />
     <addaction name="actionSave" />
     <addaction name="actionSaveAs" />
-    <addaction name="actionBeenden" />
+    <addaction name="actionExit" />
    </widget>
-   <widget class="QMenu" name="menuHilfe" >
+   <widget class="QMenu" name="menuHelp" >
     <property name="title" >
      <string>help</string>
     </property>
@@ -93,8 +64,22 @@
     <addaction name="actionMyCash" />
     <addaction name="actionQt" />
    </widget>
+   <widget class="QMenu" name="menuProject" >
+    <property name="title" >
+     <string>project</string>
+    </property>
+    <addaction name="actionNewAccount" />
+    <addaction name="actionAddAccount" />
+   </widget>
+   <widget class="QMenu" name="menuSettings" >
+    <property name="title" >
+     <string>settings</string>
+    </property>
+   </widget>
    <addaction name="menuProgramm" />
-   <addaction name="menuHilfe" />
+   <addaction name="menuProject" />
+   <addaction name="menuSettings" />
+   <addaction name="menuHelp" />
    <addaction name="menu_ber" />
   </widget>
   <widget class="QStatusBar" name="statusbar" >
@@ -107,12 +92,12 @@
     </rect>
    </property>
   </widget>
-  <action name="actionNeu" >
+  <action name="actionNew" >
    <property name="text" >
     <string>new</string>
    </property>
   </action>
-  <action name="actionBeenden" >
+  <action name="actionExit" >
    <property name="text" >
     <string>exit</string>
    </property>
@@ -130,7 +115,7 @@
     <string>Qt</string>
    </property>
   </action>
-  <action name="actionOeffnen" >
+  <action name="actionOpen" >
    <property name="text" >
     <string>open</string>
    </property>
@@ -154,11 +139,27 @@
     <string>save as</string>
    </property>
   </action>
+  <action name="actionNewAccount" >
+   <property name="text" >
+    <string>create new account</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionAddAccount" >
+   <property name="text" >
+    <string>add exist account</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+A</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>actionBeenden</sender>
+   <sender>actionExit</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow1</receiver>
    <slot>close()</slot>

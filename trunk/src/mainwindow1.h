@@ -13,6 +13,7 @@
 #include "ui_mainwindow1.h"
 #include "neueskontodialog.h"
 #include "tabkontomain.h"
+#include "tabmain.h"
 
 class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 	Q_OBJECT
@@ -38,6 +39,8 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		bool save();
 		bool saveAs();
 		bool addExistKonto();
+		bool closeTab(TabKontoMain *tab);
+		bool deleteKonto(Konto *konto);
 
 	private:
 		bool okToContinue();
@@ -47,11 +50,14 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		void unloadKonten();
 		QString getFileName();
 		QString correctFilename(QString filename, QString endung);
+		bool existFilename(QString filename);
+		void showMessageboxAlreadyExist();
 
 		MapKontoWidget connections;	//Verknüfungstabelle der Konten mit TabWidget
 		//bool IsChanged;
 		QString File;	//Projektdatei
 		NeuesKontoDialog *neuesKontoDialog;	//Speicher des Formular NeuesKontoDialog
+		TabMain *tabMain;
 
 };
 

@@ -3,6 +3,7 @@
 
 #include "ui_tab_konto_main.h"
 #include "konto.h"
+#include "AddEntry.h"
 
 class TabKontoMain : public QWidget, public Ui::TabKontoMain{
 	Q_OBJECT
@@ -10,8 +11,20 @@ class TabKontoMain : public QWidget, public Ui::TabKontoMain{
 	public:
 		TabKontoMain(QWidget *parent, Konto *connectedKonto);
 
+	public slots:
+		void clickClose();
+		void clickDelete();
+	
+	signals:
+		void close(TabKontoMain *);
+		void deleteKonto(Konto *);
+
+	private slots:
+		void showAddEntryDialog();
+
 	private:
-		Konto *konto;
+		Konto *KontoPointer;
+		AddEntry *AddEntryPointer;
 };
 
 #endif

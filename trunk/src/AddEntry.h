@@ -9,6 +9,8 @@ class AddEntry : public QWidget, public Ui::AddEntry
 	Q_OBJECT
 	public:
 		AddEntry(QWidget *parent);
+	
+	public slots:	
 		void clickAdd();
 		void clickMore();	
 

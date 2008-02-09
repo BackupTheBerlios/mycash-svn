@@ -21,6 +21,8 @@ int main(int argc, char *argv[]){
 	QTranslator appTranslator;
 	appTranslator.load((QString)argv[0] + "_" + QLocale::system().name(), qApp->applicationDirPath());
 	app.installTranslator(&appTranslator);
+	
+	//QMessageBox::warning(0,"ApplicationDirPath() + system().name()", qApp -> applicationDirPath() + "\n" + QLocale::system().name(), QMessageBox::Ok);
 
 	MainWindow1 ui;
 	//TabKontoMain ui(0,0);

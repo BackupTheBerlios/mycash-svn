@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Form</string>
+   <string>Overview Konto</string>
   </property>
   <widget class="QWidget" name="gridLayout" >
    <property name="geometry" >

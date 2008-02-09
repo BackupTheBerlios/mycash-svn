@@ -1,4 +1,5 @@
 #include <QWidget>
+#include <QCompleter>
 
 #include "AddEntry.h"
 
@@ -9,17 +10,30 @@ AddEntry::AddEntry ( QWidget *parent = 0 ) : QWidget ( parent )
 {
 	setupUi ( this );
 
+	//Verbindungen erstellen
 	connect ( pushAdd,
-			  SIGNAL ( click() ),
+			  SIGNAL ( clicked() ),
 			  this,
 			  SLOT ( clickAdd() )
 			);
 
 	connect ( pushMore,
-			  SIGNAL ( click() ),
+			  SIGNAL ( clicked() ),
 			  this,
 			  SLOT ( clickMore() )
 			);
+
+	//Datum einstellen
+	date -> setDate( QDate::currentDate() );
+
+	//Autovervollstaendigung aktivieren
+	/*QStringList list;
+	list << "Hallo" << "Walter" << "Duden" << "Arschloch";
+	QCompleter *comp = new QCompleter(list, this);
+	comp -> setCompletionMode( QCompleter::PopupCompletion );
+	comp -> setModelSorting( QCompleter::CaseInsensitivelySortedModel );
+	comboTransfer -> setCompleter( comp );
+	*/
 }
 
 void AddEntry::clickAdd()
@@ -38,5 +52,5 @@ void AddEntry::clickMore()
 * Methode wird ausgefuehrt, wenn pushMore geklickt wird
 *******************************************************************************/
 {
-
+	//Ueberpruefe, ob letzte Spalte mit Kategorie und Betrag ausgefuellt -> neue Zeile hinzufuegen
 }
