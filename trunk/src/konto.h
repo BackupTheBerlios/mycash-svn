@@ -50,8 +50,8 @@ class Konto : public QWidget
 
 	public:
 		Konto();
-		Konto ( QString filename );
-		Konto ( QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp );
+		Konto ( QString& filename );
+		Konto ( QString& kontoname, QString& kontobeschreibung, QString& blz, QString& bankname, quint32& kontotyp );
 		Konto ( QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp, float limit, bool underLimit );
 		~Konto();
 

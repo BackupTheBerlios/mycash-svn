@@ -25,7 +25,7 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		MainWindow1(QWidget *parent = 0);
 		~MainWindow1();
 
-		bool loadFile();
+		bool loadProject();
 		bool load(QString filename);
 
 	protected:
@@ -45,10 +45,11 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		bool deleteKonto(Konto *konto);
 
 	private:
-		//QDomElement getFilesXml(QDomDocument& doc);
-		//bool parseFilesXml(QDomElement& element);
+		QDomElement getKontenXml(QDomDocument& doc);
+		bool parseKontenXml(const QDomElement& element );
 		bool okToContinue();
-		bool saveFile(QString filename);
+		bool saveProject(QString filename);
+		bool saveProjectXml(QString filename);
 		bool clear();
 		void setFileName(QString filename);
 		void showMain(bool show);
@@ -57,8 +58,10 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		QString correctFilename(QString filename, QString endung);
 		bool existFilename(QString filename);
 		void showMessageboxAlreadyExist();
+		QString showGetFileNameDialog(QString endung, QString name);
 		//bool loadFilePlain();
-		//bool loadFileXml();
+		bool loadProjectXml(QString& filename);
+		bool connectKonto(Konto *konto);
 
 		MapKontoWidget connections;	//Verknüfungstabelle der Konten mit TabWidget
 		//bool IsChanged;

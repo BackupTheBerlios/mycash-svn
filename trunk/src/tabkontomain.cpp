@@ -34,7 +34,7 @@ TabKontoMain::TabKontoMain ( QWidget *parent = 0, Konto * connectedKonto = 0 ) :
 	connect( buttonSettings,
 			SIGNAL ( clicked() ),
 			this,
-			SLOT (showKontoSettingsDialog() )
+			SLOT ( clickSettings() )
 			);
 
 	//Formulurvariablen initialisieren

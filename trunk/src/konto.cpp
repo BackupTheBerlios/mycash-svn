@@ -26,7 +26,7 @@ Konto::Konto()  //Konstruktor fuer neues Konto
 }
 
 
-Konto::Konto ( QString filename )
+Konto::Konto ( QString& filename )
 /******************************************************************************
 * Konstruktor mit DateiNamen, Datei wird geladen
 *******************************************************************************/
@@ -39,7 +39,7 @@ Konto::Konto ( QString filename )
 }
 
 
-Konto::Konto ( QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp )
+Konto::Konto ( QString& kontoname, QString& kontobeschreibung, QString& blz, QString& bankname, quint32& kontotyp )
 /******************************************************************************
 * Kontruktor mit KontoName, KontoBeschreibung, BLZ, BankName und Kontotyp
 *******************************************************************************/
@@ -382,7 +382,7 @@ Konto::operator bool()
 * Ueberladener Bool-Operator
 *******************************************************************************/
 {
-	if ( KontoFile.isEmpty() ) {
+	if ( KontoName.isEmpty() ) {
 		return false;
 
 	} else {
@@ -498,7 +498,6 @@ quint32 Konto::saveFileXML()
 	}
 
 	QTextStream out ( &file );
-
 	out.setCodec ( "UTF-8" );
 
 	//XML - Document erzeugen
