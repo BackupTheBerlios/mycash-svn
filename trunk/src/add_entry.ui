@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>AddEntry</class>
- <widget class="QWidget" name="AddEntry" >
+ <class>FormAddEntry</class>
+ <widget class="QWidget" name="FormAddEntry" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -175,7 +175,7 @@
   <connection>
    <sender>pushCancel</sender>
    <signal>clicked()</signal>
-   <receiver>AddEntry</receiver>
+   <receiver>FormAddEntry</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel" >

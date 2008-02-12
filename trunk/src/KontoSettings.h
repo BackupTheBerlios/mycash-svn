@@ -4,11 +4,11 @@
 #include "konto.h"
 #include "ui_konto_settings.h"
 
-class KontoSettings : public QWidget, public Ui::KontoSettings{
+class FormKontoSettings : public QWidget, public Ui::FormKontoSettings{
 	Q_OBJECT
 	
 	public:
-		KontoSettings(QWidget *parent);
+		FormKontoSettings(QWidget *parent);
 
 	public slots:
 		void update(const Konto::KontoSettings& settings);

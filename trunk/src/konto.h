@@ -9,6 +9,7 @@
 #include "repeat_entry.h"
 #include <QString>
 #include <QMap>
+#include <QVector>
 #include <QWidget>
 
 class Konto : public QWidget
@@ -45,8 +46,16 @@ class Konto : public QWidget
 			bool canBeNegativ;
 		};
 
+		struct HistoryList{
+			QString Datum;
+			QString Verwendung;
+			quint32 Transfer;
+			float Betrag;
+		};
+
 		typedef QMap<quint32, KontoEntry> MapKontoEntry;
 		typedef QMap<quint32, RepeatEntry> MapRepeatEntry;
+		typedef QVector<Konto::HistoryList> VectorHistoryList;
 
 	public:
 		Konto();
@@ -64,7 +73,7 @@ class Konto : public QWidget
 		float getLimitNegativ();
 		bool getCanBeNegativ();
 
-		Konto::KontoSettings getKontoSettings();
+		Konto::KontoSettings getFormKontoSettings();
 
 		quint32 setKontoFile ( QString KontoFile );
 		quint32 setKontoName ( QString KontoName );
@@ -89,6 +98,8 @@ class Konto : public QWidget
 
 		float getBetragKategorie ( quint32 kategorie );
 		float getBetragKategorieIntervall ( quint32 kategorie, QDate von, QDate bis );
+		VectorHistoryList getHistoryList();
+		//VectorHistoryList getHistoryList(QDate von, QDate bis);
 
 		void setChanged();
 

@@ -1,0 +1,91 @@
+<ui version="4.0" >
+ <class>FormShowHistoryList</class>
+ <widget class="QWidget" name="FormShowHistoryList" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1155</width>
+    <height>246</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Show History</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>1050</x>
+     <y>10</y>
+     <width>77</width>
+     <height>65</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" >
+    <item>
+     <widget class="QPushButton" name="pushOk" >
+      <property name="text" >
+       <string>Ok</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushClose" >
+      <property name="text" >
+       <string>Close</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QTableWidget" name="tableList" >
+   <property name="geometry" >
+    <rect>
+     <x>15</x>
+     <y>20</y>
+     <width>691</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text" >
+     <string>date</string>
+    </property>
+   </column>
+   <column>
+    <property name="text" >
+     <string>used for</string>
+    </property>
+   </column>
+   <column>
+    <property name="text" >
+     <string>transfer</string>
+    </property>
+   </column>
+   <column>
+    <property name="text" >
+     <string>pay</string>
+    </property>
+   </column>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushClose</sender>
+   <signal>clicked()</signal>
+   <receiver>FormShowHistoryList</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>1088</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>577</x>
+     <y>122</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

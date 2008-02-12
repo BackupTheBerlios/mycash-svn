@@ -2,7 +2,7 @@
 <!DOCTYPE TS><TS version="1.1" language="de">
 <defaultcodec></defaultcodec>
 <context>
-    <name>AddEntry</name>
+    <name>FormAddEntry</name>
     <message>
         <location filename="add_entry.ui" line="136"/>
         <source>add Entry</source>

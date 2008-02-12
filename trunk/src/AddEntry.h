@@ -4,11 +4,11 @@
 #include "ui_add_entry.h"
 #include "KontoEntry.h"
 
-class AddEntry : public QWidget, public Ui::AddEntry
+class FormAddEntry : public QWidget, public Ui::FormAddEntry
 {
 	Q_OBJECT
 	public:
-		AddEntry(QWidget *parent);
+		FormAddEntry(QWidget *parent);
 	
 	public slots:	
 		void clickAdd();

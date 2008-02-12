@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>KontoSettings</class>
- <widget class="QWidget" name="KontoSettings" >
+ <class>FormKontoSettings</class>
+ <widget class="QWidget" name="FormKontoSettings" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -204,7 +204,7 @@
   <connection>
    <sender>buttonCancel</sender>
    <signal>clicked()</signal>
-   <receiver>KontoSettings</receiver>
+   <receiver>FormKontoSettings</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel" >

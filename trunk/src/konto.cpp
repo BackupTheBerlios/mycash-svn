@@ -864,6 +864,27 @@ float Konto::getBetragKategorie ( quint32 kategorie )
 }
 
 
+Konto::VectorHistoryList Konto::getHistoryList()
+/******************************************************************************
+*
+*******************************************************************************/
+{
+	VectorHistoryList result;
+	
+	MapKontoEntry::iterator it;
+	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
+		HistoryList temp;
+		temp.Datum = it -> getDatum();
+		temp.Verwendung = it -> getVerwendung();
+		temp.Transfer = it -> getTransfer();
+		temp.Betrag = it -> getBetrag();
+		
+		result.push_back( temp );
+	}
+	return result;
+}
+
+
 float Konto::getBetragKategorieIntervall ( quint32 kategorie, QDate von, QDate bis )
 /******************************************************************************
 * Methode gibt den Gesamtbetrag der Eintraege einer Kategorie in einen bestimmten Zeitraum zurueck
@@ -923,7 +944,7 @@ quint32 Konto::printEntry_deb() //DEBUG-Funktion
 }
 
 
-Konto::KontoSettings Konto::getKontoSettings()
+Konto::KontoSettings Konto::getFormKontoSettings()
 /******************************************************************************
 * Methode gibt ein Struct mit Kontoinformationen zurueck
 *******************************************************************************/

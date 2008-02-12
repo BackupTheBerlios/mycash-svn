@@ -8,7 +8,7 @@
 #include "konto.h"
 #include "configs.h"
 
-KontoSettings::KontoSettings(QWidget *parent) : QWidget( parent )
+FormKontoSettings::FormKontoSettings(QWidget *parent) : QWidget( parent )
 /******************************************************************************
 * Konstruktur
 *******************************************************************************/
@@ -34,7 +34,7 @@ KontoSettings::KontoSettings(QWidget *parent) : QWidget( parent )
 }
 
 
-void KontoSettings::update(const Konto::KontoSettings& settings) // SLOT
+void FormKontoSettings::update(const Konto::KontoSettings& settings) // SLOT
 /******************************************************************************
 * Methode aktualisiert die Felder
 *******************************************************************************/
@@ -62,7 +62,7 @@ void KontoSettings::update(const Konto::KontoSettings& settings) // SLOT
 }
 
 
-void KontoSettings::clickOk() // private SLOT
+void FormKontoSettings::clickOk() // private SLOT
 /******************************************************************************
 * Methode wird ausgeführt, wenn buttonOk das Signal clicked() sendet
 *******************************************************************************/
@@ -82,7 +82,7 @@ void KontoSettings::clickOk() // private SLOT
 }
 
 
-void KontoSettings::clickKontoFile()
+void FormKontoSettings::clickKontoFile()
 /******************************************************************************
 * Methode wird ausgefuehrt, wenn buttonFileDialog geklickt wird
 *******************************************************************************/

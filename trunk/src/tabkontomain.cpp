@@ -25,21 +25,28 @@ TabKontoMain::TabKontoMain ( QWidget *parent = 0, Konto * connectedKonto = 0 ) :
 	    SLOT ( clickDelete() )
 	  );*/
 
-	connect ( buttonAddEntry,
+	connect ( buttonFormAddEntry,
 			  SIGNAL ( clicked() ),
 			  this,
-			  SLOT( showAddEntryDialog() )
+			  SLOT ( showFormAddEntryDialog() )
 			);
 
-	connect( buttonSettings,
-			SIGNAL ( clicked() ),
-			this,
-			SLOT ( clickSettings() )
+	connect ( buttonSettings,
+			  SIGNAL ( clicked() ),
+			  this,
+			  SLOT ( clickSettings() )
+			);
+
+	connect ( buttonShowHistoryList,
+			  SIGNAL ( clicked() ),
+			  this,
+			  SLOT ( clickHistoryList() )
 			);
 
 	//Formulurvariablen initialisieren
-	AddEntryPointer = 0;
-	KontoSettingsPointer = 0;
+	FormAddEntryPointer = 0;
+	FormKontoSettingsPointer = 0;
+	FormShowHistoryListPointer = 0;
 
 }
 
@@ -49,11 +56,16 @@ TabKontoMain::~TabKontoMain()
 * Destruktor entlaed benutzte Formulare
 *******************************************************************************/
 {
-	if( AddEntryPointer){
-		delete AddEntryPointer;
+	if ( FormAddEntryPointer ) {
+		delete FormAddEntryPointer;
 	}
-	if(KontoSettingsPointer){
-		delete KontoSettingsPointer;
+
+	if ( FormKontoSettingsPointer ) {
+		delete FormKontoSettingsPointer;
+	}
+
+	if ( FormShowHistoryListPointer ) {
+		delete FormShowHistoryListPointer;
 	}
 }
 
@@ -80,71 +92,104 @@ void TabKontoMain::clickDelete() //SLOT
 
 void TabKontoMain::clickSettings() //SLOT
 /******************************************************************************
-* Methode wird aufgerufen, wenn buttonSettings das Signal clicked gibt
+* Methode wird aufgerufen, wenn buttonSettings das Signal clicked() gibt
 *******************************************************************************/
 {
-	showKontoSettingsDialog();
+	showFormKontoSettingsDialog();
 }
 
 
-void TabKontoMain::showKontoSettingsDialog()
+void TabKontoMain::clickHistoryList()
 /******************************************************************************
-* Methode zeigt das KontoSettingsDialog an
+* Methode wird aufgerufen, wenn buttonShowHistoryList das Signal clicked() gibt
 *******************************************************************************/
 {
-	if ( KontoSettingsPointer == 0 ){
-		KontoSettingsPointer = new KontoSettings(this);
+	showHistoryListDialog();
+}
 
-		connect( this,
-				SIGNAL ( updateSettingsDialog(Konto::KontoSettings) ),
-				KontoSettingsPointer,
-				SLOT ( update(Konto::KontoSettings) )
+
+void TabKontoMain::showFormKontoSettingsDialog()
+/******************************************************************************
+* Methode zeigt das FormKontoSettingsDialog an
+*******************************************************************************/
+{
+	if ( FormKontoSettingsPointer == 0 ) {
+		FormKontoSettingsPointer = new FormKontoSettings ( this );
+
+		connect ( this,
+				  SIGNAL ( updateSettingsDialog ( Konto::FormKontoSettings ) ),
+				  FormKontoSettingsPointer,
+				  SLOT ( update ( Konto::FormKontoSettings ) )
 				);
 
-		connect( KontoSettingsPointer,
-				SIGNAL( updateKonto(const Konto::KontoSettings&) ),
-				this,
-				SLOT( fromKontoSettings( const Konto::KontoSettings&) )
+		connect ( FormKontoSettingsPointer,
+				  SIGNAL ( updateKonto ( const Konto::FormKontoSettings& ) ),
+				  this,
+				  SLOT ( fromFormKontoSettings ( const Konto::FormKontoSettings& ) )
 				);
 	}
 
-	emit updateSettingsDialog( KontoPointer -> getKontoSettings() );
+	emit updateSettingsDialog ( KontoPointer -> getFormKontoSettings() );
 
-	KontoSettingsPointer -> setWindowFlags(Qt::Dialog);
-	KontoSettingsPointer -> setEnabled (true);
-	KontoSettingsPointer -> show();
+	FormKontoSettingsPointer -> setWindowFlags ( Qt::Dialog );
+	FormKontoSettingsPointer -> setEnabled ( true );
+	FormKontoSettingsPointer -> show();
 }
 
 
-void TabKontoMain::fromKontoSettings(const Konto::KontoSettings& settings) // SLOT
+void TabKontoMain::fromFormKontoSettings ( const Konto::KontoSettings& settings ) // SLOT
 /******************************************************************************
 * Methode aktualiesert die Kontoeinstellungen
-* erhaelt das Signal und Daten von KontoSettings
+* erhaelt das Signal und Daten von FormKontoSettings
 *******************************************************************************/
 {
-	KontoPointer -> setKontoFile( settings.FileName);
-	KontoPointer -> setKontoName( settings.KontoName );
-	KontoPointer -> setKontoBeschreibung( settings.KontoBeschreibung );
-	KontoPointer -> setBLZ( settings.BLZ );
-	KontoPointer -> setBankName( settings.BankName );
-	KontoPointer -> setKontoTyp( settings.KontoTyp );
-	KontoPointer -> setLimitNegativ( settings.Limit );
-	KontoPointer -> setCanBeNegativ( (int)settings.canBeNegativ ); 
+	KontoPointer -> setKontoFile ( settings.FileName );
+	KontoPointer -> setKontoName ( settings.KontoName );
+	KontoPointer -> setKontoBeschreibung ( settings.KontoBeschreibung );
+	KontoPointer -> setBLZ ( settings.BLZ );
+	KontoPointer -> setBankName ( settings.BankName );
+	KontoPointer -> setKontoTyp ( settings.KontoTyp );
+	KontoPointer -> setLimitNegativ ( settings.Limit );
+	KontoPointer -> setCanBeNegativ ( ( int ) settings.canBeNegativ );
 }
 
 
-void TabKontoMain::showAddEntryDialog() // SLOT
+void TabKontoMain::showFormAddEntryDialog() // SLOT
 /******************************************************************************
-* Methode laed den AddEntryDialog
+* Methode laed den FormAddEntry Dialog
 *******************************************************************************/
 {
-	if( AddEntryPointer == 0 ){
-		AddEntryPointer = new AddEntry(this);
+	if ( FormAddEntryPointer == 0 ) {
+		FormAddEntryPointer = new FormAddEntry ( this );
 	}
-	//AddEntryPointer -> activateWindow();
-	AddEntryPointer -> setWindowFlags(Qt::Dialog);
-	AddEntryPointer -> setEnabled( true );
-	AddEntryPointer -> show();
+
+	//FormAddEntryPointer -> activateWindow();
+	FormAddEntryPointer -> setWindowFlags ( Qt::Dialog );
+
+	FormAddEntryPointer -> setEnabled ( true );
+
+	FormAddEntryPointer -> show();
 }
 
+
+void TabKontoMain::showHistoryListDialog()
+/******************************************************************************
+* Methode laed den FormShowHistoryList Dialog
+*******************************************************************************/
+{
+	if ( FormShowHistoryListPointer == 0 ) {
+		FormShowHistoryListPointer = new FormShowHistoryList ( this );
+		connect ( this,
+				  SIGNAL ( updateHistoryListDialog (const Konto::VectorHistoryList & ) ),
+				  FormShowHistoryListPointer,
+				  SIGNAL ( update (const Konto::VectorHistoryList& list ) )
+				);
+	}
+
+	emit updateHistoryListDialog( KontoPointer -> getHistoryList() );
+
+	FormShowHistoryListPointer -> setWindowFlags ( Qt::Dialog );
+	FormShowHistoryListPointer -> setEnabled ( true );
+	FormShowHistoryListPointer -> show();
+}
 

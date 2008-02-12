@@ -21,14 +21,17 @@ HEADERS += src/AddEntry.h \
            src/repeat_entry.h \
            src/tabkontomain.h \
            src/tabmain.h \
- src/KontoSettings.h
+ src/KontoSettings.h \
+ src/KategorieDelegate.h \
+ src/FormShowHistoryList.h
 FORMS += main_layout.ui \
          src/add_entry.ui \
          src/mainwindow1.ui \
          src/neueskonto.ui \
          src/tab_konto_main.ui \
          src/tab_main.ui \
- src/konto_settings.ui
+ src/konto_settings.ui \
+ src/show_history_list.ui
 SOURCES += src/AddEntry.cpp \
            src/class_konto_typ.cpp \
            src/EntryKategorie.cpp \
@@ -41,6 +44,8 @@ SOURCES += src/AddEntry.cpp \
            src/repeat_entry.cpp \
            src/tabkontomain.cpp \
            src/tabmain.cpp \
- src/KontoSettings.cpp
+ src/KontoSettings.cpp \
+ src/KategorieDelegate.cpp \
+ src/FormShowHistoryList.cpp
 RESOURCES += src/resource.qrc
 TRANSLATIONS += src/mycash_de.ts

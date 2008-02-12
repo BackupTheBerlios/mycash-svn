@@ -3,7 +3,7 @@
 
 #include "AddEntry.h"
 
-AddEntry::AddEntry ( QWidget *parent = 0 ) : QWidget ( parent )
+FormAddEntry::FormAddEntry ( QWidget *parent = 0 ) : QWidget ( parent )
 /******************************************************************************
 * Konstruktor
 *******************************************************************************/
@@ -36,7 +36,7 @@ AddEntry::AddEntry ( QWidget *parent = 0 ) : QWidget ( parent )
 	*/
 }
 
-void AddEntry::clickAdd()
+void FormAddEntry::clickAdd()
 /******************************************************************************
 * Methode wird ausgefuehrt, wenn pushAdd geklickt wird
 *******************************************************************************/
@@ -47,7 +47,7 @@ void AddEntry::clickAdd()
 }
 
 
-void AddEntry::clickMore()
+void FormAddEntry::clickMore()
 /******************************************************************************
 * Methode wird ausgefuehrt, wenn pushMore geklickt wird
 *******************************************************************************/
