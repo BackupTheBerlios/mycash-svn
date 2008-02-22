@@ -34,6 +34,7 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 	public slots:
 		void projectChanged();
 		void showNeuesKontoDialog();
+		void about();
 		bool addKonto(Konto *konto);
 		bool addKonto(Konto *konto, bool show);
 		bool newFile();
@@ -62,6 +63,7 @@ class MainWindow1 : public QMainWindow, public Ui::MainWindow1{
 		//bool loadFilePlain();
 		bool loadProjectXml(QString& filename);
 		bool connectKonto(Konto *konto);
+		bool saveKonten();
 
 		MapKontoWidget connections;	//Verknüfungstabelle der Konten mit TabWidget
 		//bool IsChanged;

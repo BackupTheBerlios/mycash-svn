@@ -21,55 +21,69 @@
 #include <QWidget>
 
 MainWindow1::MainWindow1 ( QWidget *parent ) : QMainWindow ( parent )
-/******************************************************************************
-* Konstruktor fuer GUI MainWindow1
-* Verbindung der Signale und Slots
-* Initialisierung der Formularen
-*******************************************************************************/
+		/******************************************************************************
+		* Konstruktor fuer GUI MainWindow1
+		* Verbindung der Signale und Slots
+		* Initialisierung der Formularen
+		*******************************************************************************/
 {
 	setupUi ( this );
 
-	connect ( actionQt, //Menueintrag "about-Qt"
-			  SIGNAL ( triggered() ),
-			  qApp,
-			  SLOT ( aboutQt() )
-			);
+	connect (  //Menueintrag "about-Qt"
+		actionQt,
+		SIGNAL ( triggered() ),
+		qApp,
+		SLOT ( aboutQt() )
+	);
 
-	connect ( actionNew, // Menueintrag "program-new"
-			  SIGNAL ( triggered() ),
-			  this,
-			  SLOT ( newFile() )
-			);
+	connect ( // Menueintrag "program-new"
+		actionNew,
+		SIGNAL ( triggered() ),
+		this,
+		SLOT ( newFile() )
+	);
 
-	connect ( actionNewAccount, //Menueintrag "project-create new account"
-			  SIGNAL ( triggered() ),
-			  this,
-			  SLOT ( showNeuesKontoDialog() )
-			);
+	connect ( //Menueintrag "project-create new account"
+		actionNewAccount,
+		SIGNAL ( triggered() ),
+		this,
+		SLOT ( showNeuesKontoDialog() )
+	);
 
-	connect ( actionOpen, // Menueintrag "program - open"
-			  SIGNAL ( triggered() ),
-			  this,
-			  SLOT ( load() )
-			);
+	connect ( // Menueintrag "program - open"
+		actionOpen,
+		SIGNAL ( triggered() ),
+		this,
+		SLOT ( load() )
+	);
 
-	connect ( actionSave, // Menueintrag "program - save"
-			  SIGNAL ( triggered() ),
-			  this,
-			  SLOT ( save() )
-			);
+	connect ( // Menueintrag "program - save"
+		actionSave,
+		SIGNAL ( triggered() ),
+		this,
+		SLOT ( save() )
+	);
 
-	connect ( actionSaveAs, // Menueintrag "program - save as"
-			  SIGNAL ( triggered() ),
-			  this,
-			  SLOT ( saveAs() )
-			);
+	connect ( // Menueintrag "program - save as"
+		actionSaveAs,
+		SIGNAL ( triggered() ),
+		this,
+		SLOT ( saveAs() )
+	);
 
-	connect ( actionAddAccount, // Menueintrag "project - add exist account"
-			  SIGNAL ( triggered() ),
-			  this,
-			  SLOT ( addExistKonto() )
-			);
+	connect ( // Menueintrag "project - add exist account"
+		actionAddAccount,
+		SIGNAL ( triggered() ),
+		this,
+		SLOT ( addExistKonto() )
+	);
+
+	connect ( // Menueintrag "about - MyCash"
+		actionMyCash,
+		SIGNAL ( triggered() ),
+		this,
+		SLOT ( about() )
+	);
 
 	// Initialisiere Variablen der Formulare
 	neuesKontoDialog = 0;
@@ -79,7 +93,7 @@ MainWindow1::MainWindow1 ( QWidget *parent ) : QMainWindow ( parent )
 	qint32 pos;
 	pos = tabWidgetMain -> currentIndex();
 	tabWidgetMain -> removeTab ( pos );
-	showMain( false );
+	showMain ( false );
 }
 
 
@@ -119,7 +133,7 @@ bool MainWindow1::addKonto ( Konto *konto, bool show )
 		return addKonto ( konto );
 
 	} else {
-		connectKonto( konto );
+		connectKonto ( konto );
 
 		connections[konto] = 0;
 
@@ -148,10 +162,10 @@ bool MainWindow1::addKonto ( Konto *konto ) // SLOT
 
 	TabKontoMain *tempWidget = new TabKontoMain ( this, konto );
 
-	connectKonto(konto);
-	
+	connectKonto ( konto );
+
 	konto -> setChanged(); // Wegen Signal an MainWindow
-	
+
 	connections[konto] = tempWidget;
 	connect ( tempWidget,
 			  SIGNAL ( close ( TabKontoMain * ) ),
@@ -190,8 +204,8 @@ bool MainWindow1::addExistKonto()
 	}
 
 	Konto *tempKonto = new Konto ( filename );
-	
-	if( ! *tempKonto ){
+
+	if ( ! *tempKonto ) {
 		return false;
 	}
 
@@ -289,10 +303,11 @@ bool MainWindow1::load() // SLOT
 				   tr ( "%1 projects (%2)" ).arg ( AppName ).arg ( END_PROJECT ) );
 
 		if ( filename != "" ) {
-			load( filename );
+			load ( filename );
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -303,7 +318,7 @@ bool MainWindow1::load ( QString filename )
 *******************************************************************************/
 {
 	setFileName ( filename );
-	return loadProjectXml( filename );
+	return loadProjectXml ( filename );
 }
 
 
@@ -350,13 +365,13 @@ bool MainWindow1::loadProject()
 }
 
 
-bool MainWindow1::loadProjectXml( QString& filename )
+bool MainWindow1::loadProjectXml ( QString& filename )
 /******************************************************************************
 * Methode laed eine XML-Datei mit Projektinformationen
 *******************************************************************************/
 {
-	QFile file( filename );
-	
+	QFile file ( filename );
+
 	//Fehlervariablen fuer Parser
 	QString errorStr;
 	int errorLine;
@@ -366,6 +381,7 @@ bool MainWindow1::loadProjectXml( QString& filename )
 	QDomDocument doc;
 
 	// Dokument parsen
+
 	if ( !doc.setContent ( &file, true, &errorStr, &errorLine, &errorColumn ) ) {
 		QMessageBox::warning ( this,
 							   tr ( "%1" ).arg ( AppName ),
@@ -380,28 +396,31 @@ bool MainWindow1::loadProjectXml( QString& filename )
 	//DOM Element
 	QDomElement root = doc.documentElement();
 
-	if( root.tagName() != "Projekt" ){
-		QMessageBox::warning(this,
-							tr("%1").arg(AppName),
-							tr("This is not a correct Projectfile")
-							);
+	if ( root.tagName() != "Projekt" ) {
+		QMessageBox::warning ( this,
+							   tr ( "%1" ).arg ( AppName ),
+							   tr ( "This is not a correct Projectfile" )
+							 );
 		return false;
 	}
 
 	//QDomNode - Laufvariable
 	QDomNode node = root.firstChild();
-	
+
 	//gehe alle Zweige von 'Projekt' durch
-	while( !node.isNull() ){
+	while ( !node.isNull() ) {
 		QString nodeText = node.toElement().tagName();
-		if( nodeText == "Konten" ){
-			parseKontenXml( node.toElement() );
-		}else{
+
+		if ( nodeText == "Konten" ) {
+			parseKontenXml ( node.toElement() );
+
+		} else {
 			// nicht gueltig
 		}
-		
+
 		node = node.nextSibling();
 	}
+
 	return true;
 }
 
@@ -415,10 +434,10 @@ QString MainWindow1::showGetFileNameDialog ( QString endung, QString name )
 
 	if ( endung == END_KONTO ) {
 		file = QFileDialog::getSaveFileName ( this,
-											 tr ( "Save Konto: %1" ).arg ( name ),
-											 ".",
-											 tr ( "%1 konten (%2)" ).arg ( AppName ).arg ( endung )
-										   );
+											  tr ( "Save Konto: %1" ).arg ( name ),
+											  ".",
+											  tr ( "%1 konten (%2)" ).arg ( AppName ).arg ( endung )
+											);
 
 	} else if ( endung == END_PROJECT ) {
 		file = QFileDialog::getSaveFileName ( this,
@@ -468,7 +487,7 @@ bool MainWindow1::saveAs()
 
 	setFileName ( filename ); // setze Projektdateiname
 
-	return saveProjectXml ( getFileName() );
+	return saveProjectXml ( filename );
 }
 
 
@@ -506,7 +525,7 @@ bool MainWindow1::saveProject ( QString filename )
 
 		if ( kontofile.isEmpty() ) { //Wenn kein kontofile angegeben
 			//Rufe ein FileDialog auf
-			QString kontofilename = showGetFileNameDialog( END_KONTO, it.key() -> getKontoFile() ); 
+			QString kontofilename = showGetFileNameDialog ( END_KONTO, it.key() -> getKontoFile() );
 
 			if ( kontofilename.isEmpty() ) { //Filedialog abgebrochen
 #ifdef DEBUG
@@ -538,7 +557,7 @@ bool MainWindow1::saveProject ( QString filename )
 }
 
 
-bool MainWindow1::saveProjectXml(QString filename)
+bool MainWindow1::saveProjectXml ( QString filename )
 /******************************************************************************
 * Methode speichert das Project ab
 *******************************************************************************/
@@ -549,46 +568,56 @@ bool MainWindow1::saveProjectXml(QString filename)
 	QTextStream console ( stdout );
 #endif
 
-	if( ! isWindowModified() ){
+	if ( ! isWindowModified() ) {
 		return true;
 	}
 
-	if( filename.isEmpty() ){
+	if ( filename.isEmpty() ) {
 #ifdef DEBUG
 		console << "MainWindow1::saveFileXml(): " << "Keine Projektdatei angegeben." << "\n\r";
 #endif
 		return false;
 	}
 
-	QFile file( filename );
+	QFile file ( filename );
 
-	if( !file.open( QIODevice::WriteOnly ) ){
+	if ( !file.open ( QIODevice::WriteOnly ) ) {
 #ifdef DEBUG
 		console << "MainWindow1::saveFileXml(): " << "Projektdatei '" << filename << "' kann nicht geoeffnet werden." << "\n\r";
 #endif
 		return false;
 	}
 
-	QTextStream out( &file );
-	out.setCodec( "UTF-8" );
+	// TextStream fuer XML - Datei
+	QTextStream out ( &file );
 
+	out.setCodec ( "UTF-8" );
 
 	QDomDocument doc;
-	QDomElement elementProject = doc.createElement( "Projekt" );
-	QDomNode xmlNode = doc.createProcessingInstruction ( "xml", "version=\"1.0\" encoding=\"UTF-8\"" );	
+
+	QDomElement elementProject = doc.createElement ( "Projekt" );
+
+	QDomNode xmlNode = doc.createProcessingInstruction ( "xml", "version=\"1.0\" encoding=\"UTF-8\"" );
 
 	// An das Dokument den Zweig 'Konten' anhaengen
-	elementProject.appendChild ( getKontenXml( doc ) );
+	elementProject.appendChild ( getKontenXml ( doc ) );
 
 	//Fuege Zweig 'Konten' an das Dokument an
-	doc.appendChild( elementProject );
+	doc.appendChild ( elementProject );
 
 	// Fuege am Anfang XML-Header ein
 	doc.insertBefore ( xmlNode, doc.firstChild() );
 
+	// Speichere XML-Baum
 	doc.save ( out, Indent );
 
-	return true;
+	// Speichere einzelen Konten
+	if ( saveKonten() ) {
+		setWindowModified ( false );
+		return true;
+	}
+
+	return false;
 }
 
 QDomElement MainWindow1::getKontenXml ( QDomDocument& doc )
@@ -601,60 +630,71 @@ QDomElement MainWindow1::getKontenXml ( QDomDocument& doc )
 	MapKontoWidget::iterator it;
 
 	for ( it = connections.begin(); it != connections.end(); it++ ) {
-		if ( ( it.key() -> getKontoFile() ).isEmpty() ){
-			QString file = showGetFileNameDialog(END_KONTO, it.key() -> getKontoName() );
-			if( file.isEmpty() ){
-				return doc.createElement( "" );
+		if ( ( it.key() -> getKontoFile() ).isEmpty() ) {
+			QString file = showGetFileNameDialog ( END_KONTO, it.key() -> getKontoName() );
+
+			if ( file.isEmpty() ) {
+				return doc.createElement ( "" );
 			}
-			it.key() -> setKontoFile( file );
-		}	
-		
+
+			it.key() -> setKontoFile ( file );
+		}
+
 		QDomElement elementFile = doc.createElement ( "File" );
-		QDomText textFile = doc.createTextNode( it.key() -> getKontoFile() );
-		
-		elementFile.appendChild( textFile );
-		elementFile.setAttribute( "open", (it.value() != 0)?"ja":"nein" );
-		
-		elementKonten.appendChild( elementFile );
+
+		QDomText textFile = doc.createTextNode ( it.key() -> getKontoFile() );
+
+		elementFile.appendChild ( textFile );
+		elementFile.setAttribute ( "open", ( it.value() != 0 ) ? "ja" : "nein" );
+
+		elementKonten.appendChild ( elementFile );
 	}
+
 	return elementKonten;
 }
 
 
-bool MainWindow1::parseKontenXml(const QDomElement& element)
+bool MainWindow1::parseKontenXml ( const QDomElement& element )
 /******************************************************************************
 * Methode parset den Zweig 'Files'
 *******************************************************************************/
 {
-	if( element.tagName() != "Konten" ){
+	if ( element.tagName() != "Konten" ) {
 		return false;
 	}
-	
+
 	QDomNode node = element.firstChild();
-	while( !node.isNull() ){
+
+	while ( !node.isNull() ) {
 		QString nodeText = node.toElement().tagName();
-		if( nodeText == "File" ){
-			QString attribute = node.toElement().attribute( "open", "nein" );
+
+		if ( nodeText == "File" ) {
+			QString attribute = node.toElement().attribute ( "open", "nein" );
 			QString filename = node.toElement().text();
 			bool open;
-			
-			if( attribute == "nein" ){
+
+			if ( attribute == "nein" ) {
 				open = false;
-			}else{
+
+			} else {
 				open = true;
 			}
 
-			QFile file( filename );
-			Konto *konto = new Konto( filename );
-			if( *konto ){
-				addKonto( konto, open );
+			QFile file ( filename );
+
+			Konto *konto = new Konto ( filename );
+
+			if ( *konto ) {
+				addKonto ( konto, open );
 			}
-		}else{
+
+		} else {
 			// nicht gueltig
 		}
 
 		node = node.nextSibling();
 	}
+
 	return true;
 }
 
@@ -728,16 +768,16 @@ QString MainWindow1::correctFilename ( QString filename, QString endung )
 }
 
 
-bool MainWindow1::connectKonto(Konto *konto)
+bool MainWindow1::connectKonto ( Konto *konto )
 /******************************************************************************
 * Methode verknuepft Signal doChange() von Konto mit projectChanged()
 *******************************************************************************/
 {
 	return connect ( konto,
-					SIGNAL ( doChange() ),
-					this,
-					SLOT ( projectChanged() )
-					);
+					 SIGNAL ( doChange() ),
+					 this,
+					 SLOT ( projectChanged() )
+				   );
 
 }
 
@@ -761,11 +801,12 @@ void MainWindow1::showNeuesKontoDialog() //SLOT
 {
 	if ( ! neuesKontoDialog ) {
 		neuesKontoDialog = new NeuesKontoDialog ( this );
-		connect ( neuesKontoDialog,
-				  SIGNAL ( add ( Konto * ) ),
-				  this,
-				  SLOT ( addKonto ( Konto * ) )
-				);
+		connect (
+			neuesKontoDialog,
+			SIGNAL ( add ( Konto * ) ),
+			this,
+			SLOT ( addKonto ( Konto * ) )
+		);
 		// toDo: Titelleistenbuttons entfernen
 	}
 
@@ -806,6 +847,46 @@ void MainWindow1::showMessageboxAlreadyExist()
 							 );
 }
 
+
+bool MainWindow1::saveKonten()
+/******************************************************************************
+* Methode ruft die Speicherfunktionen der einezelnen Konten auf
+*******************************************************************************/
+{
+#ifdef DEBUG
+	// Stream auf console erstellen
+	QTextStream console ( stdout );
+#endif
+
+	MapKontoWidget::iterator it;
+
+	for ( it = connections.begin(); it != connections.end(); it++ ) {
+
+		QString kontofile = it.key() -> getKontoFile();
+
+		if ( kontofile.isEmpty() ) { //Wenn kein kontofile angegeben
+			//Rufe ein FileDialog auf
+			QString kontofilename = showGetFileNameDialog ( END_KONTO, it.key() -> getKontoFile() );
+
+			if ( kontofilename.isEmpty() ) { //Filedialog abgebrochen
+#ifdef DEBUG
+				console << "MainWindow::saveKonten(): " << "Dialog fuer Dateinamen ohne Auswahl geschlossen (Konto '"
+				<< it.key() -> getKontoName() << "')" << "\n\r";
+				console.flush();
+#endif
+				return false;
+
+			} else {
+				it.key() -> setKontoFile ( kontofilename ); // setze den erhaltenen Dateinamen in dem Kontoobjekt
+			}
+		}
+
+		// Konto Speichern
+		it.key() -> saveFileXML();
+	}
+
+	return true;
+}
 
 bool MainWindow1::deleteKonto ( Konto *konto ) // SLOT
 /******************************************************************************
@@ -850,21 +931,37 @@ void MainWindow1::showMain ( bool show )
 * Methode aktiviert/deaktiviert das Hauptmenu
 *******************************************************************************/
 {
-	if ( tabMain == 0 ){
-		tabMain = new TabMain( this );
-		tabWidgetMain -> addTab ( tabMain, tr ("Mainmenu") );
+	if ( tabMain == 0 ) {
+		tabMain = new TabMain ( this );
+		tabWidgetMain -> addTab ( tabMain, tr ( "Mainmenu" ) );
 	}
 
 	qint32 pos;
+
 	pos = tabWidgetMain -> indexOf ( tabMain );
 	//Keine Abfrage, ob 'pos == -1' da an dieser Stelle geladen
 
 	if ( show ) {
 		tabWidgetMain -> setTabEnabled ( pos, true );
 		tabWidgetMain -> setVisible ( true );
+
 	} else {
 		// Aendere Ansicht und so...
 		tabWidgetMain -> setTabEnabled ( pos, false );
 		tabWidgetMain -> setVisible ( false );
 	}
 }
+
+void MainWindow1::about()
+/******************************************************************************
+* Methode zeigt das About-Fenster
+*******************************************************************************/
+{
+	QMessageBox::about (
+		this,
+		tr ( "About %1" ).arg ( AppName ),
+		tr ( "%1 is a financiall management tool.\n" ).arg ( AppName ) +
+		tr ( "Written by Matthias Ende" )
+	);
+}
+

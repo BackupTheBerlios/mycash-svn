@@ -470,6 +470,8 @@ quint32 Konto::saveFileXML()
 * Methode speichert ein Konto im XML-Format
 *******************************************************************************/
 {
+	sort();
+
 	const int Indent = 4; //Einrueckung
 
 #ifdef DEBUG
@@ -961,6 +963,32 @@ Konto::KontoSettings Konto::getFormKontoSettings()
 	temp.canBeNegativ = canBeNegativ;
 
 	return temp;
+}
+
+
+void Konto::sort(){
+	//qSort( Eintraege.begin(), Eintraege.end() );
+	bool sorted = false;
+	while( sorted == false ){
+		sorted = true;
+
+		for(MapKontoEntry::iterator it = Eintraege.begin(); it != Eintraege.end(); it++){
+			MapKontoEntry::iterator it1 = (it + 1);
+			if(it1 == Eintraege.end() ){
+				break;
+			}
+			QString date1 = it.value().getDatum();
+			QString date2 = it1.value().getDatum();
+			if( date1 > date2 ){
+				sorted = false;
+				KontoEntry temp = it1.value();
+				it1.value() = it.value();
+				it.value() = temp;
+				break;
+			}
+		}
+
+	}
 }
 
 

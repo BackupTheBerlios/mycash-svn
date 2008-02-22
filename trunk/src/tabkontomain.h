@@ -22,7 +22,7 @@ class TabKontoMain : public QWidget, public Ui::TabKontoMain{
 		void close(TabKontoMain *);
 		void deleteKonto(Konto *);
 		void updateSettingsDialog(Konto::KontoSettings);
-		void updateHistoryListDialog(Konto::VectorHistoryList&);
+		void updateHistoryListDialog(Konto::VectorHistoryList);
 
 	private slots:
 		void clickClose();

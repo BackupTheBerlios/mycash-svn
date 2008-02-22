@@ -33,6 +33,8 @@ KontoEntry::KontoEntry(const QDomElement & element)
 * Konstruktor mit QDomElement
 *******************************************************************************/
 {
+	//ToDo: Werte vorinitialiseren!!!
+	
 	if( element.tagName() != "Eintraege" ){
 		return;
 	}
@@ -49,6 +51,8 @@ KontoEntry::KontoEntry(const QDomElement & element)
 			if( tempSplitt ){
 				addSplitt( &tempSplitt ); 
 			}
+		}else if( nodeText == "Transfer" ){
+			Transfer = node.toElement().text().toUInt();
 		}else{
 			// ITEM invalid
 		}
@@ -76,7 +80,11 @@ KontoEntry::operator bool()
 }
 
 
-QString KontoEntry::getDatum(){
+QString KontoEntry::getDatum()
+/******************************************************************************
+* Methode gibt das Datum als String zurueck
+*******************************************************************************/
+{
 	return Datum.toString("yyyyMMdd");
 }
 
@@ -261,18 +269,22 @@ QDomElement KontoEntry::getXmlElement(QDomDocument &doc)
 * Methode gibt ein QDomElement mit den Eintraegen zurueck
 *******************************************************************************/
 {
-	QDomElement elementEntry = doc.createElement("Eintraege");
+	QDomElement elementEntry = doc.createElement("Eintraege"); //Hauptzweig
 	QDomElement elementDatum = doc.createElement("Datum");
 	QDomElement elementVerwendung = doc.createElement("Verwendung");
+	QDomElement elementTransfer = doc.createElement("Transfer");
 	
 	QDomText textDatum = doc.createTextNode( getDatum() );
 	QDomText textVerwendung = doc.createTextNode( getVerwendung() );
+	QDomText textTransfer = doc.createTextNode ( QString::number( getTransfer() ));
 
 	elementDatum.appendChild(textDatum);
 	elementVerwendung.appendChild(textVerwendung);
+	elementTransfer.appendChild( textTransfer );
 
 	elementEntry.appendChild(elementDatum);
 	elementEntry.appendChild(elementVerwendung);
+	elementEntry.appendChild(elementTransfer);
 
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){

@@ -53,6 +53,15 @@ class Konto : public QWidget
 			float Betrag;
 		};
 
+		struct HistoryListDetails{
+			quint32 Entry;
+			QString Datum;
+			QString Verwendung;
+			quint32 Transfer;
+			float Betrag;
+			QVector<KontoEntry> Entrys;	
+		};
+
 		typedef QMap<quint32, KontoEntry> MapKontoEntry;
 		typedef QMap<quint32, RepeatEntry> MapRepeatEntry;
 		typedef QVector<Konto::HistoryList> VectorHistoryList;
@@ -98,7 +107,7 @@ class Konto : public QWidget
 
 		float getBetragKategorie ( quint32 kategorie );
 		float getBetragKategorieIntervall ( quint32 kategorie, QDate von, QDate bis );
-		VectorHistoryList getHistoryList();
+		Konto::VectorHistoryList getHistoryList();
 		//VectorHistoryList getHistoryList(QDate von, QDate bis);
 
 		void setChanged();
@@ -118,6 +127,7 @@ class Konto : public QWidget
 	private:
 		quint32 getFreeNumber();
 		void setNotChanged();
+		void sort();
 
 		QString KontoName;
 		QString KontoBeschreibung;

@@ -1,9 +1,11 @@
 #include <QWidget>
 #include <QTextStream>
 #include <QMessageBox>
+#include <QVector>
 
 #include "tabkontomain.h"
 #include "konto.h"
+#include "FormShowHistoryList.h"
 
 TabKontoMain::TabKontoMain ( QWidget *parent = 0, Konto * connectedKonto = 0 ) : QWidget ( parent )
 		/******************************************************************************
@@ -117,15 +119,15 @@ void TabKontoMain::showFormKontoSettingsDialog()
 		FormKontoSettingsPointer = new FormKontoSettings ( this );
 
 		connect ( this,
-				  SIGNAL ( updateSettingsDialog ( Konto::FormKontoSettings ) ),
+				  SIGNAL ( updateSettingsDialog ( Konto::KontoSettings ) ),
 				  FormKontoSettingsPointer,
-				  SLOT ( update ( Konto::FormKontoSettings ) )
+				  SLOT ( update ( Konto::KontoSettings ) )
 				);
 
 		connect ( FormKontoSettingsPointer,
-				  SIGNAL ( updateKonto ( const Konto::FormKontoSettings& ) ),
+				  SIGNAL ( updateKonto ( const Konto::KontoSettings& ) ),
 				  this,
-				  SLOT ( fromFormKontoSettings ( const Konto::FormKontoSettings& ) )
+				  SLOT ( fromFormKontoSettings ( const Konto::KontoSettings& ) )
 				);
 	}
 
@@ -180,9 +182,9 @@ void TabKontoMain::showHistoryListDialog()
 	if ( FormShowHistoryListPointer == 0 ) {
 		FormShowHistoryListPointer = new FormShowHistoryList ( this );
 		connect ( this,
-				  SIGNAL ( updateHistoryListDialog (const Konto::VectorHistoryList & ) ),
+				  SIGNAL ( updateHistoryListDialog (Konto::VectorHistoryList) ),
 				  FormShowHistoryListPointer,
-				  SIGNAL ( update (const Konto::VectorHistoryList& list ) )
+				  SLOT ( updateTable(Konto::VectorHistoryList) ) 
 				);
 	}
 
