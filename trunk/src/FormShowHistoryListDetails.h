@@ -12,15 +12,17 @@ class FormShowHistoryListDetails : public QWidget, public Ui::FormShowHistoryLis
 		FormShowHistoryListDetails(QWidget *parent);
 
 	private slots:
-		void getDelete();
+		void getDelete(void);
 
 	public slots:
-		void getData();
+		void getData(const Konto::HistoryListDetails& details);
+
 	signals:
 		void doDelete( quint32 );
 
 	private:
-		void clearAndClose();
+		void clearAndClose(void);
+		void clear(void);
 		quint32 EntryNumber;
 }; 
 

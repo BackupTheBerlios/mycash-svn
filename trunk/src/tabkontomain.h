@@ -17,13 +17,16 @@ class TabKontoMain : public QWidget, public Ui::TabKontoMain{
 	public slots:
 		//FormKontoSettings-Update
 		void fromFormKontoSettings(const Konto::KontoSettings&);
+		void deleteEntry(quint32);
+		void updateEntryDetails(quint32);
 	
 	signals:
 		void close(TabKontoMain *);
 		void deleteKonto(Konto *);
 		void updateSettingsDialog(Konto::KontoSettings);
 		void updateHistoryListDialog(Konto::VectorHistoryList);
-
+		void updateHistoryListDetailsDialog(Konto::HistoryListDetails);
+		
 	private slots:
 		void clickClose();
 		void clickDelete();
@@ -38,6 +41,7 @@ class TabKontoMain : public QWidget, public Ui::TabKontoMain{
 		FormAddEntry *FormAddEntryPointer;
 		FormKontoSettings *FormKontoSettingsPointer;
 		FormShowHistoryList *FormShowHistoryListPointer;
+		void updateTableHistory( void );
 };
 
 #endif

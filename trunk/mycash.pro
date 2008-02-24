@@ -24,7 +24,8 @@ HEADERS += src/AddEntry.h \
  src/KontoSettings.h \
  src/KategorieDelegate.h \
  src/FormShowHistoryList.h \
- src/FormShowHistoryListDetails.h
+ src/FormShowHistoryListDetails.h \
+ src/ListDetailsDelegate.h
 FORMS += main_layout.ui \
          src/add_entry.ui \
          src/mainwindow1.ui \
@@ -49,6 +50,7 @@ SOURCES += src/AddEntry.cpp \
  src/KontoSettings.cpp \
  src/KategorieDelegate.cpp \
  src/FormShowHistoryList.cpp \
- src/FormShowHistoryListDetails.cpp
+ src/FormShowHistoryListDetails.cpp \
+ src/ListDetailsDelegate.cpp
 RESOURCES += src/resource.qrc
 TRANSLATIONS += src/mycash_de.ts

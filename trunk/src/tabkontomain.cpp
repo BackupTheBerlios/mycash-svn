@@ -27,23 +27,26 @@ TabKontoMain::TabKontoMain ( QWidget *parent = 0, Konto * connectedKonto = 0 ) :
 	    SLOT ( clickDelete() )
 	  );*/
 
-	connect ( buttonFormAddEntry,
-			  SIGNAL ( clicked() ),
-			  this,
-			  SLOT ( showFormAddEntryDialog() )
-			);
+	connect (
+		buttonFormAddEntry,
+		SIGNAL ( clicked() ),
+		this,
+		SLOT ( showFormAddEntryDialog() )
+	);
 
-	connect ( buttonSettings,
-			  SIGNAL ( clicked() ),
-			  this,
-			  SLOT ( clickSettings() )
-			);
+	connect (
+		buttonSettings,
+		SIGNAL ( clicked() ),
+		this,
+		SLOT ( clickSettings() )
+	);
 
-	connect ( buttonShowHistoryList,
-			  SIGNAL ( clicked() ),
-			  this,
-			  SLOT ( clickHistoryList() )
-			);
+	connect (
+		buttonShowHistoryList,
+		SIGNAL ( clicked() ),
+		this,
+		SLOT ( clickHistoryList() )
+	);
 
 	//Formulurvariablen initialisieren
 	FormAddEntryPointer = 0;
@@ -181,17 +184,64 @@ void TabKontoMain::showHistoryListDialog()
 {
 	if ( FormShowHistoryListPointer == 0 ) {
 		FormShowHistoryListPointer = new FormShowHistoryList ( this );
-		connect ( this,
-				  SIGNAL ( updateHistoryListDialog (Konto::VectorHistoryList) ),
-				  FormShowHistoryListPointer,
-				  SLOT ( updateTable(Konto::VectorHistoryList) ) 
-				);
+		connect (
+			this,
+			SIGNAL ( updateHistoryListDialog ( Konto::VectorHistoryList ) ),
+			FormShowHistoryListPointer,
+			SLOT ( updateTable ( Konto::VectorHistoryList ) )
+		);
+		connect (
+			FormShowHistoryListPointer,
+			SIGNAL ( SigDeleteEntry ( quint32 ) ),
+			this,
+			SLOT ( deleteEntry ( quint32 ) )
+		);
+		connect(
+			FormShowHistoryListPointer,
+			SIGNAL( GetUpdateDetails(quint32) ),
+			this,
+			SLOT( updateEntryDetails(quint32) )
+		);
+		connect(
+			this,
+			SIGNAL( updateHistoryListDetailsDialog( Konto::HistoryListDetails ) ),
+			FormShowHistoryListPointer,
+			SLOT( updateDetails( Konto::HistoryListDetails ) )
+		);
+
+		FormShowHistoryListPointer -> setWindowFlags ( Qt::Dialog );
+		FormShowHistoryListPointer -> setEnabled ( true );
 	}
 
-	emit updateHistoryListDialog( KontoPointer -> getHistoryList() );
+	updateTableHistory();
 
-	FormShowHistoryListPointer -> setWindowFlags ( Qt::Dialog );
-	FormShowHistoryListPointer -> setEnabled ( true );
 	FormShowHistoryListPointer -> show();
 }
 
+
+void TabKontoMain::deleteEntry ( quint32 entrynummer )
+/******************************************************************************
+* Methode loescht ein Kontoeintrag
+*******************************************************************************/
+{
+	KontoPointer -> deleteEntry ( entrynummer );
+	updateTableHistory();
+}
+
+
+void TabKontoMain::updateEntryDetails ( quint32 entrynummer )
+/******************************************************************************
+* Methode gibt detaillierte Informationen zu einen Eintrag zurueck
+*******************************************************************************/
+{
+	emit updateHistoryListDetailsDialog ( KontoPointer -> getEntryDetails ( entrynummer ) );
+}
+
+
+void TabKontoMain::updateTableHistory( void )
+/******************************************************************************
+* Methode aktualisiert die HistoryListTable
+*******************************************************************************/
+{
+	emit updateHistoryListDialog ( KontoPointer -> getHistoryList() );
+}

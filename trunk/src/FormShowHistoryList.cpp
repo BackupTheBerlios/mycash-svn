@@ -1,4 +1,5 @@
 #include "FormShowHistoryList.h"
+#include "FormShowHistoryListDetails.h"
 
 #include <QWidget>
 #include <QTableWidget>
@@ -28,7 +29,53 @@ FormShowHistoryList::FormShowHistoryList ( QWidget *parent ) : QWidget ( parent 
 		this,
 		SLOT( selectRow( int, int ) )
 	);
+	connect(
+		tableList,
+		SIGNAL( cellDoubleClicked(int, int) ),
+		this,
+		SLOT( showDetails(int, int) )
+	);
+
+	//Item-Settings
+	tableList -> setEditTriggers ( QAbstractItemView::NoEditTriggers ); // Tabelle schreibschuetzen
+
+	//Formulare initialisieren
+	PointerFormDetails = 0;
 }
+
+
+FormShowHistoryList::~FormShowHistoryList()
+/******************************************************************************
+* Dekonstruktor
+*******************************************************************************/
+{
+	if( PointerFormDetails ){
+		delete PointerFormDetails;
+	}
+}
+
+
+void FormShowHistoryList::showDetails(int row, int column)
+/******************************************************************************
+* Methode zeigt Details eines Eintrages an
+*******************************************************************************/
+{
+	column = column; //wegen GCC
+	if(! PointerFormDetails){
+		PointerFormDetails = new FormShowHistoryListDetails(this);
+		connect(
+			this,
+			SIGNAL( DoUpdateDetails(Konto::HistoryListDetails) ),
+			PointerFormDetails,
+			SLOT( getData(Konto::HistoryListDetails) )
+		);
+		
+		PointerFormDetails -> setWindowFlags ( Qt::Dialog );
+	}
+	emit GetUpdateDetails( row + 1);
+	PointerFormDetails -> show();
+}
+
 
 /*void FormShowHistoryList::debugSel(){
 	QList<QTableWidgetSelectionRange> liste = tableList -> selectedRanges();
@@ -50,18 +97,16 @@ void FormShowHistoryList::updateTable ( const Konto::VectorHistoryList& liste ) 
 {
 	Konto::VectorHistoryList::iterator it;
 	Konto::VectorHistoryList list = liste;
+	
 	//Tabelle leeren
-	tableList -> clear();
-
-	//Header setzten
-	tableList -> setHorizontalHeaderLabels ( QStringList() << tr ( "date" ) << tr ( "used for" ) << tr ( "transfer" ) <<  tr ( "pay" ) );
-
-	// Tabelle schreibschuetzen
-	tableList -> setEditTriggers ( QAbstractItemView::NoEditTriggers );
+	quint32 row = tableList -> rowCount(); 
+	while(row > 0){
+		tableList -> removeRow( row - 1 );
+		row--;
+	}
 
 
-	quint32 row = 0;
-
+	//durch while-Schleife -> row := 0:
 	for ( it = list.begin(); it != list.end(); it++ ) {
 		tableList -> insertRow ( row );
 		QTableWidgetItem *itemDate = new QTableWidgetItem ( it -> Datum );
@@ -100,4 +145,21 @@ void FormShowHistoryList::selectRow ( int row, int column )
 		),
 		true
 	);
+}
+
+
+void FormShowHistoryList::deleteEntry(const quint32& entry)
+/******************************************************************************
+* Methode leitet den zu loeschenden Eintrag weiter
+*******************************************************************************/
+{
+	emit SigDeleteEntry( entry );
+}
+
+void FormShowHistoryList::updateDetails(const Konto::HistoryListDetails& details)
+/******************************************************************************
+* Methode leitet die Werte fuer die Deatails weiter
+*******************************************************************************/
+{
+	emit DoUpdateDetails( details );
 }

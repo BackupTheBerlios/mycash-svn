@@ -53,13 +53,14 @@ class Konto : public QWidget
 			float Betrag;
 		};
 
+		typedef QVector<KontoSplitt> VectorSplitt;
 		struct HistoryListDetails{
 			quint32 Entry;
 			QString Datum;
 			QString Verwendung;
 			quint32 Transfer;
 			float Betrag;
-			QVector<KontoEntry> Entrys;	
+			VectorSplitt Splitts;	
 		};
 
 		typedef QMap<quint32, KontoEntry> MapKontoEntry;
@@ -83,6 +84,7 @@ class Konto : public QWidget
 		bool getCanBeNegativ();
 
 		Konto::KontoSettings getFormKontoSettings();
+		Konto::HistoryListDetails getEntryDetails(quint32 entrynummer);
 
 		quint32 setKontoFile ( QString KontoFile );
 		quint32 setKontoName ( QString KontoName );

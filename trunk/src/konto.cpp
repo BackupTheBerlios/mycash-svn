@@ -966,6 +966,32 @@ Konto::KontoSettings Konto::getFormKontoSettings()
 }
 
 
+Konto::HistoryListDetails Konto::getEntryDetails(quint32 entrynummer)
+/******************************************************************************
+* Methode gibt ein Struct mit KontoEintragsInformationen zurueck
+*******************************************************************************/
+{
+	HistoryListDetails temp;
+	if( Eintraege.contains( entrynummer ) ){
+		temp.Entry = entrynummer;
+		temp.Datum = Eintraege[ entrynummer ].getDatum();
+		temp.Verwendung = Eintraege[ entrynummer ].getVerwendung();
+		temp.Transfer = Eintraege[ entrynummer ].getTransfer();
+		temp.Betrag = Eintraege[ entrynummer ].getBetrag();
+		temp.Splitts = Eintraege[ entrynummer ].getSplittdaten();
+	}else{
+		temp.Entry = 0;
+		temp.Datum = "";
+		temp.Verwendung = "";
+		temp.Transfer = 0;
+		temp.Betrag = 0.0;
+		VectorSplitt tempS;
+		temp.Splitts = tempS;
+	}
+	return temp;
+}
+
+
 void Konto::sort(){
 	//qSort( Eintraege.begin(), Eintraege.end() );
 	bool sorted = false;

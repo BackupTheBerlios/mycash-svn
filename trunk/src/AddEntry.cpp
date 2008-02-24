@@ -25,6 +25,7 @@ FormAddEntry::FormAddEntry ( QWidget *parent = 0 ) : QWidget ( parent )
 
 	//Datum einstellen
 	date -> setDate( QDate::currentDate() );
+	date -> setDisplayFormat( tr("yyyy-MM-dd") );
 
 	//Autovervollstaendigung aktivieren
 	/*QStringList list;
