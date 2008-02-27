@@ -27,6 +27,8 @@ class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 		quint32 changeVerwendung(QString verwendung, quint32 nummer);	// Splittdaten
 		quint32 changeKategorie(quint32 kategorie, quint32 nummer);
 		quint32 changeVerwendung(QString verwendung);	//Hauptverwendung
+		quint32 changeSteuerrelevanz(bool steuer, quint32 nummer);
+		quint32 changeShop(quint32 shop);
 
 		quint32 addSplitt(KontoSplitt *splitt);
 		quint32 deleteSplitt(quint32 splittnummer);
@@ -36,9 +38,10 @@ class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 		QString getVerwendung();
 		float getBetrag();
 		QString getDatum();
-		QVector<quint32> getKategorien(quint32 sort);
+		QVector<quint32> getKategorien(quint32 sort = ASC);
 		QVector<KontoSplitt> getSplittdaten();
 		quint32 getTransfer();
+		quint32 getShop();
 
 		float getBetragKategorie(quint32 kategorie);
 		float getBetragKategorieIntervall(quint32 kategorie, QDate von, QDate bis);
@@ -53,6 +56,7 @@ class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 		quint32 Transfer;
 		QDate Datum;
 		QString Verwendung;	// z.B "Einkauf bei xxx"
+		quint32 Shop;
  		MapSplitt Splittdaten;	//Kategorien auf dem Einkaufszettel
 };
 

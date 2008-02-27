@@ -760,7 +760,7 @@ QString MainWindow1::correctFilename ( QString filename, QString endung )
 		endung = endung.right ( endung.size() - 1 );
 	}
 
-	if ( ! file.contains ( endung, Qt::CaseInsensitive ) ) {
+	if ( ! file.endsWith ( endung, Qt::CaseInsensitive ) ) {
 		file.append ( endung );
 	}
 

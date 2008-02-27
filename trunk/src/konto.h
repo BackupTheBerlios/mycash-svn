@@ -57,6 +57,7 @@ class Konto : public QWidget
 		struct HistoryListDetails{
 			quint32 Entry;
 			QString Datum;
+			quint32 Shop;
 			QString Verwendung;
 			quint32 Transfer;
 			float Betrag;

@@ -11,13 +11,15 @@ class KontoSplitt{
 	public:
 		KontoSplitt();
 		KontoSplitt(const QDomElement &element);
-		KontoSplitt(quint32 kategorie, QString verwendung, float betrag);
-		quint32 changeKategorie(quint32 kategorie);
+		KontoSplitt(quint32 kategorie, QString verwendung, float betrag, bool steuer = false);
 		quint32 getKategorie();
 		QString getVerwendung();
-		quint32 changeVerwendung(QString verwendung);
 		float getBetrag();
+		bool getSteuerrelevanz();
+		quint32 changeKategorie(quint32 kategorie);
+		quint32 changeVerwendung(QString verwendung);
 		quint32 changeBetrag(float betrag);
+		quint32 changeSteuerrelevanz(bool steuer);
 
 		operator bool();
 
@@ -27,6 +29,7 @@ class KontoSplitt{
 		quint32 Kategorie;
 		QString Verwendung;
 		float Betrag;
+		bool SteuerRelevant;
 };
 
 #endif

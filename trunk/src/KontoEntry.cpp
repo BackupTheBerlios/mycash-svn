@@ -53,6 +53,8 @@ KontoEntry::KontoEntry(const QDomElement & element)
 			}
 		}else if( nodeText == "Transfer" ){
 			Transfer = node.toElement().text().toUInt();
+		}else if( nodeText == "Shop" ){
+			Shop = node.toElement().text().toUInt();
 		}else{
 			// ITEM invalid
 		}
@@ -62,7 +64,11 @@ KontoEntry::KontoEntry(const QDomElement & element)
 }
 
 
-KontoEntry::~KontoEntry(){
+KontoEntry::~KontoEntry()
+/******************************************************************************
+* Destruktor
+*******************************************************************************/
+{
 
 }
 
@@ -89,7 +95,11 @@ QString KontoEntry::getDatum()
 }
 
 
-float KontoEntry::getBetrag(){
+float KontoEntry::getBetrag()
+/******************************************************************************
+* Methode gibt den Gesamtbetrag zurueck
+*******************************************************************************/
+{
 	float betrag = 0.0;
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
@@ -99,7 +109,11 @@ float KontoEntry::getBetrag(){
 }
 
 
-QVector<quint32> KontoEntry::getKategorien(quint32 sort){
+QVector<quint32> KontoEntry::getKategorien(quint32 sort)
+/******************************************************************************
+* Methode gibt die Kategorien eines Eintrages zurueck
+*******************************************************************************/
+{
 	QVector<quint32> kategorien;
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
@@ -115,7 +129,11 @@ QVector<quint32> KontoEntry::getKategorien(quint32 sort){
 }
 
 
-QString KontoEntry::getVerwendung(){
+QString KontoEntry::getVerwendung()
+/******************************************************************************
+* Methode gibt die Verwendung zurueck
+*******************************************************************************/
+{
 	return Verwendung;
 }
 
@@ -130,22 +148,34 @@ quint32 KontoEntry::changeTransfer(quint32 transfer)
 }
 
 
-quint32 KontoEntry::changeVerwendung(QString verwendung){
+quint32 KontoEntry::changeVerwendung(QString verwendung)
+/******************************************************************************
+* Methode aendert die Verwendung
+*******************************************************************************/
+{
 	// ToDo: Überprüfung Verwendung
 	Verwendung = verwendung;
 	return Ok;
 }
 
 
-quint32 KontoEntry::changeDatum(QDate datum){
-	//QTextStream console(stdout);
+quint32 KontoEntry::changeDatum(QDate datum)
+/******************************************************************************
+* Methode aendert das Datum
+* Eingabe des Datums als QDate
+*******************************************************************************/
+{
 	Datum = datum;
-	//console << "\t" << "KontoEntry::changeDatum()" << Datum.toString("yyyyMMdd") << "\r\n";
 	return Ok;
 }
 
 
-quint32 KontoEntry::changeDatum(QString datum){
+quint32 KontoEntry::changeDatum(QString datum)
+/******************************************************************************
+* Methode aendert das Datum
+* Eingabe als String im Format "yyyyMMdd"
+*******************************************************************************/
+{
 	QString jahr, monat, tag;
 	jahr = datum.mid(0,4);
 	monat = datum.mid(4,2);
@@ -156,7 +186,26 @@ quint32 KontoEntry::changeDatum(QString datum){
 }
 
 
-quint32 KontoEntry::getFreeNumber(){
+quint32 KontoEntry::changeSteuerrelevanz(bool steuer, quint32 nummer)
+/******************************************************************************
+* Methode aendert die Steuerrelevanz eines Eintrages
+*******************************************************************************/
+{
+	MapSplitt::iterator it;
+	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
+		if( it.key() == nummer ){
+			return it.value().changeSteuerrelevanz( steuer );
+		}
+	}
+	return NotFound;
+}
+
+
+quint32 KontoEntry::getFreeNumber() //private
+/******************************************************************************
+* Methode gibt eine freie Nummer zurueck
+*******************************************************************************/
+{
 	MapSplitt::iterator it;
 	it = Splittdaten.end();
 	if(it == Splittdaten.begin()){	// logisch richtig???
@@ -167,7 +216,11 @@ quint32 KontoEntry::getFreeNumber(){
 }
 
 
-quint32 KontoEntry::changeBetrag(float betrag, quint32 nummer){
+quint32 KontoEntry::changeBetrag(float betrag, quint32 nummer)
+/******************************************************************************
+* Methode aendert den Betrag des Splitteintreages nummer in betrag
+*******************************************************************************/
+{
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
 		if( it.key() == nummer){
@@ -178,7 +231,11 @@ quint32 KontoEntry::changeBetrag(float betrag, quint32 nummer){
 }
 
 
-quint32 KontoEntry::changeVerwendung(QString verwendung, quint32 nummer){
+quint32 KontoEntry::changeVerwendung(QString verwendung, quint32 nummer)
+/******************************************************************************
+* Methode aendert die Verwendung des Splitteintrages nummer in verwendung
+*******************************************************************************/
+{
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
 		if(it.key() == nummer){
@@ -189,7 +246,11 @@ quint32 KontoEntry::changeVerwendung(QString verwendung, quint32 nummer){
 }
 
 
-quint32 KontoEntry::changeKategorie(quint32 kategorie, quint32 nummer){
+quint32 KontoEntry::changeKategorie(quint32 kategorie, quint32 nummer)
+/******************************************************************************
+* Methode aendert die Kategorie des Splitteintrages nummer in kategorie
+*******************************************************************************/
+{
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
 		if(it.key() == nummer){
@@ -201,7 +262,21 @@ quint32 KontoEntry::changeKategorie(quint32 kategorie, quint32 nummer){
 }
 
 
-QVector<KontoSplitt> KontoEntry::getSplittdaten(){
+quint32 KontoEntry::changeShop(quint32 shop)
+/******************************************************************************
+* Methode aendert den Shop
+*******************************************************************************/
+{
+	Shop = shop;
+	return Ok;
+}
+
+
+QVector<KontoSplitt> KontoEntry::getSplittdaten()
+/******************************************************************************
+* Methode gibt ein Vector mit den Splittdaten zurueck
+*******************************************************************************/
+{
 	QVector<KontoSplitt> returnvalue;
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
@@ -211,13 +286,21 @@ QVector<KontoSplitt> KontoEntry::getSplittdaten(){
 }
 
 
-quint32 KontoEntry::addSplitt(KontoSplitt *splitt){
+quint32 KontoEntry::addSplitt(KontoSplitt *splitt)
+/******************************************************************************
+* Methode fuegt ein Splitteintrag hinzu
+*******************************************************************************/
+{
 	Splittdaten[ getFreeNumber() ] = *splitt;
 	return Ok;
 }
 
 
-quint32 KontoEntry::deleteSplitt(quint32 splittnummer){
+quint32 KontoEntry::deleteSplitt(quint32 splittnummer)
+/******************************************************************************
+* Methode loescht Splitteintrag mit Nummer splittnummer
+*******************************************************************************/
+{
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
 		if( it.key() == splittnummer ){
@@ -229,7 +312,11 @@ quint32 KontoEntry::deleteSplitt(quint32 splittnummer){
 }
 
 
-float KontoEntry::getBetragKategorieIntervall(quint32 kategorie, QDate von, QDate bis){
+float KontoEntry::getBetragKategorieIntervall(quint32 kategorie, QDate von, QDate bis)
+/******************************************************************************
+* Methode gibt den Gesamtbetrag der Splitteintraege einer Kategorie in einen Zeitintervall zurueck
+*******************************************************************************/
+{
 	float summe = 0.0;
 	if((Datum >= von) && (Datum <= bis)){
 		MapSplitt::iterator it;
@@ -243,7 +330,11 @@ float KontoEntry::getBetragKategorieIntervall(quint32 kategorie, QDate von, QDat
 }
 
 
-float KontoEntry::getBetragKategorie(quint32 kategorie){
+float KontoEntry::getBetragKategorie(quint32 kategorie)
+/******************************************************************************
+* Methode gibt den Gesamtbetrag der Splitteintraege einer Kategorie zurueck
+*******************************************************************************/
+{
 	float summe = 0.0;
 	MapSplitt::iterator it;
 	for(it = Splittdaten.begin(); it != Splittdaten.end(); it++){
@@ -261,6 +352,15 @@ quint32 KontoEntry::getTransfer()
 *******************************************************************************/
 {
 	return Transfer;
+}
+
+
+quint32 KontoEntry::getShop()
+/******************************************************************************
+* Methode gibt eine Shop-ID zurueck
+*******************************************************************************/
+{
+	return Shop;
 }
 
 
@@ -295,7 +395,11 @@ QDomElement KontoEntry::getXmlElement(QDomDocument &doc)
 }
 
 
-quint32 KontoEntry::list_Entry_deb(){
+quint32 KontoEntry::list_Entry_deb() //DEBUG
+/******************************************************************************
+* Methode listet alle Informationen auf der Konsole aus
+*******************************************************************************/
+{
 	QTextStream console(stdout);
 	console << "\t" << "KontoEntry::list_Entry_deb(): ";
 	console << "Datum: " << getDatum() << "\t" << "Verwendung: " << getVerwendung() << "\t";

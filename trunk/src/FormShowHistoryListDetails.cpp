@@ -1,5 +1,6 @@
 #include "FormShowHistoryListDetails.h"
 #include "konto_splitt.h"
+#include "ListDetailsDelegate.h"
 #include <QMessageBox>
 #include <QTableWidget>
 #include <QTableWidgetItem>
@@ -17,7 +18,7 @@ FormShowHistoryListDetails::FormShowHistoryListDetails ( QWidget *parent ) : QWi
 		this,
 		SLOT ( getDelete() )
 	);
-
+	//tableSplitt -> setItemDelegate( new ListDetailsDelegate(-1, 3, -1) );
 	dateEdit -> setDisplayFormat( tr("yyyy-MM-dd") );
 }
 
@@ -96,11 +97,13 @@ void FormShowHistoryListDetails::getData ( const Konto::HistoryListDetails& deta
 			QTableWidgetItem *ItemVerwendung	=	new QTableWidgetItem( it -> getVerwendung() );
 			QTableWidgetItem *ItemKategorie		= 	new QTableWidgetItem( it -> getKategorie() );
 			QTableWidgetItem *ItemBetrag		=	new QTableWidgetItem( QString::number(it -> getBetrag()) );
+			QTableWidgetItem *ItemSteuer		= 	new QTableWidgetItem( QString::number( (it -> getSteuerrelevanz())?1:0 ) );
 
 			tableSplitt -> insertRow(row);
 			tableSplitt -> setItem(row, 0, ItemVerwendung);
 			tableSplitt -> setItem(row, 1, ItemKategorie);
 			tableSplitt -> setItem(row, 2, ItemBetrag);
+			tableSplitt -> setItem(row, 3, ItemSteuer);
 			row++; 
 		}
 	}

@@ -1,6 +1,7 @@
 #include "ListDetailsDelegate.h"
 
 #include <QModelIndex>
+#include <QCheckBox>
 
 ListDetailsDelegate::ListDetailsDelegate(qint32 ColumnKat, qint32 ColumnTax, quint32 ColumnDelete, QObject *parent) :
 QItemDelegate(parent)
@@ -22,9 +23,11 @@ void ListDetailsDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
 	if( index.column() ==  posKategorie){
 
 	}else if( index.column() == posTax){
+		//leider keine richtige Checkbox... weiter testen..
+		//drawCheck(painter, option, option.rect,  (bool)index.model() -> data(index, Qt::DisplayRole).toInt()?Qt::Checked:Qt::Unchecked );
 
 	}else if( index.column() == posDelete ){
-
+		
 	}else{
 		QItemDelegate::paint(painter, option, index);
 	}
@@ -43,8 +46,9 @@ QWidget *ListDetailsDelegate::createEditor(QWidget *parent, const QStyleOptionVi
 	}else if( index.column() == posDelete ){
 
 	}else{
-		QItemDelegate::createEditor(parent, option, index);
+		return QItemDelegate::createEditor(parent, option, index);
 	}
+	return QItemDelegate::createEditor(parent, option, index); //debug
 }
 
 

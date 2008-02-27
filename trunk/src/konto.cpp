@@ -975,6 +975,7 @@ Konto::HistoryListDetails Konto::getEntryDetails(quint32 entrynummer)
 	if( Eintraege.contains( entrynummer ) ){
 		temp.Entry = entrynummer;
 		temp.Datum = Eintraege[ entrynummer ].getDatum();
+		temp.Shop = Eintraege[ entrynummer ].getShop();
 		temp.Verwendung = Eintraege[ entrynummer ].getVerwendung();
 		temp.Transfer = Eintraege[ entrynummer ].getTransfer();
 		temp.Betrag = Eintraege[ entrynummer ].getBetrag();
@@ -982,6 +983,7 @@ Konto::HistoryListDetails Konto::getEntryDetails(quint32 entrynummer)
 	}else{
 		temp.Entry = 0;
 		temp.Datum = "";
+		temp.Shop = 0;
 		temp.Verwendung = "";
 		temp.Transfer = 0;
 		temp.Betrag = 0.0;
