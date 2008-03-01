@@ -1,3 +1,8 @@
+/**
+* @file FormShowHistoryListDetails.cpp
+*
+* @brief Datei enthält die Definitionen der Klasse FormShowHistoryListDetails
+*/
 #include "FormShowHistoryListDetails.h"
 #include "konto_splitt.h"
 #include "ListDetailsDelegate.h"
@@ -6,10 +11,12 @@
 #include <QTableWidgetItem>
 #include <QDate>
 
+/**
+* @brief Konstruktor des Formulars
+*
+* @param *parent Adresse der Elternklasse
+*/
 FormShowHistoryListDetails::FormShowHistoryListDetails ( QWidget *parent ) : QWidget ( parent )
-		/******************************************************************************
-		* Konstruktor
-		********************************************************************************/
 {
 	setupUi ( this );
 	connect ( //
@@ -42,6 +49,9 @@ void FormShowHistoryListDetails::getDelete()
 }
 
 
+/**
+* @brief Methode löscht Eingabefelder und beendet das Fenster
+*/
 void FormShowHistoryListDetails::clearAndClose ( void )
 /******************************************************************************
 * Methode loescht die Eingabefelder und beendet das Fenster
@@ -97,14 +107,52 @@ void FormShowHistoryListDetails::getData ( const Konto::HistoryListDetails& deta
 			QTableWidgetItem *ItemVerwendung	=	new QTableWidgetItem( it -> getVerwendung() );
 			QTableWidgetItem *ItemKategorie		= 	new QTableWidgetItem( it -> getKategorie() );
 			QTableWidgetItem *ItemBetrag		=	new QTableWidgetItem( QString::number(it -> getBetrag()) );
-			QTableWidgetItem *ItemSteuer		= 	new QTableWidgetItem( QString::number( (it -> getSteuerrelevanz())?1:0 ) );
+			
+			//QTableWidgetItem *ItemSteuer		= 	new QTableWidgetItem( QString::number( (it -> getSteuerrelevanz())?1:0 ) );
+			QTableWidgetItem *item = new QTableWidgetItem(/* tr( "Checkbox" ) */);
+			//item -> setFlags( Qt::ItemIsUserCheckable );
+			item -> setCheckState( (it -> getSteuerrelevanz())?Qt::Checked:Qt::Unchecked );
+
 
 			tableSplitt -> insertRow(row);
-			tableSplitt -> setItem(row, 0, ItemVerwendung);
-			tableSplitt -> setItem(row, 1, ItemKategorie);
-			tableSplitt -> setItem(row, 2, ItemBetrag);
-			tableSplitt -> setItem(row, 3, ItemSteuer);
+			tableSplitt -> setItem(row, VERWENDUNG, ItemVerwendung);
+			tableSplitt -> setItem(row, KATEGORIE, ItemKategorie);
+			tableSplitt -> setItem(row, BETRAG, ItemBetrag);
+			tableSplitt -> setItem(row, STEUER, /*ItemSteuer*/item);
 			row++; 
 		}
 	}
+}
+
+/**
+* @brief Methode wird ausgeführt, wenn ButtonOk geklickt wird
+*/
+void FormShowHistoryListDetails::buttonOkClicked( void )
+{
+	//ToDo:  Ueberpruefen, ob alle wichtigen Felder ausgefüllt
+
+	Konto::HistoryListDetails tempStruct;
+	tempStruct.Entry = EntryNumber;
+	tempStruct.Datum = (dateEdit -> date()).toString("yyyyMMdd");
+	tempStruct.Shop = 0; //An ComboBox anpassen
+	tempStruct.Verwendung = lineUsed -> text();
+	tempStruct.Transfer = 0; // An ComboBox anpassen
+	tempStruct.Betrag = (linePay -> text()).toFloat(0);
+
+	Konto::VectorSplitt splitts;
+	quint32 anzahlRow = tableSplitt -> rowCount();
+	for(quint32 i = 0; i < anzahlRow; i++){
+		QString Verwendung = (tableSplitt -> item(i, VERWENDUNG)) -> text();
+		quint32 Kategorie = 0; //ComboBox auswerten
+		float Betrag = ((tableSplitt -> item(i, BETRAG)) -> text()).toFloat(0);
+		bool Steuer = ((tableSplitt -> item(i, STEUER)) -> checkState() == Qt::Checked)?true:false;
+		
+		if( Verwendung != "" && Betrag != 0.0 ){
+			KontoSplitt tempSplitt(Kategorie, Verwendung, Betrag, Steuer);
+			splitts.push_back( tempSplitt );
+		}
+	}
+	tempStruct.Splitts = splitts;
+	
+	emit sendData( tempStruct );
 }

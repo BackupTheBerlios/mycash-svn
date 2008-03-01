@@ -1,3 +1,8 @@
+/**
+* @file konto.cpp
+*
+* @brief Datei enthält die Methodendefinition der Klasse Konto
+*/
 #include "konto.h"
 #include "configs.h"
 
@@ -14,10 +19,11 @@
 
 #include <QtXml> //constains #include <QDomDocument>, #include <QDomText>
 
+
+/**
+* @brief Standardkonstruktor
+*/
 Konto::Konto()  //Konstruktor fuer neues Konto
-/******************************************************************************
-* leerer Konstruktor
-*******************************************************************************/
 {
 	KontoFile = "";
 	KontoName = "";
@@ -25,11 +31,12 @@ Konto::Konto()  //Konstruktor fuer neues Konto
 	setNotChanged();
 }
 
-
+/**
+* @brief Überladener Konstruktor zum Laden einer vorhandenen Kontodatei
+*
+* @param filename Lädt die Datei, in der die Kontodaten enthalten sind.
+*/
 Konto::Konto ( QString& filename )
-/******************************************************************************
-* Konstruktor mit DateiNamen, Datei wird geladen
-*******************************************************************************/
 {
 	KontoFile = filename;
 	KontoName = "";
@@ -38,11 +45,16 @@ Konto::Konto ( QString& filename )
 	setNotChanged();
 }
 
-
+/**
+* @brief Überladener Konstruktor zum Erstellen eines neuen Kontos
+*
+* @param kontoname Name des Kontos
+* @param kontobeschreibung Beschreibung des Kontos
+* @param blz Bankleitzahl des Kontos
+* @param bankname Name der Bank unter deren das Konto läuft
+* @param kontotyp Art des Kontos
+*/
 Konto::Konto ( QString& kontoname, QString& kontobeschreibung, QString& blz, QString& bankname, quint32& kontotyp )
-/******************************************************************************
-* Kontruktor mit KontoName, KontoBeschreibung, BLZ, BankName und Kontotyp
-*******************************************************************************/
 {
 	KontoFile = "";
 	KontoName = kontoname;
@@ -55,10 +67,17 @@ Konto::Konto ( QString& kontoname, QString& kontobeschreibung, QString& blz, QSt
 	setCanBeNegativ ( true );
 }
 
+/**
+* @brief Überladener Konstruktor mit allen Kontoattributen
+* @param kontoname Name des Kontos
+* @param kontobeschreibung Beschreibung des Kontos
+* @param blz Bankleitzahl der Bank
+* @param bankname Name der Bank
+* @param kontotyp Kontotyp
+* @param limit Überzugsgrenze
+* @param underLimit Überzugsgrenze kann unterschritten werden
+*/
 Konto::Konto ( QString kontoname, QString kontobeschreibung, QString blz, QString bankname, quint32 kontotyp, float limit, bool underLimit )
-/******************************************************************************
-* Kontstruktor mit KontoName, KontoBeschreibung, BLZ, BankName, KontoTyp, Limit, LimitFix
-*******************************************************************************/
 {	
 	KontoFile = "";
 	KontoName = kontoname;
@@ -91,23 +110,35 @@ void Konto::setChanged()
 }
 
 
+/**
+* @brief Methode setzt den Betrag unter dessen das Konto als Überzogen gilt
+* @param limit Überzugsgrenze
+* @return Gibt den Erfolg der Methode zurück 
+*/
 quint32 Konto::setLimitNegativ ( float limit )
-/******************************************************************************
-* Methode setzt den Limit
-*******************************************************************************/
 {
-	LimitNegativ = limit;
-	return Ok;
+	if(LimitNegativ != limit){
+		LimitNegativ = limit;
+		setChanged();
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode bestimmt ob Konto die gesetzte Grenze unterziehen kann
+* @param beNegativ Konto kann unterhalb der Granze sein
+* @return Gibt den Erfolg der Methode zurück
+*/
 quint32 Konto::setCanBeNegativ ( bool beNegativ )
-/******************************************************************************
-* Methode setzt den Limit fix
-********************************************************************************/
 {
-	canBeNegativ = beNegativ;
-	return true;
+	if(canBeNegativ != beNegativ){
+		canBeNegativ = beNegativ;
+		setChanged();
+		return true;
+	}
+	return NotChanged;
 }
 
 
@@ -377,10 +408,11 @@ QString Konto::getKontoFile()
 }
 
 
+/**
+* @brief Überladener bool Operator
+* @return True wenn der Name des Kontos gesetzt ist
+*/
 Konto::operator bool()
-/******************************************************************************
-* Ueberladener Bool-Operator
-*******************************************************************************/
 {
 	if ( KontoName.isEmpty() ) {
 		return false;
@@ -557,69 +589,99 @@ quint32 Konto::saveFileXML()
 }
 
 
+/**
+* @brief Methode setzt den Namen des Kontos
+* @param KName Neuer Name des Kontos
+* @return Erfolg der Methode
+*/
 quint32 Konto::setKontoName ( QString KName )
-/******************************************************************************
-* Methode setzt den KontoNamen
-*******************************************************************************/
 {
-	KontoName = KName;
-	setChanged();
-	return Ok;
+	if(KontoName != KName){
+		KontoName = KName;
+		setChanged();
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode ändert die Kontobeschreibung
+* @param KBez Neue Kontobeschreibung
+* @return Erfolg der Methode
+*/
 quint32 Konto::setKontoBeschreibung ( QString KBez )
-/******************************************************************************
-* Methode setzt die KontoBeschreibung
-*******************************************************************************/
 {
-	KontoBeschreibung = KBez;
-	setChanged();
-	return Ok;
+	if(KontoBeschreibung != KBez){
+		KontoBeschreibung = KBez;
+		setChanged();
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode setzt die Datei in der das Konto gespeichert werden soll
+* @param KFile Neue Kontodatei
+* @return Erfolg der Methode
+*/
 quint32 Konto::setKontoFile ( QString KFile )
-/******************************************************************************
-* Methode setzt die Kontodatei
-*******************************************************************************/
 {
-	KontoFile = KFile;
-	setChanged();
-	return Ok;
+	if(KontoFile != KFile){
+		KontoFile = KFile;
+		setChanged();
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode setzt die Bankleitzahl
+* @param blz Neue Bankleitzahl
+* @return Erfolg der Methode
+*/
 quint32 Konto::setBLZ ( QString blz )
-/******************************************************************************
-* Methode setzt die BLZ
-*******************************************************************************/
 {
-	BLZ = blz;
-	setChanged();
-	return Ok;
+	if(BLZ != blz){
+		BLZ = blz;
+		setChanged();
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode setzt den BankNamen
+* @param bankname Neuer Bankname
+* @return Erfolg der Methode
+*/
 quint32 Konto::setBankName ( QString bankname )
-/******************************************************************************
-* Methode setzt den Banknamen
-*******************************************************************************/
 {
-	BankName = bankname;
-	setChanged();
-	return Ok;
+	if(BankName != bankname){
+		BankName = bankname;
+		setChanged();
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode setzt den Kontotyp
+* @param kontotyp Neuer Kontotyp
+* @return Erfolg der Methode
+*/
 quint32 Konto::setKontoTyp ( quint32 kontotyp )
-/******************************************************************************
-* Methode setzt den KontoTyp
-*******************************************************************************/
 {
-	KontoTyp = kontotyp;
-	setChanged();
-	return Ok;
+	if(KontoTyp != kontotyp){
+		KontoTyp = kontotyp;
+		setChanged();
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
@@ -691,21 +753,29 @@ quint32 Konto::deleteSplitt ( quint32 entry, quint32 splittnummer )
 }
 
 
+/**
+* @brief Methode ändert das Datum eines Eintrages
+* @param datum Neues Datum als Qt-Klasse QString in Form 'yyyyMMdd'
+* @param entry Eintrag indem die Änderung stattfinden soll
+* @return Erfolg der Methode
+*/
 quint32 Konto::changeDatum ( QString datum, quint32 entry )
-/******************************************************************************
-* Methode aendert das Datum eines Eintrages(entry) - Datum als String
-*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
 	for ( it = Eintraege.begin(); it != Eintraege.end(); it++ ) {
 		if ( it.key() == entry ) {
-			if ( it.value().changeDatum ( datum ) ) {
+
+			quint32 return_value = it.value().changeDatum( datum );
+			if(return_value == Ok){
 				setChanged();
 				return Ok;
+			}else if(return_value == NotChanged){
+				return Ok;
+			}else{
+				return return_value;
 			}
 
-			break;
 		}
 	}
 
@@ -713,21 +783,29 @@ quint32 Konto::changeDatum ( QString datum, quint32 entry )
 }
 
 
+/**
+* @brief Methode ändert das Datum eines Eintrages
+* @param datum Neues Datum als Qt-Klasse QDate
+* @param entry Eintrag deren Datum geändert werden soll
+* @return Erfolg der Methode 
+*/
 quint32 Konto::changeDatum ( QDate datum, quint32 entry )
-/******************************************************************************
-* Methode aendert das Datum eines Eintrages(entry) - Datum als Klasse
-*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
 	for ( it = Eintraege.begin(); it != Eintraege.end(); it++ ) {
 		if ( it.key() == entry ) {
-			if ( it.value().changeDatum ( datum ) ) {
+
+			quint32 return_value = it.value().changeDatum ( datum );
+			if( return_value == Ok){
 				setChanged();
 				return Ok;
+			}else if( return_value == NotChanged ){
+				return Ok;
+			}else{
+				return return_value;
 			}
 
-			break;
 		}
 	}
 
@@ -735,21 +813,29 @@ quint32 Konto::changeDatum ( QDate datum, quint32 entry )
 }
 
 
+/**
+* @brief Methode änder die Verwendung eines Eintrages
+* @param verwendung Neue Verwendung des Eintrages
+* @param entry Eintrag in dem die Änderung stattfinden soll
+* @return Erfolg der Methode
+*/
 quint32 Konto::changeVerwendung ( QString verwendung, quint32 entry )
-/******************************************************************************
-* Methode aendert die Verwendung eines Eintrages(entry)
-*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
 	for ( it = Eintraege.begin(); it != Eintraege.end(); it++ ) {
 		if ( it.key() == entry ) {
-			if ( it.value().changeVerwendung ( verwendung ) ) {
+
+			quint32 return_value = it.value().changeVerwendung( verwendung );
+			if(return_value == Ok){
 				setChanged();
 				return Ok;
+			}else if(return_value == NotChanged){
+				return Ok;
+			}else{
+				return return_value;
 			}
 
-			break;
 		}
 	}
 
@@ -757,21 +843,30 @@ quint32 Konto::changeVerwendung ( QString verwendung, quint32 entry )
 }
 
 
+/**
+* @brief Methode ändert die Verwendung des Untereintrages
+* @param verwendung Neue Verwendung
+* @param entry Eintrag der den zu ändernen Untereintrag enthält
+* @param nummer Nummer des Untereintrages
+* @return Erfolg der Methode
+*/
 quint32 Konto::changeVerwendung ( QString verwendung, quint32 entry, quint32 nummer )
-/******************************************************************************
-*  Methode aendert die Verwendung eines Postens(nummer) eines Eintrages(entry)
-*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
 	for ( it = Eintraege.begin(); it != Eintraege.end(); it++ ) {
 		if ( it.key() == entry ) {
-			if ( it.value().changeVerwendung ( verwendung, nummer ) ) {
+
+			quint32 return_value = it.value().changeVerwendung ( verwendung, nummer );
+			if( return_value == Ok ){
 				setChanged();
 				return Ok;
+			}else if( return_value == NotChanged ){
+				return Ok;
+			}else{
+				return return_value;
 			}
 
-			break;
 		}
 	}
 
@@ -779,21 +874,30 @@ quint32 Konto::changeVerwendung ( QString verwendung, quint32 entry, quint32 num
 }
 
 
+/**
+* @brief Methode ändert die Kategorie
+* @param kategorie Neue Kategorie des Untereintrages
+* @param entry Eintrag indem sich der Untereintrag befindet
+* @param nummer Nummer des Untereintrages
+* @return Erfolg der Methode
+*/
 quint32 Konto::changeKategorie ( quint32 kategorie, quint32 entry, quint32 nummer )
-/******************************************************************************
-*  Methode aendert die Kategorie eines Postens(nummer) eines Eintrages(entry)
-*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
 	for ( it = Eintraege.begin(); it != Eintraege.end(); it++ ) {
 		if ( it.key() == entry ) {
-			if ( it.value().changeKategorie ( kategorie, nummer ) ) {
+			
+			quint32 return_value = it.value().changeKategorie ( kategorie, nummer );
+			if(return_value == Ok){
 				setChanged();
 				return Ok;
+			}else if(return_value == NotChanged){
+				return Ok;
+			}else{
+				return return_value;
 			}
 
-			break;
 		}
 	}
 
@@ -801,21 +905,28 @@ quint32 Konto::changeKategorie ( quint32 kategorie, quint32 entry, quint32 numme
 }
 
 
+/**
+* @brief Methode ändert den Betrag des Untereintrages eines Eintrages
+* @param betrag Neuer Betrag
+* @param entry Eintrag in dem sich der zuänderne Untereintrag befindet
+* @param nummer Nummer des zuändernen Untereintrages
+* @return Ergebniss der Operation
+*/
 quint32 Konto::changeBetrag ( float betrag, quint32 entry, quint32 nummer )
-/******************************************************************************
-* Methode aendert den Betrag eines Postens(nummer) eines Eintrages(entry)
-*******************************************************************************/
 {
 	MapKontoEntry::iterator it;
 
 	for ( it = Eintraege.begin(); it != Eintraege.end(); it++ ) {
 		if ( it.key() == entry ) {
-			if ( it.value().changeBetrag ( betrag, nummer ) ) {
+			quint32 return_value = it.value().changeBetrag ( betrag, nummer );
+			if(return_value == Ok){
 				setChanged();
 				return Ok;
+			}else if(return_value == NotChanged){
+				return Ok;
+			}else{
+				return return_value;
 			}
-
-			break;
 		}
 	}
 
@@ -823,10 +934,41 @@ quint32 Konto::changeBetrag ( float betrag, quint32 entry, quint32 nummer )
 }
 
 
+/**
+* @brief Methode ändert die Handelsquelle eines Eintrages
+*
+* @param shop ID der Handelsquelle
+* @param nummer Nummer des Eintrages
+*
+* @return Erfolg der Operation
+*/
+quint32 Konto::changeShop(quint32 shop, const quint32 nummer)
+{
+	MapKontoEntry::iterator it;
+	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
+		if( it.key() == nummer){
+			quint32 return_value = it.value().changeShop( shop );
+			if( return_value == Ok){
+				setChanged();
+				return Ok;
+			}else if(return_value == NotChanged){
+				return Ok;
+			}else{
+				return return_value;
+			}
+		}
+	}
+	return NotFound;
+}
+
+
+/**
+* @brief Methode gibt eine freie Zuordnungsnummer zurück. Dabei wird die Nummer des letzten Eintrages inkrementiert.
+* Lücken zwischen 2 Einträgen werden nicht gefüllt. Die erste freie Zahl ist 1.
+* Nur wenn der jeweils letzte Eintrag gelöscht wurde kann eine Nummer doppelt vergeben werden.
+* @return Freie Nummer 
+*/
 quint32 Konto::getFreeNumber()
-/******************************************************************************
-* Methode gibt eine freie Number der Eintraege zurueck, Luecken werden ignoriert
-*******************************************************************************/
 {
 #ifdef DEBUG
 	QTextStream console ( stdout );
@@ -991,6 +1133,60 @@ Konto::HistoryListDetails Konto::getEntryDetails(quint32 entrynummer)
 		temp.Splitts = tempS;
 	}
 	return temp;
+}
+
+
+/**
+* @brief Methode aktualisiert einen Eintrag eines Kontos
+* @param entry Ein Strukt mit den Daten eines Eintrages zum aktualisieren
+* @return Erfolg der Methode
+*/
+quint32 Konto::updateEntry(const Konto::HistoryListDetails& entry)
+{
+	//Überprüfe die Eingaben
+
+	bool not_changed = true;
+
+	MapKontoEntry::iterator it;
+	for(it = Eintraege.begin(); it != Eintraege.end(); it++){
+		if( it.key() == entry.Entry ){
+
+			if( entry.Datum != it.value().getDatum() ){
+				it.value().changeDatum( entry.Datum );
+				not_changed = false;
+			}
+
+			if( entry.Shop != it.value().getShop() ){
+				it.value().changeShop( entry.Shop );
+				not_changed = false;
+			}
+
+			if( entry.Verwendung != it.value().getVerwendung() ){
+				it.value().changeVerwendung( entry.Verwendung );
+				not_changed = false;
+			}
+
+			if( entry.Transfer != it.value().getTransfer() ){
+				it.value().changeTransfer( entry.Transfer );
+				not_changed = false;
+			}
+
+			VectorSplitt::iterator its;
+			VectorSplitt tempV = entry.Splitts;
+			for(its = tempV.begin(); its != tempV.end(); it++){
+				
+			}
+
+
+
+			if( not_changed ){
+				return NotChanged;
+			}
+			return Ok;
+		}
+	}
+	
+	return NotFound;
 }
 
 

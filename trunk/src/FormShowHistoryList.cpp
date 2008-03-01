@@ -69,6 +69,12 @@ void FormShowHistoryList::showDetails(int row, int column)
 			PointerFormDetails,
 			SLOT( getData(Konto::HistoryListDetails) )
 		);
+		connect(
+			PointerFormDetails,
+			SIGNAL( sendData(Konto::HistoryListDetails ) ),
+			this,
+			SLOT( changeDetails(Konto::HistoryListDetails details) )
+		);
 		
 		PointerFormDetails -> setWindowFlags ( Qt::Dialog );
 	}
@@ -163,3 +169,12 @@ void FormShowHistoryList::updateDetails(const Konto::HistoryListDetails& details
 {
 	emit DoUpdateDetails( details );
 }
+
+/**
+* @brief Methode leitet Struct Konto::HistoryListDetails weiter.
+*/
+void FormShowHistoryList::changeDetails(const Konto::HistoryListDetails& details)
+{
+	emit DoChangeDetails( details );
+}
+

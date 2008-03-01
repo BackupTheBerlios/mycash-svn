@@ -16,6 +16,7 @@ class FormShowHistoryList : public QWidget, public Ui::FormShowHistoryList{
 		void updateTable(const Konto::VectorHistoryList& list);
 		void deleteEntry(const quint32& entry);
 		void updateDetails(const Konto::HistoryListDetails& details);
+		void changeDetails(const Konto::HistoryListDetails& details);
 	
 	private slots:
 		void selectRow(int row, int column);
@@ -24,9 +25,10 @@ class FormShowHistoryList : public QWidget, public Ui::FormShowHistoryList{
 		//void debugSel();
 
 	signals:
-		void GetUpdateDetails(quint32); //Signal zur Weitergabe des gewuenschten Eintrages
-		void DoUpdateDetails(Konto::HistoryListDetails); // Signal zur Weitergabe der Details
-		void SigDeleteEntry(quint32 entry); //Signal zum Loeschen eines Eintrages
+		void GetUpdateDetails(quint32); //Signal zur Weitergabe des gewuenschten Eintrages| this->parent
+		void DoUpdateDetails(Konto::HistoryListDetails); // Signal zur Weitergabe der Details| this -> child
+		void SigDeleteEntry(quint32 entry); //Signal zum Loeschen eines Eintrages| this -> parent
+		void DoChangeDetails(Konto::HistoryListDetails); // Signal zum Ändern von Eintragen| this -> parent
 
 	private:
 		FormShowHistoryListDetails *PointerFormDetails;

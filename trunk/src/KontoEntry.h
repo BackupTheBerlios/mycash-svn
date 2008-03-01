@@ -1,3 +1,8 @@
+/**
+* @file KontoEntry.h
+*
+* @brief Datei beinhaltet die Klassendeklaration von KontoEntry
+*/
 #ifndef _CLASS_KONTOENTRY_H_
 #define _CLASS_KONTOENTRY_H_
 
@@ -9,9 +14,14 @@
 #include <QDomElement>
 #include <QDomDocument>
 
+/**
+* @class KontoEntry
+*
+* @brief Klasse beinhaltet Daten einer Buchung
+*/
 class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 	enum sort{NO=0, ASC=1, DES=2};
-	enum returns{Ok=1, NotFound=4}; 
+	enum returns{Ok=1, NotFound=4, NotChanged=5, NotValid=6}; 
 	typedef QMap<quint32, KontoSplitt> MapSplitt;
 
 	public:
@@ -42,6 +52,7 @@ class KontoEntry{	//zB ein Einkauf in einen Laden bzw. ein Einkaufszettel
 		QVector<KontoSplitt> getSplittdaten();
 		quint32 getTransfer();
 		quint32 getShop();
+		// --- get ..KontoSplitts-Werte..
 
 		float getBetragKategorie(quint32 kategorie);
 		float getBetragKategorieIntervall(quint32 kategorie, QDate von, QDate bis);

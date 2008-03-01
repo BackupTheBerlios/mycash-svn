@@ -1,3 +1,8 @@
+/**
+* @file tabkontomain.cpp
+*
+* @brief Enthält die Methodendefinitionen des Formulars TabKontoMain
+*/
 #include <QWidget>
 #include <QTextStream>
 #include <QMessageBox>
@@ -208,6 +213,12 @@ void TabKontoMain::showHistoryListDialog()
 			FormShowHistoryListPointer,
 			SLOT( updateDetails( Konto::HistoryListDetails ) )
 		);
+		connect(
+			FormShowHistoryListPointer,
+			SIGNAL( DoChangeDetails(Konto::HistoryListDetails) ),
+			this,
+			SLOT( updateEntryDetails(Konto::HistoryListDetails) )
+		);
 
 		FormShowHistoryListPointer -> setWindowFlags ( Qt::Dialog );
 		FormShowHistoryListPointer -> setEnabled ( true );
@@ -238,10 +249,24 @@ void TabKontoMain::updateEntryDetails ( quint32 entrynummer )
 }
 
 
+/**
+* @brief Methode aktualisiert die Kontoeinträge
+* @param details Struct mit Updateinformationen
+*/
+void TabKontoMain::updateEntryDetails(const Konto::HistoryListDetails& details)
+{
+	if(KontoPointer -> updateEntry( details ) == Konto::Ok ){
+		updateTableHistory();
+	}
+	return;
+}
+
+
+/**
+* @brief Methode gezeugt eine Liste der Kontoeinträge und sendet diese an das FormShowHistory-Formular
+* Somit wird die HistoryListTable aktualisiert. Die Kontoeinträge sind nur Bestandteil des zugeordneten Kontos.
+*/
 void TabKontoMain::updateTableHistory( void )
-/******************************************************************************
-* Methode aktualisiert die HistoryListTable
-*******************************************************************************/
 {
 	emit updateHistoryListDialog ( KontoPointer -> getHistoryList() );
 }

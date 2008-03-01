@@ -1,3 +1,7 @@
+/**
+* @file tabkontomain.h
+* @brief Datei entält die Klassendefinition der Klasse TabKontoMain.
+*/
 #ifndef TABKONTOMAIN_H
 #define TABKONTOMAIN_H
 
@@ -7,6 +11,10 @@
 #include "KontoSettings.h"
 #include "FormShowHistoryList.h"
 
+/**
+* @class TabKontoMain
+* @brief Klasse enthält die Elemente und Funktionen des QTabWidget zum kontospezifischen Anzeigen der möglichen Optionen.
+*/
 class TabKontoMain : public QWidget, public Ui::TabKontoMain{
 	Q_OBJECT
 	
@@ -19,6 +27,7 @@ class TabKontoMain : public QWidget, public Ui::TabKontoMain{
 		void fromFormKontoSettings(const Konto::KontoSettings&);
 		void deleteEntry(quint32);
 		void updateEntryDetails(quint32);
+		void updateEntryDetails(const Konto::HistoryListDetails& details);
 	
 	signals:
 		void close(TabKontoMain *);

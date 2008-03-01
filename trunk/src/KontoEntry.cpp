@@ -1,3 +1,8 @@
+/**
+* @file KontoEntry.cpp
+*
+* @brief Enthält die Methodendefinition der Klasse KontoEntry
+*/
 #include "KontoEntry.h"
 #include <QVector>
 #include <QDate>
@@ -137,52 +142,85 @@ QString KontoEntry::getVerwendung()
 	return Verwendung;
 }
 
-
+/**
+* @brief Methode ändert die Handelsart
+*
+* @param transfer Handelsart
+*
+* @return Ergebniss der Operation
+*/
 quint32 KontoEntry::changeTransfer(quint32 transfer)
 /******************************************************************************
 * Methode aendert die Art des Transfers
 *******************************************************************************/
 {
-	Transfer = transfer;
-	return true;
+	if(Transfer != transfer){
+		Transfer = transfer;
+		return Ok;
+	}
+		return NotChanged;
 }
 
-
+/**
+* @brief Methode ändert die Verwendung
+*
+* @param verwendung Neue Verwendung
+*
+* @return Ergebniss der Operation
+*/
 quint32 KontoEntry::changeVerwendung(QString verwendung)
 /******************************************************************************
 * Methode aendert die Verwendung
 *******************************************************************************/
 {
-	// ToDo: Überprüfung Verwendung
-	Verwendung = verwendung;
-	return Ok;
+	if(Verwendung != verwendung){
+		// ToDo: Überprüfung Verwendung
+		Verwendung = verwendung;
+		return Ok;
+	}
+	return NotChanged;
 }
 
-
+/**
+* @brief Methode ändert das Datum
+*
+* @param datum Neues Datum im Format der Qt-Klasse QDate;
+*
+* @return Ergebniss der Operation
+*/
 quint32 KontoEntry::changeDatum(QDate datum)
 /******************************************************************************
 * Methode aendert das Datum
 * Eingabe des Datums als QDate
 *******************************************************************************/
 {
-	Datum = datum;
-	return Ok;
+	if(Datum != datum){
+		Datum = datum;
+		return Ok;
+	}
+	return NotChanged;
 }
 
-
+/**
+* @brief Methode ändert das Datum
+*
+* @param datum Neues Datum als Qt-Klasse QString im Format 'yyyyMMdd'
+*
+* @return Ergebniss der Operation
+*/
 quint32 KontoEntry::changeDatum(QString datum)
 /******************************************************************************
 * Methode aendert das Datum
 * Eingabe als String im Format "yyyyMMdd"
 *******************************************************************************/
 {
-	QString jahr, monat, tag;
-	jahr = datum.mid(0,4);
-	monat = datum.mid(4,2);
-	tag = datum.mid(6,2);
-	bool ok;
-	Datum.setDate(jahr.toUInt(&ok, 10), monat.toUInt(&ok, 10), tag.toUInt(&ok, 10));
-	return Ok;
+	QDate tempDate = QDate::fromString(datum, "yyyyMMdd");
+	
+	if(Datum != tempDate){
+		Datum = tempDate;
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
@@ -258,17 +296,26 @@ quint32 KontoEntry::changeKategorie(quint32 kategorie, quint32 nummer)
 			return it.value().changeKategorie(kategorie);
 		}
 	}
-	return 0;
+	return NotFound;
 }
 
-
+/**
+* @brief Methode ändert die Handelsquelle
+*
+* @param shop Handelsquelle
+*
+* @return Ergebniss der Operation
+*/
 quint32 KontoEntry::changeShop(quint32 shop)
 /******************************************************************************
 * Methode aendert den Shop
 *******************************************************************************/
 {
-	Shop = shop;
-	return Ok;
+	if(Shop != shop){
+		Shop = shop;
+		return Ok;
+	}
+	return NotChanged;
 }
 
 

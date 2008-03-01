@@ -1,21 +1,28 @@
+/**
+* @file konto_splitt.cpp
+*
+* @brief Datei enthält die Methodendefinitionen der Klasse KontoSplitt
+*/
 #include "konto_splitt.h"
 #include <QString>
 
 #include <QtXml> //contains #include <QDomDocument>, #include <QDomElement>, #include <QDomText>
 
+/**
+* @brief Überladener Konstruktor der Klasse
+* Dieser erzeugt keine gültige Klasse.
+*/
 KontoSplitt::KontoSplitt()
-/******************************************************************************
-* leerer Konstruktor
-*******************************************************************************/
 {
 
 }
 
-
+/**
+* @brief Überladener Konstruktor der Klasse zum Initialisieren über ein XML-Zweig
+* @param element Ein XML-Zweig indem klassenrelevante Daten enthalten sind.
+* Falsche Unterzweige werden ignoriert.
+*/
 KontoSplitt::KontoSplitt(const QDomElement &element)
-/******************************************************************************
-* Konstruktor zum laden von XML-Baeumen
-*******************************************************************************/
 {
 	if( element.tagName() != "Splittdaten" ){ //Falscher Baum
 		return;
@@ -42,11 +49,14 @@ KontoSplitt::KontoSplitt(const QDomElement &element)
 }
 
 
+/**
+* @brief Überladener Konstruktor der Klasse
+* @param kategorie ID der Kategorie
+* @param verwendung Verwendung dieses Eintrages
+* @param betrag Betrag dieses Eintrages
+* @param steuer Steuerrelevanz dieses Eintrages. Vorinitialisiert mit false
+*/
 KontoSplitt::KontoSplitt(quint32 kategorie, QString verwendung, float betrag, bool steuer)
-/******************************************************************************
-* Konstruktor mit allen Werten.
-* steuer(relevanz) mit false vorinitialisiert
-*******************************************************************************/
 {
 	Kategorie = kategorie;
 	Verwendung = verwendung;
@@ -55,11 +65,12 @@ KontoSplitt::KontoSplitt(quint32 kategorie, QString verwendung, float betrag, bo
 }
 
 
+/**
+* @brief Überladener bool-Operator
+* @return Eintrag gültig
+* Ein Eintrag gilt als gültig, wenn eine Verwendung zugeordnet wurde und die ID der Kategorie nicht 0 ist.
+*/
 KontoSplitt::operator bool()
-/******************************************************************************
-* Ueberladener Bool-Operator
-* Wenn Verwendung != "" && Kategorie != 0 -> true, sonst false
-*******************************************************************************/
 {
 	if( Verwendung != "" && Kategorie != 0 ){
 		return true;
@@ -69,87 +80,113 @@ KontoSplitt::operator bool()
 }
 
 
+/**
+* @brief Methode ändert die Kategorie dieses Eintrages
+* @param kategorie Neue Kategorie (ID)
+* @return Ergebniss der Operation
+*/
 quint32 KontoSplitt::changeKategorie(quint32 kategorie)
-/******************************************************************************
-* Methode aendert die Kategorie
-*******************************************************************************/
 {
-	Kategorie = kategorie;
-	return Ok;
+	if(Kategorie != kategorie){
+		Kategorie = kategorie;
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode gibt die Kategorie zurück
+* @return Kategorie (ID) des Eintrages
+*/
 quint32 KontoSplitt::getKategorie()
-/******************************************************************************
-* Methode gibt die Kategorie zurueck
-*******************************************************************************/
 {
 	return Kategorie;
 }
 
 
+/**
+* @brief Methode gibt die Verwendung dieses Eintrages zurück
+* @return Verwendung des Eintrages
+*/
 QString KontoSplitt::getVerwendung()
-/******************************************************************************
-* Methode gibt die Verwendung zurueck
-*******************************************************************************/
 {
 	return Verwendung;
 }
 
 
+/**
+* @brief Methode gibt den Betrag dieses Eintrages zurück
+* @return Betrag des Eintrages
+*/
 float KontoSplitt::getBetrag()
-/******************************************************************************
-* Methode gibt den Betrag zurueck
-*******************************************************************************/
 {
 	return Betrag;
 }
 
 
+/**
+* @brief Methode gibt die Steuerrelevanz dieses Eintrages zurück
+* @return Eintrag steuerrelevant
+*/
 bool KontoSplitt::getSteuerrelevanz()
-/******************************************************************************
-* Methode gibt die Steuerrelevanz zurueck
-*******************************************************************************/
 {
  return SteuerRelevant;
 }
 
 
+/**
+* @brief Methode ändert den Betrag dieses Eintrages
+* @param betrag Neuer Betrag
+* @return Ergebniss der Operation
+*/
 quint32 KontoSplitt::changeBetrag(float betrag)
-/******************************************************************************
-* Methode aendert den Betrag
-*******************************************************************************/
 {
-	// ToDo: betrag ueberpruefen
-	Betrag = betrag;
-	return Ok;
+	if(Betrag != betrag){
+		// ToDo: betrag ueberpruefen
+		Betrag = betrag;
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode ändert die Verwendung dieses Eintrages
+* @param verwendung Neue Verwendung
+* @return Ergebniss der Operation
+*/
 quint32 KontoSplitt::changeVerwendung(QString verwendung)
-/******************************************************************************
-* Methode aendert die Verwendung
-*******************************************************************************/
 {
-	Verwendung = verwendung;
-	return Ok;
+	if(Verwendung != verwendung){
+		Verwendung = verwendung;
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode ändert die Steuerrelevant dieses Eintrages
+* @param steuer Neue Steuerrelevanz
+* @return Ergebniss der Operation
+*/
 quint32 KontoSplitt::changeSteuerrelevanz(bool steuer)
-/******************************************************************************
-* Methode aendert die Steuerrelevanz
-*******************************************************************************/
 {
-	SteuerRelevant = steuer;
-	return Ok;
+	if(SteuerRelevant != steuer){
+		SteuerRelevant = steuer;
+		return Ok;
+	}
+	return NotChanged;
 }
 
 
+/**
+* @brief Methode erstellt aus diesen Eintrag ein XML-Zweig
+* @param doc Referenz zum Dokument
+* @return Erstellter XML-Zweig
+*/
 QDomElement KontoSplitt::getXmlElement(QDomDocument &doc)
-/******************************************************************************
-* Methode gibt ein XML-Node zurueck
-*******************************************************************************/
 {
 	QDomElement elementSplitt = doc.createElement("Splittdaten");
 	QDomElement elementKategorie = doc.createElement("Kategorie");

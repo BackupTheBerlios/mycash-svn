@@ -1,3 +1,8 @@
+/**
+* @file konto_splitt.h
+*
+* @brief Datei entält die Klassendefinition von KontoSplitt
+*/
 #ifndef _class_konto_splitt_h
 #define _class_konto_splitt_h
 
@@ -5,8 +10,18 @@
 #include <QDomElement>
 #include <QDomDocument>
 
+/**
+* @class KontoSplitt
+*
+* @brief Klasse enthält alle Daten einer Unterbuchung.
+*
+* Als Unterbuchungen sind zum Beispiel Waren/Objekte einer Buchung mit unterschiedlicher Kategorie oder steuerrelevanz zu sehen.
+*/
 class KontoSplitt{
-	enum returns{Ok=1};
+	/**
+	* @brief Enumeration mit (Status-)Rückgabewerten der Methoden dieser Klasse
+	*/
+	enum returns{Ok=1, NotFound=4, NotChanged=5, NotValid=6};
 	
 	public:
 		KontoSplitt();
